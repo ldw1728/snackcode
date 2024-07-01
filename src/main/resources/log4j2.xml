@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" >
+
+    <Properties>
+        <!-- 자주 사용되는 패턴은 property에 등록-->
+        <Property name="LOG_DATEFORMAT_PATTERN">{[yyyy-MM-dd HH:mm:ss,SSS]}</Property>
+        <Property name="STDOUT_BS">%d${LOG_DATEFORMAT_PATTERN} [%-5level] %logger{36} - %msg%n</Property>
+        <Property name="STDOUT_ST">%style{%d${LOG_DATEFORMAT_PATTERN}}{cyan} [%highlight{%-5p}{FATAL=bg_red, ERROR=red, INFO=green, DEBUG=blue}]    %logger{36} - %msg%n</Property>
+        <Property name="REQUEST_LOG">%d${LOG_DATEFORMAT_PATTERN} [REQUEST] - %msg%n</Property>
+        <Property name="REQUEST_LOG_ST">%style{%d${LOG_DATEFORMAT_PATTERN}}{cyan} [%style{REQUEST}{Magenta}]  %msg%n</Property>
+    </Properties>
+
+    <!-- log 메시지를 특정위치에 전달-->
+    <Appenders>
+        <!-- 콘솔 출력 -->
+        <Console name="CONSOLE_STDOUT_ST" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false" pattern="${STDOUT_ST}"/>
+        </Console>
+        <Console name="CONSOLE_REQUEST_LOG_ST" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false" pattern="${REQUEST_LOG_ST}"/>
+        </Console>
+
+        <!-- 파일 출력 -->
+        <RollingFile name="InfoAppender"
+                     fileName="logs/server.log" filePattern="logs/server.log.%d{yyyy-MM-dd}">
+            <PatternLayout pattern="${STDOUT_BS}" />
+            <!-- 밑의 태그를 이용하여 Level별로 로그를 남길 수 있다. -->
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO"
+                              onMatch="ACCEPT" onMismatch="DENY" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverstrategy>
+                <Delete basePath="/logs" maxDepth="3">
+                    <IfLastModified age="30d" />
+                </Delete>
+            </DefaultRolloverstrategy>
+        </RollingFile>
+
+        <RollingFile name="ReqAppender"
+                     fileName="logs/reqInfo.log" filePattern="logs/reqInfo.log.%d{yyyy-MM-dd}">
+            <PatternLayout pattern="${REQUEST_LOG}" />
+            <!-- 밑의 태그를 이용하여 Level별로 로그를 남길 수 있다. -->
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO"
+                              onMatch="ACCEPT" onMismatch="DENY" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverstrategy>
+                <Delete basePath="/logs" maxDepth="3">
+                    <IfLastModified age="30d" />
+                </Delete>
+            </DefaultRolloverstrategy>
+        </RollingFile>
+
+    </Appenders>
+    <Loggers>
+        <logger name="org.springframework" level="INFO" additivity="false"> <!-- additivity="false" = 중복x-->
+            <AppenderRef ref="CONSOLE_STDOUT_ST"/>
+<!--            <AppenderRef ref="InfoAppender"/>-->
+        </logger>
+        <logger name="org.hibernate" level="INFO" additivity="false">
+            <AppenderRef ref="CONSOLE_STDOUT_ST"/>
+<!--            <AppenderRef ref="InfoAppender"/>-->
+        </logger>
+        <logger name="com.project.snackcode" level="INFO" additivity="false">
+<!--            <AppenderRef ref="InfoAppender"/>-->
+        </logger>
+        <logger name="com.project.snackcode" level="DEBUG" additivity="false">
+            <AppenderRef ref="CONSOLE_STDOUT_ST"/>
+        </logger>
+        <logger name="com.project.snackcode.Filter.RequestCachingFilter" level="DEBUG" additivity="false">
+            <AppenderRef ref="CONSOLE_REQUEST_LOG_ST"/>
+        </logger>
+    </Loggers>
+</Configuration>
+
+        <!--높음 FATAL, ERROR, WARN, INFO, DEBUG, TRACE 낮음-->
