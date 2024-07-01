@@ -1,7 +1,7 @@
-java 17
-springboot 3.3.1
-spring security
-spring jpa
+java 17  
+springboot 3.3.1  
+spring security  
+spring jpa  
 mysql  
 
 
