@@ -20,7 +20,7 @@ public class MemberApiController {
      */
     @PostMapping("/join")
     public ResponseEntity join(@RequestBody MemberFormModel memberFormModel){
-        memberService.join(memberFormModel);
+        memberService.save(memberFormModel);
         return ResponseEntity.ok().build();
     }
 

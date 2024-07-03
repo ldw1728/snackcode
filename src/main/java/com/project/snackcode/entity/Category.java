@@ -1,11 +1,11 @@
 package com.project.snackcode.entity;
 
 import com.project.snackcode.entity.base.BaseEntity;
+import com.project.snackcode.model.category.CategoryModel;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
-
-import java.time.LocalDateTime;
 
 /**
  *  TB_CATEGORY - 카테고리 테이블
@@ -24,8 +24,8 @@ public class Category extends BaseEntity {
     private Long id;
 
     /** 회원*/
-    @ManyToOne
-    @JoinColumn(name = "uid")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mem_id")
     private Member member;
 
     /** 부모 카테고리*/
@@ -37,5 +37,24 @@ public class Category extends BaseEntity {
     @Column(name = "NAME")
     private String name;
 
+    @Builder
+    public Category(Long Id, Member member, Category prntCategory, String name) {
+        this.id             = id;
+        this.member         = member;
+        this.prntCategory   = prntCategory;
+        this.name           = name;
+    }
 
+    public CategoryModel toModel(){
+        return CategoryModel.builder()
+                            .id(this.id)
+                            .memId(this.member.getId())
+                            .prntCategory(
+                                    this.prntCategory == null ? null : this.prntCategory.toModel()
+                            )
+                            .name(this.name)
+                            .regDt(this.getRegDt())
+                            .updtDt(this.getUpdtDt())
+                            .build();
+    }
 }
