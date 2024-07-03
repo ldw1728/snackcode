@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("회원을 찾을 수 없음.");
         }
 
-        log.debug("조회된 회원 : {}", member);
+        log.debug("조회된 회원 : {}, {}", member.getId(), member.getEmail());
 
         UserDetailsImpl userDetails = new UserDetailsImpl(member.toModel());
 

@@ -81,6 +81,7 @@ public class Member {
 
     public MemberModel toModel(){
         return MemberModel.builder()
+                        .id(this.id)
                         .name(this.name)
                         .email(this.email)
                         .password(this.password)
