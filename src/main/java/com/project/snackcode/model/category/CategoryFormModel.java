@@ -7,10 +7,13 @@ import lombok.Data;
 @Data
 public class CategoryFormModel {
 
-    /** 회원*/
+    /** id */
+    private Long id;
+
+    /** 회원 */
     private Long memId;
 
-    /** 부모 카테고리*/
+    /** 부모 카테고리 */
     private Long prntCid;
 
     /** 카테고리명 */
@@ -19,9 +22,13 @@ public class CategoryFormModel {
     public Category toEntity(){
         return Category.builder()
                         .member(Member.builder().id(this.memId).build())
-                        .prntCategory(Category.builder().Id(this.prntCid).build())
+                        .prntCategory(this.prntCid != null ? Category.builder().id(this.prntCid).build() : null)
                         .name(this.name)
                         .build();
+    }
+
+    public void update(Category category) {
+        category.update(this.name);
     }
 
 }

@@ -19,7 +19,7 @@ public class IndexController {
         return "home";
     }
 
-    @GetMapping("/member")
+    @GetMapping("/auth")
     @ResponseBody
     public String auth(){
         return "auth";

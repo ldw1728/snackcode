@@ -38,11 +38,15 @@ public class Category extends BaseEntity {
     private String name;
 
     @Builder
-    public Category(Long Id, Member member, Category prntCategory, String name) {
+    public Category(Long id, Member member, Category prntCategory, String name) {
         this.id             = id;
         this.member         = member;
         this.prntCategory   = prntCategory;
         this.name           = name;
+    }
+
+    public void update(String name){
+        this.name = name;
     }
 
     public CategoryModel toModel(){

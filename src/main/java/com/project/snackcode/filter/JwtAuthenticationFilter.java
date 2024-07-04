@@ -2,9 +2,7 @@ package com.project.snackcode.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.snackcode.config.SecurityConfig;
-import com.project.snackcode.model.member.MemberFormModel;
 import com.project.snackcode.model.member.UserDetailsImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.io.IOException;
 import java.util.Date;
 
 @Slf4j
@@ -64,7 +61,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
 
         String jwt = JWT.create().withSubject(userDetails.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 10))) // 만료시간 대략 10분에서 30분사이가 적당할듯
+                .withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 100))) // 만료시간 대략 10분에서 30분사이가 적당할듯
                 .withClaim("id", userDetails.getMember().getId()) //jwt의 payload부분
                 .sign(Algorithm.HMAC512(SecurityConfig.jwtSecretKey)); // 시크릿값은 임의로 정해준다.
 

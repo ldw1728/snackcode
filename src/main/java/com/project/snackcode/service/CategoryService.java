@@ -54,4 +54,40 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
+    /**
+     * 카테고리 수정
+     * @param categoryFormModel
+     */
+    @Transactional
+    public void update(CategoryFormModel categoryFormModel) {
+        Category category = categoryRepository.findById(categoryFormModel.getId()).orElseThrow();
+        categoryFormModel.update(category);
+    }
+
+    /**
+     * 카테고리 삭제
+     * @param cateId
+     */
+    @Transactional
+    public void delete(Long cateId){
+        Category category = categoryRepository.findById(cateId).orElseThrow();
+        // TODO 카테고리내의 모든 포스트를 삭제
+        categoryRepository.delete(category);
+    }
+
+    /**
+     * 회원 전체 카테고리 삭제
+     * @param memId
+     */
+    @Transactional
+    public void deleteAll(Long memId){
+        List<Category> categoryList = categoryRepository.findAllByMember_Id(memId);
+        categoryList.forEach(category -> {
+            // TODO 카테고리내의 모든 포스트를 삭제
+            categoryRepository.delete(category);
+        });
+    }
+
+
+
 }

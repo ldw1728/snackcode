@@ -18,11 +18,11 @@ public abstract class BaseEntity {
     /** 등록일자 */
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDateTime regDt;
+    protected LocalDateTime regDt;
 
     /** 수정일자 */
     @LastModifiedDate
     @Column(nullable = false)
-    private LocalDateTime updtDt;
+    protected LocalDateTime updtDt;
 
 }

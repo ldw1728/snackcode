@@ -28,7 +28,9 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final MemberRepository memberRepository;
 
-    public static final String jwtSecretKey = createSecretKey();
+    //public static final String jwtSecretKey = createSecretKey();
+    public static final String jwtSecretKey = "123";
+
 
     /**
      * jwt secretkey 생성
@@ -55,10 +57,12 @@ public class SecurityConfig {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration)))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), memberRepository))
             .formLogin(form->form.loginProcessingUrl("/login").usernameParameter("email"))
-                .httpBasic(basic->basic.disable())
             .authorizeHttpRequests(auth -> {
-                auth.requestMatchers(HttpMethod.POST, "/api/**").access(new WebExpressionAuthorizationManager("hasRole('ROLE_USER')"))
-                    .requestMatchers("/home").permitAll();
+                        auth
+                        .requestMatchers("/api/member/join").anonymous()
+                        .requestMatchers( "/api/**").access(new WebExpressionAuthorizationManager("hasRole('ROLE_USER')"))
+                        .requestMatchers("/auth").authenticated()
+                        .requestMatchers("/home").permitAll();
 
             });
 

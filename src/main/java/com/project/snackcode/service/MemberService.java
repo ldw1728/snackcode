@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final CategoryService categoryService;
 
     /**
      * 회원 조회
@@ -46,6 +47,17 @@ public class MemberService {
     public void update(MemberFormModel memberFormModel) {
         Member member = memberRepository.findById(memberFormModel.getId()).orElseThrow();
         memberFormModel.updateEntity(member);
+    }
+
+    /**
+     * 회원 삭제
+     * @param memId
+     */
+    @Transactional
+    public void delete(Long memId){
+        Member member = memberRepository.findById(memId).orElseThrow();
+        categoryService.deleteAll(memId);
+        memberRepository.delete(member);
     }
 
 
