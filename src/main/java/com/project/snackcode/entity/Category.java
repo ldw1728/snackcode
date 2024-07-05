@@ -4,6 +4,7 @@ import com.project.snackcode.entity.base.BaseEntity;
 import com.project.snackcode.model.category.CategoryModel;
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -15,6 +16,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "TB_CATEGORY")
 @DynamicUpdate
 @NoArgsConstructor
+@Getter
 public class Category extends BaseEntity {
 
     /** 카테고리고유번호 */

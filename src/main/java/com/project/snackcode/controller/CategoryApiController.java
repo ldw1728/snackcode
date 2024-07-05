@@ -50,6 +50,26 @@ public class CategoryApiController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 카테고리 수정
+     * @param categoryFormModel
+     * @return
+     */
+    @PatchMapping("/category")
+    public ResponseEntity update(@RequestBody CategoryFormModel categoryFormModel){
+        categoryService.update(categoryFormModel);
+        return ResponseEntity.ok().build();
+    }
 
+    /**
+     * 카테고리 삭제
+     * @param cateId
+     * @return
+     */
+    @DeleteMapping("/category/{cateId}")
+    public ResponseEntity delete(@PathVariable Long cateId) {
+        categoryService.delete(cateId);
+        return ResponseEntity.ok().build();
+    }
 
 }

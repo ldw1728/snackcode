@@ -68,6 +68,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             // 회원 정상 조회일 경우
             if (member != null) {
 
+                // 최근활동일자 수정
+                member.updateLastDt();
+
                 // authentication 객체 생성 후 security session에 강제로 설정(인증처리)
                 UserDetailsImpl userDetails = new UserDetailsImpl(member.toModel());
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

@@ -11,5 +11,8 @@ mysql
 ~security 기본구성 및 회원 로그인, 가입 구현~  
 ~jwt 토큰 인증 및 인가 구현 -> BasicAuthenticationFilter 이슈가 있음... ~
 ~category 로직 구현~
-member 로직 구현 (탈퇴 시)
-post 로직 구현
+~member 로직 구현 (탈퇴 시)~
+~post 로직 구현~
+post 조회시 pagination 기능 필요
+spring validation 적용하여 formModel 필드 유효성 체크
+

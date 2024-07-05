@@ -1,7 +1,10 @@
 package com.project.snackcode.entity;
 
 import com.project.snackcode.entity.base.BaseEntity;
+import com.project.snackcode.enums.OpenType;
+import com.project.snackcode.model.post.PostModel;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -31,7 +34,7 @@ public class Post extends BaseEntity {
 
     /** 코드컨텐츠 */
     @Column(name = "code_cntns")
-    private String code_cntns;
+    private String codeCntns;
 
     /** 설명 */
     @Column(name = "code_desc")
@@ -39,6 +42,35 @@ public class Post extends BaseEntity {
 
     /** 공개여부 */
     @Column(name = "open_yn")
-    private Boolean openYn;
+    private OpenType openType;
 
+    @Builder
+    public Post(Long cateId, String name, String codeCntns, String desc, OpenType openType) {
+        this.category   = Category.builder().id(cateId).build();
+        this.name       = name;
+        this.codeCntns  = codeCntns;
+        this.desc       = desc;
+        this.openType   = openType;
+    }
+
+    public void update(Long cateId, String name, String codeCntns, String desc, OpenType openYn) {
+        this.category   = Category.builder().id(cateId).build();
+        this.name       = name;
+        this.codeCntns  = codeCntns;
+        this.desc       = desc;
+        this.openType   = openYn;
+    }
+
+    public PostModel toModel(){
+        return PostModel.builder()
+                        .id(this.id)
+                        .category(this.category)
+                        .codeCntns(this.codeCntns)
+                        .desc(this.desc)
+                        .name(this.name)
+                        .openType(this.openType)
+                        .regDt(this.regDt)
+                        .updtDt(this.updtDt)
+                        .build();
+    }
 }

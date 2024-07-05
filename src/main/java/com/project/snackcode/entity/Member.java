@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -49,10 +50,12 @@ public class Member {
     /** 가입일시 */
     @Column(name = "JOIN_DT")
     @CreatedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime joinDt;
 
     /** 마지막 접속일시 */
     @Column(name = "LAST_DT")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastDt;
 
     /** 권한 */
@@ -66,8 +69,7 @@ public class Member {
         this.name       = name;
         this.email      = email;
         this.password   = password;
-        this.joinDt     = LocalDateTime.now();
-        this.lastDt     = LocalDateTime.now();
+        updateLastDt();
 
         roles.add(new MemberRole(this, Role.ROLE_USER));
 
@@ -78,6 +80,10 @@ public class Member {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public void updateLastDt(){
+        this.lastDt = LocalDateTime.now();
     }
 
     public MemberModel toModel(){

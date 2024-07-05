@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final PostService postService;
 
     /**
      * 카테고리 조회
@@ -71,7 +72,7 @@ public class CategoryService {
     @Transactional
     public void delete(Long cateId){
         Category category = categoryRepository.findById(cateId).orElseThrow();
-        // TODO 카테고리내의 모든 포스트를 삭제
+        postService.deleteAllByCategoryId(cateId);
         categoryRepository.delete(category);
     }
 
@@ -83,7 +84,7 @@ public class CategoryService {
     public void deleteAll(Long memId){
         List<Category> categoryList = categoryRepository.findAllByMember_Id(memId);
         categoryList.forEach(category -> {
-            // TODO 카테고리내의 모든 포스트를 삭제
+            postService.deleteAllByCategoryId(category.getId());
             categoryRepository.delete(category);
         });
     }
