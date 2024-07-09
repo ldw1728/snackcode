@@ -2,6 +2,7 @@ package com.project.snackcode.controller;
 
 import com.project.snackcode.model.member.MemberFormModel;
 import com.project.snackcode.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class MemberApiController {
      * @return
      */
     @PostMapping("/join")
-    public ResponseEntity join(@RequestBody MemberFormModel memberFormModel){
+    public ResponseEntity join(@RequestBody @Valid MemberFormModel memberFormModel){
         memberService.save(memberFormModel);
         return ResponseEntity.ok().build();
     }

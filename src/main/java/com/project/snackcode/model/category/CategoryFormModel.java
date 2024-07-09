@@ -2,6 +2,9 @@ package com.project.snackcode.model.category;
 
 import com.project.snackcode.entity.Category;
 import com.project.snackcode.entity.Member;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -11,12 +14,15 @@ public class CategoryFormModel {
     private Long id;
 
     /** 회원 */
+    @NotNull
+    @Min(value = 1L)
     private Long memId;
 
     /** 부모 카테고리 */
     private Long prntCid;
 
     /** 카테고리명 */
+    @NotBlank
     private String name;
 
     public Category toEntity(){

@@ -3,7 +3,10 @@ package com.project.snackcode.controller;
 import com.project.snackcode.model.post.PostFormModel;
 import com.project.snackcode.model.post.PostModel;
 import com.project.snackcode.service.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,18 +20,19 @@ public class PostApiController {
     private final PostService postService;
 
     /**
-     * post 조회
+     * post page, 단건 조회
      * @param cateId
      * @param postId
      * @return
      */
     @GetMapping("/post/{cateId}/{postId}")
-    public ResponseEntity list(@PathVariable Long cateId,
-                               @PathVariable Long postId){
+    public ResponseEntity select(  @PathVariable Long cateId,
+                                   @PathVariable Long postId,
+                                   Pageable pageable){
 
         // category post 전체조회
         if (postId == null) {
-            List<PostModel> postModels = postService.selectModelsByCategoryId(cateId);
+            Page<PostModel> postModels = postService.selectPageByCategoryId(cateId, pageable);
             return ResponseEntity.ok(postModels);
         }
 
@@ -43,7 +47,7 @@ public class PostApiController {
      * @return
      */
     @PostMapping("/post")
-    public ResponseEntity save(@RequestBody PostFormModel postFormModel){
+    public ResponseEntity save(@RequestBody @Valid PostFormModel postFormModel){
         postService.save(postFormModel);
         return ResponseEntity.ok().build();
     }
@@ -54,7 +58,7 @@ public class PostApiController {
      * @return
      */
     @PatchMapping("/post")
-    public ResponseEntity update(@RequestBody PostFormModel postFormModel){
+    public ResponseEntity update(@RequestBody @Valid PostFormModel postFormModel){
         postService.update(postFormModel);
         return ResponseEntity.ok().build();
     }

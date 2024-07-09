@@ -17,7 +17,7 @@ public class PostModel {
     private Category category;
 
     /** 포스트명 */
-    private String name;
+    private String title;
 
     /** 코드컨텐츠 */
     private String codeCntns;
@@ -35,10 +35,10 @@ public class PostModel {
     private LocalDateTime updtDt;
 
     @Builder
-    public PostModel(Long id, Category category, String name, String codeCntns, String desc, OpenType openType, LocalDateTime regDt, LocalDateTime updtDt) {
+    public PostModel(Long id, Category category, String title, String codeCntns, String desc, OpenType openType, LocalDateTime regDt, LocalDateTime updtDt) {
         this.id = id;
         this.category = category;
-        this.name = name;
+        this.title = title;
         this.codeCntns = codeCntns;
         this.desc = desc;
         this.openType = openType;

@@ -25,12 +25,12 @@ public class Post extends BaseEntity {
 
     /** 카테고리 */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cid")
+    @JoinColumn(name = "cate_id")
     private Category category;
 
     /** 포스트명 */
-    @Column(name = "name")
-    private String name;
+    @Column(name = "title")
+    private String title;
 
     /** 코드컨텐츠 */
     @Column(name = "code_cntns")
@@ -45,17 +45,17 @@ public class Post extends BaseEntity {
     private OpenType openType;
 
     @Builder
-    public Post(Long cateId, String name, String codeCntns, String desc, OpenType openType) {
+    public Post(Long cateId, String title, String codeCntns, String desc, OpenType openType) {
         this.category   = Category.builder().id(cateId).build();
-        this.name       = name;
+        this.title       = title;
         this.codeCntns  = codeCntns;
         this.desc       = desc;
         this.openType   = openType;
     }
 
-    public void update(Long cateId, String name, String codeCntns, String desc, OpenType openYn) {
+    public void update(Long cateId, String title, String codeCntns, String desc, OpenType openYn) {
         this.category   = Category.builder().id(cateId).build();
-        this.name       = name;
+        this.title       = title;
         this.codeCntns  = codeCntns;
         this.desc       = desc;
         this.openType   = openYn;
@@ -67,7 +67,7 @@ public class Post extends BaseEntity {
                         .category(this.category)
                         .codeCntns(this.codeCntns)
                         .desc(this.desc)
-                        .name(this.name)
+                        .title(this.title)
                         .openType(this.openType)
                         .regDt(this.regDt)
                         .updtDt(this.updtDt)

@@ -3,6 +3,7 @@ package com.project.snackcode.model.post;
 import com.project.snackcode.entity.Category;
 import com.project.snackcode.entity.Post;
 import com.project.snackcode.enums.OpenType;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
@@ -13,10 +14,13 @@ public class PostFormModel {
     private Long cateId;
     private Category category;
 
-    private String name;
+    @NotBlank
+    private String title;
 
+    @NotBlank
     private String codeCntns;
 
+    @NotBlank
     private String desc;
 
     private OpenType openType;
@@ -26,13 +30,13 @@ public class PostFormModel {
                     .cateId(this.cateId)
                     .codeCntns(this.codeCntns)
                     .desc(this.desc)
-                    .name(this.name)
+                    .title(this.title)
                     .openType(OpenType.Y)
                     .build();
     }
 
     public void update(Post post){
-        post.update(this.cateId, this.name, this.codeCntns, this.desc, this.openType);
+        post.update(this.cateId, this.title, this.codeCntns, this.desc, this.openType);
     }
 
 }

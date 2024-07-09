@@ -4,6 +4,7 @@ import com.project.snackcode.model.category.CategoryFormModel;
 import com.project.snackcode.model.category.CategoryModel;
 import com.project.snackcode.model.member.LoginContextHolder;
 import com.project.snackcode.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class CategoryApiController {
      * @return
      */
     @PostMapping("/category")
-    public ResponseEntity save(@RequestBody CategoryFormModel categoryFormModel){
+    public ResponseEntity save(@RequestBody @Valid CategoryFormModel categoryFormModel){
         categoryService.save(categoryFormModel);
         return ResponseEntity.ok().build();
     }
@@ -56,7 +57,7 @@ public class CategoryApiController {
      * @return
      */
     @PatchMapping("/category")
-    public ResponseEntity update(@RequestBody CategoryFormModel categoryFormModel){
+    public ResponseEntity update(@RequestBody @Valid CategoryFormModel categoryFormModel){
         categoryService.update(categoryFormModel);
         return ResponseEntity.ok().build();
     }
@@ -68,7 +69,8 @@ public class CategoryApiController {
      */
     @DeleteMapping("/category/{cateId}")
     public ResponseEntity delete(@PathVariable Long cateId) {
-        categoryService.delete(cateId);
+        Long memId = LoginContextHolder.getLoginUser().getId();
+        categoryService.delete(memId, cateId);
         return ResponseEntity.ok().build();
     }
 

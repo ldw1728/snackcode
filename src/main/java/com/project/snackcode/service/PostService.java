@@ -5,6 +5,8 @@ import com.project.snackcode.model.post.PostFormModel;
 import com.project.snackcode.model.post.PostModel;
 import com.project.snackcode.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,12 @@ public class PostService {
     public PostModel selectModel(Long postId){
         Post post = postRepository.findById(postId).orElseThrow();
         return post.toModel();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostModel> selectPageByCategoryId(Long cateId, Pageable pageable){
+        Page<Post> posts = postRepository.findAllByCategory_IdOrderByIdDesc(cateId, pageable);
+        return posts.map(Post::toModel);
     }
 
     /**

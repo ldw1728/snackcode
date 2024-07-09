@@ -70,10 +70,18 @@ public class CategoryService {
      * @param cateId
      */
     @Transactional
-    public void delete(Long cateId){
-        Category category = categoryRepository.findById(cateId).orElseThrow();
+    public void delete(Long memId, Long cateId){
+        Category targetCategory = categoryRepository.findById(cateId).orElseThrow();
+
+        // 하위 카테고리들도 삭세
+        List<Category> categorys = categoryRepository.findAllByMember_IdAndPrntCategory_Id(memId, cateId);
+        categorys.forEach(category -> {
+            postService.deleteAllByCategoryId(category.getId());
+            categoryRepository.delete(category);
+        });
+
         postService.deleteAllByCategoryId(cateId);
-        categoryRepository.delete(category);
+        categoryRepository.delete(targetCategory);
     }
 
     /**
