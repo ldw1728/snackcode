@@ -1,5 +1,6 @@
 package com.project.snackcode.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.snackcode.converter.EncryptConverter;
 import com.project.snackcode.converter.PasswordConverter;
 import com.project.snackcode.enums.Role;
@@ -10,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -25,6 +28,7 @@ import java.util.stream.Collectors;
 @Table(name = "TB_MEMBER")
 @DynamicUpdate
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class) // createdDate, modifiedDate 생성을 위해 필요
 @Getter
 public class Member {
 
@@ -35,26 +39,27 @@ public class Member {
     private Long id;
 
     /** 회원명 */
-    @Column(name = "NAME")
+    @Column(name = "NAME", nullable = false)
     private String name;
 
     /** 이메일 */
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", nullable = false)
     private String email;
 
     /** 패스워드 */
-    @Column(name = "PASSWORD")
+    @Column(name = "PASSWORD", nullable = false)
     @Convert(converter = PasswordConverter.class)
     private String password;
 
     /** 가입일시 */
-    @Column(name = "JOIN_DT")
+    @Column(name = "JOIN_DT", nullable = false)
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime joinDt;
 
     /** 마지막 접속일시 */
-    @Column(name = "LAST_DT")
+    @Column(name = "LAST_DT", nullable = false)
+    @LastModifiedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastDt;
 
@@ -69,7 +74,7 @@ public class Member {
         this.name       = name;
         this.email      = email;
         this.password   = password;
-        updateLastDt();
+        //updateLastDt();
 
         roles.add(new MemberRole(this, Role.ROLE_USER));
 

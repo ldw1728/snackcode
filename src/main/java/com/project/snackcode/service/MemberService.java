@@ -1,6 +1,7 @@
 package com.project.snackcode.service;
 
 import com.project.snackcode.entity.Member;
+import com.project.snackcode.exception.BasicErrorException;
 import com.project.snackcode.model.member.MemberFormModel;
 import com.project.snackcode.model.member.MemberModel;
 import com.project.snackcode.repository.MemberRepository;
@@ -14,6 +15,15 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final CategoryService categoryService;
+
+    @Transactional(readOnly = true)
+    public boolean isEmailDup(String email) {
+        Member member = memberRepository.findByEmail(email);
+        if (member != null) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * 회원 조회
@@ -35,6 +45,13 @@ public class MemberService {
      */
     @Transactional
     public void save(MemberFormModel memberFormModel){
+        if (isEmailDup(memberFormModel.getEmail())) {
+            throw BasicErrorException.builder()
+                    .code("EMAIL_DUP")
+                    .msg(memberFormModel.getEmail() + ": email is duplication ")
+                    .build();
+        }
+
         Member member = memberFormModel.toEntity();
         memberRepository.save(member);
     }

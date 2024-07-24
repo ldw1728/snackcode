@@ -2,18 +2,28 @@ package com.project.snackcode.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.snackcode.config.SecurityConfig;
+import com.project.snackcode.model.dto.ResponseDataDto;
+import com.project.snackcode.model.member.MemberModel;
 import com.project.snackcode.model.member.UserDetailsImpl;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Slf4j
@@ -35,28 +45,41 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         log.debug("로그인 시도.....");
 
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        try {
+            //String email = request.getParameter("email");
+            //String password = request.getParameter("password");
+            ObjectMapper om = new ObjectMapper();
+            MemberModel member = om.readValue(request.getInputStream(), MemberModel.class);
 
-        UsernamePasswordAuthenticationToken tkn = new UsernamePasswordAuthenticationToken(
-                email, password
-        );
+            log.debug("email, password : {}, {}", member.getEmail(), member.getPassword());
 
-        Authentication authentication = authenticationManager.authenticate(tkn);
+            UsernamePasswordAuthenticationToken tkn = new UsernamePasswordAuthenticationToken(
+                    member.getEmail(), member.getPassword()
+            );
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            Authentication authentication = authenticationManager.authenticate(tkn);
 
-        log.debug("로그인 성공 : {}, {}", userDetails.getMember().getId(), userDetails.getUsername());
+            //UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        return authentication;
+            return authentication;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BadCredentialsException b) {
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
+        }
+
+        return null;
+
 
     }
 
 
     // 인증 성공 후 처리
     // jwt 토큰을 생성하여 header에 추가한다.
+    // front framework -> thymeleaf로 변경하여 쿠키 방식으로 적용
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
 
@@ -65,7 +88,34 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("id", userDetails.getMember().getId()) //jwt의 payload부분
                 .sign(Algorithm.HMAC512(SecurityConfig.jwtSecretKey)); // 시크릿값은 임의로 정해준다.
 
-        response.addHeader("Authorization", "Bearer " + jwt);
+        log.debug("====== create Token : {}", jwt);
+
+        // header에 추가
+        //response.addHeader("Authorization", "Bearer " + jwt);
+
+        // 쿠키 생성
+        for (Cookie cookie : request.getCookies()) {
+            if ("Authorization".equals(cookie.getValue())) {
+                cookie.setMaxAge(0);
+            }
+        }
+        Cookie cookie = new Cookie("Authorization", URLEncoder.encode("Bearer " + jwt, StandardCharsets.UTF_8));
+        cookie.setMaxAge(60000 * 100);
+        cookie.setDomain("localhost");
+        cookie.setPath("/");
+        cookie.setSecure(true);
+        response.addCookie(cookie);
+        log.debug("====== create jwt cookie");
+
+        //request.getRequestDispatcher("/home").forward(request, response);
+//        String redirectUrl = request.getParameter("redirectUrl");
+//        SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
+//
+//        if(redirectUrl == null){
+//            redirectUrl = savedRequest != null ? savedRequest.getRedirectUrl() : "/home";
+//        }
+//
+//        response.addHeader("redirectUrl", redirectUrl);
 
     }
 

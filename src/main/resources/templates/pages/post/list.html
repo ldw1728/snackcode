@@ -1,10 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org" >
+
+<th:block th:fragment="post-list-fragment">
+    <div id="postContainer" class="md:w-11/12 py-10 mx-3 whitespace-nowrap overflow-y-auto">
+
+
+        <div id="listBtns" class="hidden absolute w-fit text-center right-40 bottom-40">
+            <div id="addPostBtn" class="m-2 pt-2 h-10 w-10 rounded-full bg-black text-white font-black cursor-pointer">+</div>
+            <div id="deleteCateBtn" class="m-2 pt-2 h-10 w-10 rounded-full bg-black text-white font-black cursor-pointer">-</div>
+        </div>
+
+    </div>
+
+
+    <th:block th:insert="pages/post/detail::post-detail-fragment"></th:block>
+
+    <script th:inline="javascript">
+
+        let CURR_PAGE = 0;
+
+        domReady(()=>{
+            addClickEvnt('#addPostBtn', openDetail);
+            toggleListBtns();
+        })
+
+        function toggleListBtns(){
+            if(currCateId){
+                document.querySelector('#listBtns').classList.remove('hidden');
+            }
+            else{
+                document.querySelector('#listBtns').classList.add('hidden');
+            }
+        }
+
+        function newPostElement(obj){
+            return `
+                <div name="postEl" class="md:w-8/12 mx-auto m-2" data-post-id="${obj.id}">
+                    <button class="py-1 px-2 w-full ring-1 ring-inset ring-gray-300 hover:bg-gray-50 h-8 rounded-md shadow-sm ">
+                        <span>${obj.title}</span>
+                    </button>
+                </div>
+            `
+        }
+
+        function refreshList(list){
+
+            const postContain = document.querySelector('#postContainer');
+            removeElementsAll('[name="postEl"]');
+
+            list.forEach((item, idx) => {
+                let newPost = newPostElement(item);
+                postContain.insertAdjacentHTML('beforeend', newPost);
+            })
+        }
+
+        async function reloadList(){
+            await axios.get(`/post/${currCateId}?page=${CURR_PAGE}`)
+            .then(res => {
+                CURR_PAGE ++;
+                refreshList(res.data.content);
+            })
+        }
+
+    </script>
+</th:block>
+
 </html>

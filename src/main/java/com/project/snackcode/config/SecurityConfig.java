@@ -2,19 +2,28 @@ package com.project.snackcode.config;
 
 import com.project.snackcode.filter.JwtAuthenticationFilter;
 import com.project.snackcode.filter.JwtAuthorizationFilter;
+import com.project.snackcode.handler.AccessDeniedHandlerImpl;
 import com.project.snackcode.repository.MemberRepository;
 import com.project.snackcode.service.UserDetailsServiceImpl;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.Random;
@@ -51,20 +60,68 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new AccessDeniedHandlerImpl();
+    }
+
+    /**
+     * cors 설정
+     * @return
+     */
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.setAllowCredentials(true);
+//        config.addAllowedOrigin("http://localhost:7070"); //특정 ip에 허용
+//        config.addAllowedHeader("*"); // 모든 header에 허용
+//        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+//        source.registerCorsConfiguration("/**", config);
+//        return new CorsFilter(source);
+//    }
+
+    // 정적 리소스들은 시큐리티 필터에 거치지 않도록 무시 설정.
+    @Bean
+    public WebSecurityCustomizer configure(){
+        return (web) -> {
+            web.ignoring().requestMatchers("/node_modules/**", "/favicon.ico")
+                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        };
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.userDetailsService(userDetailsService);
-        http.csrf(csrf -> csrf.disable())
+
+        http
+                /** userDetailsService */
+                .userDetailsService(userDetailsService)
+
+                /** exception handler */
+                .exceptionHandling(exception -> {
+                    exception.accessDeniedHandler(accessDeniedHandler());
+                })
+
+                //.addFilter(corsFilter())
+                .csrf(csrf -> csrf.disable())
+
+                /** jwt filter */
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration)))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), memberRepository))
-            .formLogin(form->form.loginProcessingUrl("/login").usernameParameter("email"))
-            .authorizeHttpRequests(auth -> {
-                        auth
-                        .requestMatchers("/api/member/join").anonymous()
-                        .requestMatchers( "/api/**").access(new WebExpressionAuthorizationManager("hasRole('ROLE_USER')"))
-                        .requestMatchers("/auth").authenticated()
-                        .requestMatchers("/home").permitAll();
 
-            });
+                /** form login config */
+                .formLogin(form->form
+                        .loginPage("/login")
+                        .usernameParameter("email")
+                )
+
+                /** authorize request path config */
+                .authorizeHttpRequests(auth -> {
+                    auth.anyRequest().permitAll();
+//                            .requestMatchers("/member/join").anonymous()
+//                            .requestMatchers("/login").anonymous()
+//                            .requestMatchers("/home", "/post/**").authenticated()
+//                            .requestMatchers( "/api/**").authenticated();
+                });
 
 
 

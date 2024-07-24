@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.1'
     id 'io.spring.dependency-management' version '1.1.5'
+    id 'com.github.node-gradle.node' version '3.4.0'
 }
 
 group = 'com.project'
@@ -12,6 +13,21 @@ java {
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
+
+
+// 빌드 시 npm 라이브러리들을 다운받아 빌드폴더에 복사함.
+node {
+    version = '22.4.1'
+    npmVersion = '10.8.1'
+    download = true
+    nodeProjectDir = file('${projectDir}/src/main/resources/static')
+}
+
+task copyFrontLib(type: Copy) {
+    from "${projectDir}/src/main/resources/static"
+    into "${projectDir}/build/resources/main/static/."
+}
+
 
 configurations {
     all {
@@ -35,6 +51,8 @@ dependencies {
     implementation 'com.auth0:java-jwt:4.4.0'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'

@@ -2,6 +2,7 @@ package com.project.snackcode.model.post;
 
 import com.project.snackcode.entity.Category;
 import com.project.snackcode.enums.OpenType;
+import com.project.snackcode.model.category.CategoryModel;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ public class PostModel {
     private Long id;
 
     /** 카테고리 */
-    private Category category;
+    private CategoryModel category;
 
     /** 포스트명 */
     private String title;
@@ -37,7 +38,7 @@ public class PostModel {
     @Builder
     public PostModel(Long id, Category category, String title, String codeCntns, String desc, OpenType openType, LocalDateTime regDt, LocalDateTime updtDt) {
         this.id = id;
-        this.category = category;
+        this.category = category.toModel();
         this.title = title;
         this.codeCntns = codeCntns;
         this.desc = desc;

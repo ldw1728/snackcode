@@ -1,10 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/empty-layout}">
+
+<th:block layout:fragment="content-fragment">
+
+    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+            <h2 class="mt-10 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">CODE DRAWERS</h2>
+            <h3></h3>
+        </div>
+
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <form class="space-y-6" name="jForm">
+                <div>
+                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900"><span class="necess">*</span>Email</label>
+                    <div class="mt-2">
+                        <input id="email" name="email" type="email" class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between">
+                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900"><span class="necess">*</span>Password</label>
+                    </div>
+                    <div class="mt-2">
+                        <input id="password" name="password" type="password" class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="name" class="block text-sm font-medium leading-6 text-gray-900"><span class="necess">*</span>Name</label>
+                    <div class="mt-2">
+                        <input id="name" name="name" type="text" class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    </div>
+                </div>
+
+                <div>
+                    <button id="signUpBtn" type="button" class="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-neutral-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign up</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+<script th:src="@{/js/validateConfig.js}"></script>
+<script th:inline="javascript">
+
+
+    domReady(()=>{
+        addClickEvnt('#signUpBtn', signUp);
+    });
+
+    function signUp() {
+
+        let form = document.jForm;
+
+        validateForm(form, ['email', 'password', 'name'], JOIN_CONSTRAINTS)
+        .then((result)=>{
+
+            axios.post('/member/join', form)
+            .then( res => {
+               location.href = '/login';
+            })
+            .catch( err => {
+                console.log(err)
+                if("EMAIL_DUP" === err.response.data.code){
+                    showVaidMsg({
+                        email: ['해당 이메일이 사용중입니다.']
+                    });
+                }
+            })
+
+        });
+
+
+    }
+
+
+</script>
+
+</th:block>
+
+
+
+
 </html>

@@ -35,15 +35,27 @@ public class CategoryService {
     }
 
     /**
-     * 최상위 카테고리 리스트 조회
+     * 카테고리 하위 리스트 조회
      * @param memId
+     * @param cateId
      * @return
      */
     @Transactional(readOnly = true)
-    public List<CategoryModel> selectRootCategoryModels(Long memId){
-        List<Category> categorys = categoryRepository.findAllByMember_IdAndPrntCategory_Id(memId, null);
+    public List<CategoryModel> selectCategoryModels(Long memId, Long cateId) {
+        List<Category> categorys = categoryRepository.findAllByMember_IdAndPrntCategory_Id(memId, cateId);
         return categorys.stream().map(Category::toModel).collect(Collectors.toList());
     }
+
+//    /**
+//     * 최상위 카테고리 리스트 조회
+//     * @param memId
+//     * @return
+//     */
+//    @Transactional(readOnly = true)
+//    public List<CategoryModel> selectRootCategoryModels(Long memId){
+//        List<Category> categorys = categoryRepository.findAllByMember_IdAndPrntCategory_Id(memId, null);
+//        return categorys.stream().map(Category::toModel).collect(Collectors.toList());
+//    }
 
     /**
      * 카테고리 저장

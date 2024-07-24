@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+    <head th:replace="common/fragments/head::head-fragment">
+        <title layout:title-pattern="$LAYOUT_TITLE : $CONTENT_TITLE">snackCode</title>
+    </head>
+
+
+    <body>
+
+        <header th:replace="common/fragments/header::header-fragment"></header>
+
+        <!-- 본문 -->
+        <th:block layout:fragment="content-fragment"></th:block>
+
+        <footer></footer>
+
+    </body>
+
+
+
+
+<script th:inline="javascript">
+
+</script>
+</html>

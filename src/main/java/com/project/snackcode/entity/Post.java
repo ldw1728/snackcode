@@ -25,29 +25,29 @@ public class Post extends BaseEntity {
 
     /** 카테고리 */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cate_id")
+    @JoinColumn(name = "CATE_ID")
     private Category category;
 
     /** 포스트명 */
-    @Column(name = "title")
+    @Column(name = "TITLE")
     private String title;
 
     /** 코드컨텐츠 */
-    @Column(name = "code_cntns")
+    @Column(name = "CODE_CNTNS")
     private String codeCntns;
 
     /** 설명 */
-    @Column(name = "code_desc")
+    @Column(name = "CODE_DESC")
     private String desc;
 
     /** 공개여부 */
-    @Column(name = "open_yn")
+    @Column(name = "OPEN_YN")
     private OpenType openType;
 
     @Builder
     public Post(Long cateId, String title, String codeCntns, String desc, OpenType openType) {
         this.category   = Category.builder().id(cateId).build();
-        this.title       = title;
+        this.title      = title;
         this.codeCntns  = codeCntns;
         this.desc       = desc;
         this.openType   = openType;

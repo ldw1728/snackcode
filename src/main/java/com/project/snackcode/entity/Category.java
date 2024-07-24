@@ -27,12 +27,12 @@ public class Category extends BaseEntity {
 
     /** 회원*/
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mem_id")
+    @JoinColumn(name = "MEM_ID")
     private Member member;
 
     /** 부모 카테고리*/
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "prnt_cid")
+    @JoinColumn(name = "PRNT_CID")
     private Category prntCategory;
 
     /** 카테고리명 */

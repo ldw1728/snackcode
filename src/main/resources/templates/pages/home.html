@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default-layout}">
+
+
+<th:block layout:fragment="content-fragment">
+
+    <!-- 카테고리 표시 -->
+    <section th:replace="common/fragments/category::category-fragment"></section>
+
+    <th:block th:replace="pages/post/list :: post-list-fragment"></th:block>
+
+
+
+</th:block>
+
 </html>

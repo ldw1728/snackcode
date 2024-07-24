@@ -15,7 +15,6 @@ import java.util.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
 public class CategoryApiController {
 
     private final CategoryService categoryService;
@@ -26,18 +25,10 @@ public class CategoryApiController {
      * @return
      */
     @GetMapping({"/category", "/category/{id}"})
-    public ResponseEntity list(Long id){
-
-        // root category 전체조회
-        if (id == null) {
-            Long memId = LoginContextHolder.getLoginUser().getId();
-            List<CategoryModel> categoryModels = categoryService.selectRootCategoryModels(memId);
-            return ResponseEntity.ok(categoryModels);
-        }
-
-        // 특정 category 조회
-        CategoryModel categoryModel = categoryService.selectModel(id);
-        return ResponseEntity.ok(categoryModel);
+    public ResponseEntity list(@PathVariable(required = false) Long id){
+        Long memId = LoginContextHolder.getLoginUser().getId();
+        List<CategoryModel> categoryModels = categoryService.selectCategoryModels(memId, id);
+        return ResponseEntity.ok(categoryModels);
     }
 
     /**
@@ -46,7 +37,8 @@ public class CategoryApiController {
      * @return
      */
     @PostMapping("/category")
-    public ResponseEntity save(@RequestBody @Valid CategoryFormModel categoryFormModel){
+    public ResponseEntity save(@Valid CategoryFormModel categoryFormModel){
+        categoryFormModel.setMemId(LoginContextHolder.getLoginUser().getId());
         categoryService.save(categoryFormModel);
         return ResponseEntity.ok().build();
     }

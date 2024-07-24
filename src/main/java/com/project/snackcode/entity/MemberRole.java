@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 public class MemberRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mem_id")
+    @JoinColumn(name = "MEM_ID")
     private Member member;
 
     @Column(name = "ROLE_TYPE")

@@ -1,10 +1,179 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <th:block th:fragment="category-fragment">
+
+        <section class="c-category relative">
+
+            <!-- path 영역 -->
+            <div id="pathSec" class="hidden-scoll text-sm md:w-5/6  mx-4 md:mx-auto my-3 h-10 whitespace-nowrap overflow-x-auto">
+                <img onclick="clickPathBtn(this)" class="inline p-2 cursor-pointer" th:src="@{/images/home.png}">
+            </div>
+            <!-- // path 영역 -->
+
+
+            <!-- category 영역-->
+            <div id="cateSec" class=" hidden-scoll p-2 md:w-5/6 mx-auto whitespace-nowrap overflow-x-auto max-h-18">
+                <button id="addCateBtn" class="p-2 font-bold">+</button>
+            </div>
+            <!-- // category 영역-->
+
+        </section>
+
+        <script th:inline="javascript">
+
+            let currCateId = '';
+
+            domReady(()=>{
+                addClickEvnt('#addCateBtn', addCate);
+                reloadCate('');
+                setXScroll('#cateSec');
+                setXScroll('#pathSec');
+
+            })
+
+            /**
+             * 카테고리 추가 버튼 클릭 시
+             */
+            function addCate(){
+
+                const newCate =
+                                `<button name="newCateBtn" class="w-32 py-2 px-4 border-solid border border-black rounded-full relative">
+                                    <form name="cForm">
+                                        <input name="name" id="newCateInput" class="w-24 px-2" type="text">
+                                        <input name="prntCid" type="hidden" value="">
+                                    </form>
+                                </button>`
+
+                document.querySelector('#addCateBtn').insertAdjacentHTML('afterend', newCate);
+
+                const newCateInpt = document.querySelector('#newCateInput');
+                newCateInpt.addEventListener('blur', saveCate);
+                newCateInpt.addEventListener('keypress', (e) => {
+                    if (window.event.keyCode === 13) {
+                        e.preventDefault();
+                        newCateInpt.removeEventListener('blur', saveCate);
+                        saveCate();
+                    }
+                });
+
+                newCateInpt.focus();
+            }
+
+            /**
+             * 카테고리 저장
+             */
+            function saveCate(){
+
+                let form = document.cForm;
+
+                if(!form.name.value) {
+                    form.parentNode?.remove();
+                    return;
+                }
+
+                axios.post('/category', document.cForm)
+                    .then( res => {
+                        console.log(res)
+                        reloadCate('');
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    });
+
+            }
+
+            /**
+             * 카테고리 리로드
+             * @param id
+             */
+            async function reloadCate(id){
+                await axios.get(id ? `/category/${id}` : '/category')
+                .then(res=>{
+                    refreshCateElements(res.data);
+                })
+            }
+
+            function refreshCateElements(categories) {
+                removeElementsAll('#cateSec [name$=ateBtn]');
+
+                // new cate btn 생성
+                const newCateEl = () => {
+                    const el    = document.createElement('button');
+                    el.name     = 'cateBtn';
+                    el.classList.add('inline', 'hover:bg-gray-50', 'm-1', 'py-2', 'px-4', 'border-solid', 'border', 'border-black', 'rounded-full');
+                    el.addEventListener('click', (e) => { clickCateBtn(e.target) });
+
+                return el;
+            }
+
+                categories.forEach(cate=>{
+                    let el              = newCateEl();
+                    el.innerText        = cate.name;
+                    el.dataset.cateId   = cate.id;
+                    document.querySelector('#cateSec').insertAdjacentElement('beforeend', el);
+                });
+            }
+
+            /**
+             * 카테고리 클릭 시
+             * @param target
+             */
+            function clickCateBtn(target) {
+
+                const id = target.dataset.cateId;
+
+                // 하위 카테고리들을 가져와 로드
+                reloadCate(id)
+                    .then(()=>{
+                        const pathSec       = document.querySelector('#pathSec');
+                        const addPathHtml   = `<div name="pathBtn" class="inline" data-cate-id="${target.dataset.cateId}">
+                                                    <img class="inline" src="/images/arrow_right.png">
+                                                    <button class="p-2" onclick="clickPathBtn(this)">${target.innerText}</button>
+                                                </div>`
+                        // 경로에 추가
+                        pathSec.insertAdjacentHTML('beforeend', addPathHtml);
+
+                        changeCate(id);
+
+                    });
+            }
+
+            function clickPathBtn(target){
+
+                const id = target.closest('[name="pathBtn"]')?.dataset.cateId;
+
+                reloadCate(id)
+                    .then(()=>{
+                        // 현재 클릭한 경로의 다음 경로들을 삭제
+                        let pathBtns    = document.querySelectorAll('[name="pathBtn"]');
+                        let currIdx     = id ? pathBtns.length - 1 : -1;
+
+                        for(const [idx, btn] of pathBtns.entries()){
+
+                            if(id == btn.dataset?.cateId){
+                                currIdx = idx;
+                            }
+                            if(idx > currIdx){
+                                btn.remove();
+                            }
+                        }
+
+                        changeCate(id);
+
+                    });
+
+            }
+
+            function changeCate(id){
+                currCateId = id;
+                toggleListBtns();
+                CURR_PAGE = 0;
+                reloadList()
+            }
+
+
+
+
+        </script>
+
+    </th:block>
 </html>

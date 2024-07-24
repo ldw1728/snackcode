@@ -2,11 +2,13 @@ package com.project.snackcode.model.member;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class MemberModel {
 
     private Long id;

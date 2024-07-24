@@ -8,6 +8,7 @@ import com.project.snackcode.model.member.UserDetailsImpl;
 import com.project.snackcode.repository.MemberRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +16,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
@@ -42,15 +47,31 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
             log.debug(" ----- jwt validation check ------ url : [{}]", request.getRequestURL());
 
-            String jwtStr = request.getHeader("authorization");
+            // header 방식
+//            String jwtStr = request.getHeader("Authorization");
+//
+//            // 요청 헤더에 token이 존재하는지
+//            if (StringUtils.isBlank(jwtStr) || !jwtStr.startsWith("Bearer")) {
+//                throw new Exception("JWT token is not exist");
+//            }
 
-            // 요청 헤더에 token이 존재하는지
+            String jwtStr = "";
+
+            for (Cookie cookie : request.getCookies()) {
+                if ("Authorization".equals(cookie.getName())) {
+                    jwtStr = cookie.getValue();
+                    log.debug("123123JWT : {}", jwtStr);
+
+                }
+            }
+
             if (StringUtils.isBlank(jwtStr) || !jwtStr.startsWith("Bearer")) {
                 throw new Exception("JWT token is not exist");
             }
 
             log.debug("JWT : {}", jwtStr);
 
+            jwtStr = URLDecoder.decode(jwtStr, StandardCharsets.UTF_8);
             jwtStr = jwtStr.replace("Bearer ", "");
 
             // jwt 검증 후 payload영역의 회원 id 데이터 추출
@@ -88,4 +109,5 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // 토큰이 없거나 검증실패 시 예외가 발생. 따로 처리될것없이 다음 필터로 넘겨준다
         // 인증이 필요하다면 로그인페이지로, 아니면 정상적으로 페이지 로드함.
     }
+
 }

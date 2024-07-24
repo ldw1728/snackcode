@@ -14,7 +14,6 @@ public class CategoryFormModel {
     private Long id;
 
     /** 회원 */
-    @NotNull
     @Min(value = 1L)
     private Long memId;
 

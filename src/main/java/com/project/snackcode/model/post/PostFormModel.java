@@ -11,6 +11,7 @@ public class PostFormModel {
 
     private Long id;
 
+    @NotBlank
     private Long cateId;
     private Category category;
 

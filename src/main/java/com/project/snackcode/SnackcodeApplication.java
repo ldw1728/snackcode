@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+@EnableJpaAuditing
 @ServletComponentScan
 @SpringBootApplication
-@EnableJpaAuditing
 public class SnackcodeApplication {
 
     @Bean

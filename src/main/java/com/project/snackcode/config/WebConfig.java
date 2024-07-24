@@ -1,9 +1,5 @@
 package com.project.snackcode.config;
 
-import com.project.snackcode.listener.CustomContextListener;
-import jakarta.servlet.ServletContextListener;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -19,4 +15,13 @@ public class WebConfig implements WebMvcConfigurer {
 //        return bean;
 //    }
 
+
+    // 정적 리소스들을 적용
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/**").addResourceLocations(
+//                "classpath:/static/**",
+//                "classpath:/resources/**"
+//        );
+//    }
 }

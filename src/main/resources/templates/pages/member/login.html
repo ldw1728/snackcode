@@ -35,7 +35,7 @@
 
             <p class="mt-10 text-center text-sm text-gray-500">
                 Not a member?
-                <a href="#" class="font-semibold leading-6 text-black hover:text-black underline">sign up</a>
+                <a href="/member/join" class="font-semibold leading-6 text-black hover:text-black underline">sign up</a>
             </p>
         </div>
     </div>
@@ -45,21 +45,29 @@
 
         domReady(()=>{
             addClickEvnt('#loginBtn', goLogin);
+            pressEnter();
         });
+
+        const pressEnter = () => {
+            document.querySelectorAll('input').forEach(node => {
+                node.addEventListener('keypress', () => {
+                    !(window.event.keyCode === 13) || goLogin();
+                });
+            })
+        }
 
         function goLogin(){
 
             let form = document.lForm;
 
-            validateForm(form, ['email', 'password'])
+            validateForm(form, ['email', 'password'], LOGIN_CONSTRAINTS)
             .then(async (result) => {
-
                 await axios.post("/login",
                     {   email   :form.email.value,
                         password:form.password.value }
                     )
                     .then((res) => {
-                        location.href = '/home';
+                        location.href = '/post';
                     });
             })
             .catch((err)=>{

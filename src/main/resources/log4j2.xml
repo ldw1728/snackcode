@@ -61,6 +61,10 @@
             <AppenderRef ref="CONSOLE_STDOUT_ST"/>
 <!--            <AppenderRef ref="InfoAppender"/>-->
         </logger>
+        <logger name="org.springframework.security" level="INFO" additivity="false"> <!-- additivity="false" = 중복x-->
+            <AppenderRef ref="CONSOLE_STDOUT_ST"/>
+            <!--            <AppenderRef ref="InfoAppender"/>-->
+        </logger>
         <logger name="org.hibernate" level="INFO" additivity="false">
             <AppenderRef ref="CONSOLE_STDOUT_ST"/>
 <!--            <AppenderRef ref="InfoAppender"/>-->
