@@ -10,5 +10,18 @@ html, body{
 
 .c-category {
     width: 100%;
-    height: fit-content;
+    height: 10%;
+}
+
+.hidden-scoll{
+    -ms-overflow-style: none; /* IE, Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.hidden-scoll::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+textarea{
+    resize:none
 }

@@ -28,6 +28,18 @@ const ALL_CONSTRAINTS = {
             message: '이름은 필수입력 항목입니다.'
         }
     },
+    title: {
+        presence: {
+            allowEmpty : false,
+            message: '제목은 필수입력 항목입니다.'
+        }
+    },
+    codeCntns:{
+        presence: {
+            allowEmpty : false,
+            message: '컨텐츠는 필수입력 항목입니다.'
+        }
+    },
     loginEmail:{
 
     }
@@ -43,6 +55,11 @@ const JOIN_CONSTRAINTS = {
     password: ALL_CONSTRAINTS.editPassword,
     name    : ALL_CONSTRAINTS.name
 };
+
+const DETAIL_CONSTRAINTS = {
+    title: ALL_CONSTRAINTS.title,
+    codeCntns: ALL_CONSTRAINTS.codeCntns,
+}
 
 /** form validation */
 function validateForm(form, names, constraints = ALL_CONSTRAINTS){
@@ -96,7 +113,7 @@ function showVaidMsg(resultObj = {}){
         let el = document.querySelector(`[name=${name}]`);
 
         if(el){
-            el.insertAdjacentElement('afterend', validationMsgEl(resultObj[name][0]))
+            el.parentElement.insertAdjacentElement('afterend', validationMsgEl(resultObj[name][0]))
         }
 
     });
