@@ -1,4 +1,41 @@
 const JWT_TOKEN_KEY = 'jwttkn'
+const STORED_PATH   = 'storedPath'
+
+NodeList.prototype.setAttrAll = function(key, value) {
+    this.forEach((node, idx, listObj)=>{
+        node.setAttribute(key, value);
+    });
+}
+
+/**
+ * 특정 셀렉터들에 속성을 부여한다.
+ * @param selector
+ * @param key
+ * @param value
+ */
+function setAttrAll(selector, key, value) {
+    document.querySelectorAll('[name="typeOptions"]').forEach(el => {
+        el.setAttribute(key, value);
+    })
+}
+
+function isShowElement(selector){
+    return !document.querySelector(selector).classList.contains('hidden');
+}
+
+/** 요소 표시 */
+function showElement(selector) {
+    document.querySelectorAll(selector).forEach(el => {
+        el.classList.remove('hidden');
+    });
+}
+
+/** 요소 숨기기 */
+function hiddenElement(selector) {
+    document.querySelectorAll(selector).forEach(el => {
+        el.classList.add('hidden');
+    });
+}
 
 function setXScroll(selector){
     document.querySelector(selector).addEventListener('wheel', (e)=>{
@@ -20,8 +57,10 @@ function removeElementsAll(selector){
 }
 
 /** click event */
-function addClickEvnt(selector, func){
-    document.querySelector(selector).addEventListener('click', func);
+function addClickEvnt(selector, func, options){
+    document.querySelectorAll(selector).forEach(el => {
+        el.addEventListener('click', (e) => func(e), options);
+    })
 }
 
 const domReady = func => {
