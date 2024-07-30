@@ -26,11 +26,17 @@ class SnackcodeApplicationTests {
 
 
     @Test
+    @Commit
     public void postTest(){
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<PostModel> postModels = postService.selectPageByCategoryId(2L, pageable);
 
-        System.out.println(postModels.getTotalElements());
+
+        for (int i = 0; i < 30; i++) {
+            PostFormModel postFormModel = new PostFormModel();
+            postFormModel.setTitle("test" + i);
+            postFormModel.setCodeCntns("tetst");
+            postFormModel.setCateId(2L);
+            postService.save(postFormModel);
+        }
 
     }
 

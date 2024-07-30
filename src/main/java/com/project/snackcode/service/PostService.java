@@ -1,6 +1,8 @@
 package com.project.snackcode.service;
 
 import com.project.snackcode.entity.Post;
+import com.project.snackcode.exception.BasicErrorException;
+import com.project.snackcode.model.member.LoginContextHolder;
 import com.project.snackcode.model.post.PostFormModel;
 import com.project.snackcode.model.post.PostModel;
 import com.project.snackcode.repository.PostRepository;
@@ -63,8 +65,17 @@ public class PostService {
      */
     @Transactional
     public void update(PostFormModel postFormModel) {
+
         Post post = postRepository.findById(postFormModel.getId()).orElseThrow();
+
+        Long memId = LoginContextHolder.getLoginUser().getId();
+
+        if (memId != post.getCategory().getMember().getId()) {
+            throw BasicErrorException.builder().code("INCORRECT_MEM").msg("diff postMem and loginmem").build();
+        }
+
         postFormModel.update(post);
+
     }
 
     /**

@@ -34,9 +34,10 @@ frontend 프로젝트 구성.
 ~thymeleaf로 변경.~
 ~jwt 토큰을 header에 담아 요청하는것을 쿠키 방식으로 변경~
 ~카테고리 및 리스트 생성 기능 추가~
-게시글 삭제 및 수정 기능 추가
+~게시글 삭제 및 수정 기능 추가~
 게시글의 조회수, 좋아요, 즐겨찾기 컬럼추가 및 기능추가
-게시글 contents, description항목에 에디터 달기
+~게시글 contents, description항목에 에디터 달기~
+~codemirror 이용하여 code editor 기능추가~
 
 
 

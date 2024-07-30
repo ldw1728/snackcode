@@ -116,10 +116,10 @@ public class SecurityConfig {
 
                 /** authorize request path config */
                 .authorizeHttpRequests(auth -> {
-                    auth.anyRequest().permitAll();
+                    auth
 //                            .requestMatchers("/member/join").anonymous()
-//                            .requestMatchers("/login").anonymous()
-//                            .requestMatchers("/home", "/post/**").authenticated()
+                              .requestMatchers("/login").anonymous()
+                              .requestMatchers("/**").authenticated();
 //                            .requestMatchers( "/api/**").authenticated();
                 });
 

@@ -2,6 +2,7 @@ package com.project.snackcode.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.project.snackcode.config.SecurityConfig;
 import com.project.snackcode.entity.Member;
 import com.project.snackcode.model.member.UserDetailsImpl;
@@ -60,8 +61,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             for (Cookie cookie : request.getCookies()) {
                 if ("Authorization".equals(cookie.getName())) {
                     jwtStr = cookie.getValue();
-                    log.debug("123123JWT : {}", jwtStr);
-
                 }
             }
 
@@ -96,7 +95,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 UserDetailsImpl userDetails = new UserDetailsImpl(member.toModel());
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                userDetails.getAuthorities().forEach(str -> System.out.println(str.getAuthority()));
+
+                request.setAttribute("LoginUser", userDetails);
+
                 log.debug("jwt auth success : {}, {}", userDetails.getMember().getId(), userDetails.getUsername());
 
             }

@@ -20,6 +20,9 @@ public class PostModel {
     /** 포스트명 */
     private String title;
 
+    /** 컨텐츠 타입 */
+    private String cntnsType;
+
     /** 코드컨텐츠 */
     private String codeCntns;
 
@@ -36,14 +39,15 @@ public class PostModel {
     private LocalDateTime updtDt;
 
     @Builder
-    public PostModel(Long id, Category category, String title, String codeCntns, String desc, OpenType openType, LocalDateTime regDt, LocalDateTime updtDt) {
-        this.id = id;
-        this.category = category.toModel();
-        this.title = title;
-        this.codeCntns = codeCntns;
-        this.desc = desc;
-        this.openType = openType;
-        this.regDt = regDt;
-        this.updtDt = updtDt;
+    public PostModel(Long id, Category category, String title, String cntnsType, String codeCntns, String desc, OpenType openType, LocalDateTime regDt, LocalDateTime updtDt) {
+        this.id         = id;
+        this.category   = category.toModel();
+        this.title      = title;
+        this.cntnsType  = cntnsType;
+        this.codeCntns  = codeCntns;
+        this.desc       = desc;
+        this.openType   = openType;
+        this.regDt      = regDt;
+        this.updtDt     = updtDt;
     }
 }

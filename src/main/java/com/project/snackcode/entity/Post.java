@@ -5,6 +5,7 @@ import com.project.snackcode.enums.OpenType;
 import com.project.snackcode.model.post.PostModel;
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -16,6 +17,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "TB_POST")
 @DynamicUpdate
 @NoArgsConstructor
+@Getter
 public class Post extends BaseEntity {
 
     @Id
@@ -32,7 +34,11 @@ public class Post extends BaseEntity {
     @Column(name = "TITLE")
     private String title;
 
-    /** 코드컨텐츠 */
+    /** 컨텐츠 타입 */
+    @Column(name = "CNTNS_TYPE")
+    private String cntnsType;
+
+    /** 컨텐츠 */
     @Column(name = "CODE_CNTNS")
     private String codeCntns;
 
@@ -45,17 +51,19 @@ public class Post extends BaseEntity {
     private OpenType openType;
 
     @Builder
-    public Post(Long cateId, String title, String codeCntns, String desc, OpenType openType) {
+    public Post(Long cateId, String title, String cntnsType, String codeCntns, String desc, OpenType openType) {
         this.category   = Category.builder().id(cateId).build();
         this.title      = title;
+        this.cntnsType  = cntnsType;
         this.codeCntns  = codeCntns;
         this.desc       = desc;
         this.openType   = openType;
     }
 
-    public void update(Long cateId, String title, String codeCntns, String desc, OpenType openYn) {
+    public void update(Long cateId, String title, String cntnsType, String codeCntns, String desc, OpenType openYn) {
         this.category   = Category.builder().id(cateId).build();
-        this.title       = title;
+        this.title      = title;
+        this.cntnsType  = cntnsType;
         this.codeCntns  = codeCntns;
         this.desc       = desc;
         this.openType   = openYn;

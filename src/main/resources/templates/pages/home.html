@@ -12,6 +12,31 @@
     <th:block th:replace="pages/post/list :: post-list-fragment"></th:block>
 
 
+    <script th:inline="javascript">
+        domReady(()=>{
+            getStoredPathHtml()
+        })
+
+        /** 저장된 경로를 불러온다. */
+        function getStoredPathHtml() {
+            const ls = window.localStorage;
+            const pathHTML = ls.getItem(STORED_PATH);
+            if(pathHTML){
+                const pathSec = document.querySelector('#pathSec');
+                pathSec.innerHTML = pathHTML;
+                pathSec.lastElementChild?.lastElementChild?.click();
+            }
+            else{
+                reloadCate('');
+            }
+        }
+
+        /** 경로를 저장한다. */
+        function storePathHtml(pathHTML = document.querySelector('#pathSec').innerHTML) {
+            const ls = window.localStorage;
+            ls.setItem(STORED_PATH, pathHTML);
+        }
+    </script>
 
 </th:block>
 

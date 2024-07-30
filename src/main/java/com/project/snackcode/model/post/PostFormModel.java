@@ -4,6 +4,7 @@ import com.project.snackcode.entity.Category;
 import com.project.snackcode.entity.Post;
 import com.project.snackcode.enums.OpenType;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -11,7 +12,7 @@ public class PostFormModel {
 
     private Long id;
 
-    @NotBlank
+    @NotNull
     private Long cateId;
     private Category category;
 
@@ -19,9 +20,11 @@ public class PostFormModel {
     private String title;
 
     @NotBlank
-    private String codeCntns;
+    private String cntnsType;
 
     @NotBlank
+    private String codeCntns;
+
     private String desc;
 
     private OpenType openType;
@@ -29,15 +32,16 @@ public class PostFormModel {
     public Post toEntity(){
         return Post.builder()
                     .cateId(this.cateId)
+                    .cntnsType(this.cntnsType)
                     .codeCntns(this.codeCntns)
                     .desc(this.desc)
                     .title(this.title)
-                    .openType(OpenType.Y)
+                    .openType(this.openType)
                     .build();
     }
 
     public void update(Post post){
-        post.update(this.cateId, this.title, this.codeCntns, this.desc, this.openType);
+        post.update(this.cateId, this.title, this.cntnsType, this.codeCntns, this.desc, this.openType);
     }
 
 }

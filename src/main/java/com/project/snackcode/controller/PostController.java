@@ -34,24 +34,20 @@ public class PostController {
      */
     @GetMapping({"/post/{cateId}", "/post/{cateId}/{postId}"})
     @ResponseBody
-    public ResponseEntity<Page<PostModel>> select(  @PathVariable Long cateId,
+    public ResponseEntity select(  @PathVariable Long cateId,
                                    @PathVariable(required = false) Long postId,
                                    Pageable pageable){
 
-        Page<PostModel> postModels = postService.selectPageByCategoryId(cateId, pageable);
-        System.out.println(postModels.getTotalElements());
 
-        return ResponseEntity.ok(postModels);
+        // category post 전체조회
+        if (postId == null) {
+            Page<PostModel> postModels = postService.selectPageByCategoryId(cateId, pageable);
+            return ResponseEntity.ok(postModels);
+        }
 
-//        // category post 전체조회
-//        if (postId == null) {
-//            Page<PostModel> postModels = postService.selectPageByCategoryId(cateId, pageable);
-//            return ResponseEntity.ok(postModels);
-//        }
-//
-//        // 특정 post 조회
-//        PostModel postModel = postService.selectModel(postId);
-//        return ResponseEntity.ok(postModel);
+        // 특정 post 조회
+        PostModel postModel = postService.selectModel(postId);
+        return ResponseEntity.ok(postModel);
     }
 
     /**
@@ -73,7 +69,7 @@ public class PostController {
      */
     @PatchMapping("/post")
     @ResponseBody
-    public ResponseEntity update(@RequestBody @Valid PostFormModel postFormModel){
+    public ResponseEntity update(@Valid PostFormModel postFormModel){
         postService.update(postFormModel);
         return ResponseEntity.ok().build();
     }

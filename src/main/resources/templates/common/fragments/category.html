@@ -24,7 +24,6 @@
 
             domReady(()=>{
                 addClickEvnt('#addCateBtn', addCate);
-                reloadCate('');
                 setXScroll('#cateSec');
                 setXScroll('#pathSec');
 
@@ -70,10 +69,12 @@
                     return;
                 }
 
-                axios.post('/category', document.cForm)
+                form.prntCid.value = currCateId;
+
+                axios.post('/category', form)
                     .then( res => {
                         console.log(res)
-                        reloadCate('');
+                        reloadCate(currCateId);
                     })
                     .catch(err => {
                         console.error(err)
@@ -124,19 +125,24 @@
                 // 하위 카테고리들을 가져와 로드
                 reloadCate(id)
                     .then(()=>{
-                        const pathSec       = document.querySelector('#pathSec');
-                        const addPathHtml   = `<div name="pathBtn" class="inline" data-cate-id="${target.dataset.cateId}">
-                                                    <img class="inline" src="/images/arrow_right.png">
-                                                    <button class="p-2" onclick="clickPathBtn(this)">${target.innerText}</button>
-                                                </div>`
-                        // 경로에 추가
-                        pathSec.insertAdjacentHTML('beforeend', addPathHtml);
-
+                        addPath(target);
                         changeCate(id);
-
                     });
             }
 
+            function addPath(cateBtn){
+                const pathSec       = document.querySelector('#pathSec');
+                const addPathHtml   = `<div name="pathBtn" class="inline" data-cate-id="${cateBtn.dataset.cateId}">
+                                                    <img class="inline" src="/images/arrow_right.png">
+                                                    <button class="p-2" onclick="clickPathBtn(this)">${cateBtn.innerText}</button>
+                                                </div>`
+                // 경로에 추가
+                pathSec.insertAdjacentHTML('beforeend', addPathHtml);
+                // 스토리지에 경로 저장
+                storePathHtml();
+            }
+
+            // 경로 클릭 시
             function clickPathBtn(target){
 
                 const id = target.closest('[name="pathBtn"]')?.dataset.cateId;
@@ -158,16 +164,22 @@
                         }
 
                         changeCate(id);
-
+                        storePathHtml();
                     });
 
             }
 
             function changeCate(id){
-                currCateId = id;
-                toggleListBtns();
-                CURR_PAGE = 0;
-                reloadList()
+
+                removeElementsAll('[name="postEl"]');
+
+                if (id) {
+                    currCateId = id;
+                    toggleListBtns();
+                    CURR_PAGE = 0;
+                    reloadList()
+                }
+
             }
 
 

@@ -2,10 +2,9 @@
       xmlns:th="http://www.thymeleaf.org" >
 
 <th:block th:fragment="post-list-fragment">
-    <div id="postContainer" class="md:w-11/12 py-10 mx-3 whitespace-nowrap overflow-y-auto">
+    <div id="postContainer" class="hidden-scoll md:w-11/12 h-3/5 my-10 py-10 mx-auto whitespace-nowrap overflow-y-auto">
 
-
-        <div id="listBtns" class="hidden absolute w-fit text-center right-40 bottom-40">
+        <div id="listBtns" class="hidden absolute w-fit text-center right-32 bottom-32">
             <div id="addPostBtn" class="m-2 pt-2 h-10 w-10 rounded-full bg-black text-white font-black cursor-pointer">+</div>
             <div id="deleteCateBtn" class="m-2 pt-2 h-10 w-10 rounded-full bg-black text-white font-black cursor-pointer">-</div>
         </div>
@@ -16,37 +15,38 @@
     <th:block th:insert="pages/post/detail::post-detail-fragment"></th:block>
 
     <script th:inline="javascript">
-
         let CURR_PAGE = 0;
 
         domReady(()=>{
             addClickEvnt('#addPostBtn', openDetail);
+            addClickEvnt('#deleteCateBtn', deleteCate);
+            document.querySelector('#postContainer').addEventListener('scroll', scrollPaging);
             toggleListBtns();
-        })
+        });
 
         function toggleListBtns(){
             if(currCateId){
-                document.querySelector('#listBtns').classList.remove('hidden');
+                showElement('#listBtns');
             }
             else{
-                document.querySelector('#listBtns').classList.add('hidden');
+                hiddenElement('#listBtns');
             }
         }
 
         function newPostElement(obj){
             return `
-                <div name="postEl" class="md:w-8/12 mx-auto m-2" data-post-id="${obj.id}">
-                    <button class="py-1 px-2 w-full ring-1 ring-inset ring-gray-300 hover:bg-gray-50 h-8 rounded-md shadow-sm ">
+                <div name="postEl" class="md:w-8/12 mx-auto m-2">
+                    <button onclick="clickPost(this)" class="py-1 px-2 w-full ring-1 ring-inset ring-gray-300 hover:bg-gray-50 h-8 rounded-md shadow-sm" data-post-id="${obj.id}">
                         <span>${obj.title}</span>
                     </button>
                 </div>
             `
         }
 
-        function refreshList(list){
+        function attatchList(list){
 
             const postContain = document.querySelector('#postContainer');
-            removeElementsAll('[name="postEl"]');
+            //removeElementsAll('[name="postEl"]');
 
             list.forEach((item, idx) => {
                 let newPost = newPostElement(item);
@@ -55,11 +55,47 @@
         }
 
         async function reloadList(){
-            await axios.get(`/post/${currCateId}?page=${CURR_PAGE}`)
+            await axios.get(`/post/${currCateId}?page=${CURR_PAGE}&size=15`)
             .then(res => {
                 CURR_PAGE ++;
-                refreshList(res.data.content);
-            })
+                attatchList(res.data.content);
+            });
+        }
+
+        async function clickPost(target){
+
+            const id = target.dataset.postId;
+
+            await axios.get(`/post/${currCateId}/${id}`)
+                .then(res => {
+                    openPostDetail(res.data);
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+
+        }
+
+        /** 카테고리 삭제 */
+        async function deleteCate() {
+
+            if (!confirm('현재 카테고리를 삭제하시겠습니까? \n 카테고리의 게시글도 모두 삭제됩니다.')) {
+                return;
+            }
+
+            await axios.delete(`/category/${currCateId}`)
+            .then(res => {
+                storePathHtml('');
+                location.reload();
+            });
+        }
+
+        /** 스크롤 페이징 */
+        function scrollPaging() {
+            // 스크롤 끝에 오면
+            if (Math.ceil(this.scrollTop + this.offsetHeight) >= this.scrollHeight) {
+                reloadList();
+            }
         }
 
     </script>
