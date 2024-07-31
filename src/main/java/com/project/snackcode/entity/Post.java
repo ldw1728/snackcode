@@ -73,6 +73,7 @@ public class Post extends BaseEntity {
         return PostModel.builder()
                         .id(this.id)
                         .category(this.category)
+                        .cntnsType(this.cntnsType)
                         .codeCntns(this.codeCntns)
                         .desc(this.desc)
                         .title(this.title)

@@ -14,7 +14,7 @@ NodeList.prototype.setAttrAll = function(key, value) {
  * @param value
  */
 function setAttrAll(selector, key, value) {
-    document.querySelectorAll('[name="typeOptions"]').forEach(el => {
+    document.querySelectorAll(selector).forEach(el => {
         el.setAttribute(key, value);
     })
 }
@@ -59,7 +59,10 @@ function removeElementsAll(selector){
 /** click event */
 function addClickEvnt(selector, func, options){
     document.querySelectorAll(selector).forEach(el => {
-        el.addEventListener('click', (e) => func(e), options);
+        el.addEventListener('click', (e) => {
+            func = func.bind(e);
+            func();
+        }, options);
     })
 }
 

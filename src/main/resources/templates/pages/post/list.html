@@ -11,22 +11,22 @@
 
     </div>
 
-
-    <th:block th:insert="pages/post/detail::post-detail-fragment"></th:block>
+    <th:block th:if="${#strings.contains(biz.uri, 'home')}" th:insert="pages/post/form::post-form-fragment"></th:block>
+    <th:block th:if="${#strings.contains(biz.uri, 'search')}" th:insert="pages/post/detail::post-detail-fragment"></th:block>
 
     <script th:inline="javascript">
         let CURR_PAGE = 0;
 
         domReady(()=>{
-            addClickEvnt('#addPostBtn', openDetail);
-            addClickEvnt('#deleteCateBtn', deleteCate);
             document.querySelector('#postContainer').addEventListener('scroll', scrollPaging);
             toggleListBtns();
         });
 
         function toggleListBtns(){
-            if(currCateId){
+            if(typeof currCateId !== "undefined" && currCateId){
                 showElement('#listBtns');
+                addClickEvnt('#addPostBtn'      , openDetail);
+                addClickEvnt('#deleteCateBtn'   , deleteCate);
             }
             else{
                 hiddenElement('#listBtns');
@@ -65,8 +65,13 @@
         async function clickPost(target){
 
             const id = target.dataset.postId;
+            let cateId = '';
 
-            await axios.get(`/post/${currCateId}/${id}`)
+            if(typeof currCateId !== "undefined"){
+                cateId = currCateId;
+            }
+
+            await axios.get(`/post/${cateId}/${id}`)
                 .then(res => {
                     openPostDetail(res.data);
                 })

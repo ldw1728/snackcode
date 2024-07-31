@@ -38,6 +38,8 @@ frontend 프로젝트 구성.
 게시글의 조회수, 좋아요, 즐겨찾기 컬럼추가 및 기능추가
 ~게시글 contents, description항목에 에디터 달기~
 ~codemirror 이용하여 code editor 기능추가~
+search 메뉴 및 페이지 생성. 다른 유저의 게시글포함하여 서치함.
+search메뉴의 상세 요소 구현
 
 
 

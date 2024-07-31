@@ -95,8 +95,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         // 쿠키 생성
         for (Cookie cookie : request.getCookies()) {
-            if ("Authorization".equals(cookie.getValue())) {
+            if ("Authorization".equals(cookie.getName())) {
                 cookie.setMaxAge(0);
+                response.addCookie(cookie);
             }
         }
         Cookie cookie = new Cookie("Authorization", URLEncoder.encode("Bearer " + jwt, StandardCharsets.UTF_8));

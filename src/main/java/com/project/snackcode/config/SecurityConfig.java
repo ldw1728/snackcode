@@ -3,6 +3,7 @@ package com.project.snackcode.config;
 import com.project.snackcode.filter.JwtAuthenticationFilter;
 import com.project.snackcode.filter.JwtAuthorizationFilter;
 import com.project.snackcode.handler.AccessDeniedHandlerImpl;
+import com.project.snackcode.handler.CustomLogoutHandler;
 import com.project.snackcode.repository.MemberRepository;
 import com.project.snackcode.service.UserDetailsServiceImpl;
 import jakarta.servlet.ServletException;
@@ -22,6 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -62,6 +64,11 @@ public class SecurityConfig {
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         return new AccessDeniedHandlerImpl();
+    }
+
+    @Bean
+    public LogoutHandler logoutHandler() {
+        return new CustomLogoutHandler();
     }
 
     /**
@@ -113,14 +120,19 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .usernameParameter("email")
                 )
+                .logout(out -> {
+                    out.logoutUrl("/logout")
+                            .addLogoutHandler(logoutHandler());
+                })
 
                 /** authorize request path config */
                 .authorizeHttpRequests(auth -> {
                     auth
-//                            .requestMatchers("/member/join").anonymous()
-                              .requestMatchers("/login").anonymous()
-                              .requestMatchers("/**").authenticated();
-//                            .requestMatchers( "/api/**").authenticated();
+//                              .requestMatchers("/member/join").anonymous()
+                                .requestMatchers("/login").anonymous()
+                                .requestMatchers("/member/join").anonymous()
+                                .requestMatchers("/**").authenticated();
+//                              .requestMatchers( "/api/**").authenticated();
                 });
 
 

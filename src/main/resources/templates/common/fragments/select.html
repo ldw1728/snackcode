@@ -38,31 +38,7 @@
                         <!-- Selected: "font-semibold", Not Selected: "font-normal" -->
                         <span class="ml-3 block truncate font-normal">text</span>
                     </div>
-
-                    <!--
-                      Checkmark, only display for selected option.
-
-                      Highlighted: "text-white", Not Highlighted: "text-indigo-600"
-                    -->
-                    <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600">
-                      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
-                      </svg>
-                    </span>
-                </li>
-
-                <li name="typeOptions" data-type-value="java" class="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900" id="listbox-option-0" role="option">
-                    <div class="flex items-center">
-                        <!-- Selected: "font-semibold", Not Selected: "font-normal" -->
-                        <span class="ml-3 block truncate font-normal">java</span>
-                    </div>
-
-                    <!--
-                      Checkmark, only display for selected option.
-
-                      Highlighted: "text-white", Not Highlighted: "text-indigo-600"
-                    -->
-                    <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600">
+                    <span class="hidden absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600">
                       <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
                       </svg>
@@ -79,16 +55,22 @@
         const typeSelect    = document.querySelector('#cntnsTypeSelect');
         const typeOptions   = document.querySelector('#cntnsTypeOptions');
 
+        let selectSrchWordCodes = [];
+
         domReady(()=>{
-            setAttrAll('[name="typeOptions"]', 'onmousedown', 'clickOptions(this)')
+            createCodeTypeOptions();
             setSelectEvent();
         });
+
+        function selectCodeType(value) {
+            document.dForm.cntnsType.value = value;
+            document.querySelector('#selectedValue').innerHTML = value;
+        }
 
         function clickOptions(target) {
 
             const val = target.dataset.typeValue;
-            document.dForm.cntnsType.value = val;
-            document.querySelector('#selectedValue').innerHTML = val;
+            selectCodeType(val);
 
             let cntnsValue = document.dForm.codeCntns.value;
 
@@ -107,20 +89,61 @@
         }
 
         function setSelectEvent(){
-            addClickEvnt('#cntnsTypeSelect', toggleSelect);
-            typeSelect.addEventListener('blur', (e)=>{
+
+            /** select클릭 후 검색기능 */
+            const srchEvnt = () => {
+                const keyCode = window.event.keyCode;
+                keyCode == 8 ? selectSrchWordCodes.pop() : selectSrchWordCodes.push(keyCode);
+                const word = String.fromCharCode(...selectSrchWordCodes).toLowerCase();
+                const modes = codeModes.filter(mode => mode.includes(word));
+                createCodeTypeOptions(modes);
+            }
+
+            addClickEvnt('#cntnsTypeSelect', ()=>{
                 toggleSelect();
+                window.addEventListener('keyup', srchEvnt);
+            });
+            typeSelect.addEventListener('blur', (e)=>{
+                toggleSelect(true);
+                window.removeEventListener('keyup', srchEvnt);
+                selectSrchWordCodes = [];
+                createCodeTypeOptions();
             });
         }
 
-        function toggleSelect(){
-
-            if (typeOptions.classList.contains('opacity-0')) {
-                typeOptions.classList.remove('opacity-0', 'hidden');
-            }
-            else{
+        function toggleSelect(isHide = false){
+            if (isHide) {
                 typeOptions.classList.add('opacity-0', 'hidden');
             }
+            else{
+                typeOptions.classList.remove('opacity-0', 'hidden');
+            }
+
+        }
+
+        function createCodeTypeOptions(modes = codeModes){
+            const cntnsTypeOptions = document.querySelector('#cntnsTypeOptions');
+            cntnsTypeOptions.innerHTML = '';
+            modes.forEach(mode => {
+                cntnsTypeOptions.insertAdjacentHTML('beforeend', newCodeTypeOption(mode));
+            });
+            setAttrAll('[name="typeOptions"]', 'onmousedown', 'clickOptions(this)')
+        }
+
+        function newCodeTypeOption(mode){
+            return `
+                 <li name="typeOptions" data-type-value="${mode}" class="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900" role="option">
+                    <div class="flex items-center">
+                        <!-- Selected: "font-semibold", Not Selected: "font-normal" -->
+                        <span class="ml-3 block truncate font-normal">${mode}</span>
+                    </div>
+                    <span class="hidden absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600">
+                      <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+                      </svg>
+                    </span>
+                </li>
+            `
         }
     </script>
 

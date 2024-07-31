@@ -3,82 +3,167 @@
 
 <th:block th:fragment="post-form-fragment">
 
-    <!-- 저장 / 수정일 경우 해당 폼을 표시 -->
+    <div id="detailEl" class="hidden relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
 
-    <div class="space-y-12">
-        <div class="border-b border-gray-900/10 pb-5" >
-            <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div class="sm:col-span-4">
-                    <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Title</label>
-                    <div class="mt-2">
-                        <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                            <input type="text" name="title" id="title" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Title">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+        <div class="fixed inset-0 overflow-hidden">
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 ">
+
+                    <div class="pointer-events-auto relative w-screen max-w-2xl ease-in-out duration-500 opacity-100">
+
+                        <!-- close btn -->
+                        <div id="closeBtn" class="absolute z-10 right-5 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
+                            <button type="button" class="relative rounded-md text-gray-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-white">
+                                <span class="absolute -inset-2.5"></span>
+                                <span class="sr-only">Close panel</span>
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- detail panel -->
+                        <div class="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+                            <div class="px-4 sm:px-6">
+                                <h2 class="text-base font-semibold leading-6 text-gray-900" id="slide-over-title"></h2>
+                            </div>
+                            <div class="relative mt-6 flex-1 px-4 sm:px-6">
+
+                                <!-- Your content -->
+                                <!-- form -->
+                                <form id="dForm" name="dForm">
+                                    <!-- 저장 / 수정일 경우 해당 폼을 표시 -->
+
+                                    <div class="space-y-12">
+                                        <div class="border-b border-gray-900/10 pb-5" >
+                                            <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                                                <div class="sm:col-span-4">
+                                                    <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Title</label>
+                                                    <div class="mt-2">
+                                                        <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                                            <input type="text" name="title" id="title" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Title">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-span-full">
+                                                    <label for="codeCntns" class="block text-sm font-medium leading-6 text-gray-900">Contents</label>
+                                                    <th:block th:replace="common/fragments/select::select-fragment"></th:block>
+                                                    <div class="mt-2">
+                                                        <div id="editor1" style="height: 15rem"></div>
+                                                        <div id="aceEditor" class="hidden h-72 text-sm"></div>
+                                                        <div class="hidden flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                                            <textarea name="codeCntns" id="codeCntns" class=" h-80 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Content"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-span-full">
+                                                    <label for="desc" class="block text-sm font-medium leading-6 text-gray-900">Description</label>
+                                                    <div class="mt-2">
+                                                        <div id="editor2" style="height: 15rem"></div>
+                                                        <div class="hidden flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                                            <textarea name="desc" id="desc" class=" h-60 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Description"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-span-full">
+                                                    <label for="desc" class="block text-sm font-medium leading-6 text-gray-900">public</label>
+                                                    <div class="mt-2">
+                                                        <input name="openType" type="radio" value="Y" checked><span class="mx-2">공개</span>
+                                                        <input name="openType" type="radio" value="N"><span class="mx-2">비공개</span>
+                                                    </div>
+                                                    <div class="mt-1 text-xs text-gray-500">* 공개 시 다른사람에게 해당 게시글이 노출될 수 있습니다.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="id" value="">
+                                    <input type="hidden" name="cateId" value="">
+                                </form>
+
+                            </div>
+
+                            <!-- btn -->
+                            <div id="saveDtlBtns" class="hidden w-fit text-center float-right mx-5" >
+                                <div id="saveBtn" class="float-right m-2 pt-2 h-10 w-16 rounded-md bg-black text-white cursor-pointer">save</div>
+                            </div>
+
+                            <div id="updateDtlBtns" class="hidden w-fit text-center float-right mx-5" >
+                                <div id="updateBtn" class="float-right m-2 pt-2 h-10 w-16 rounded-md bg-black text-white cursor-pointer">update</div>
+                                <div id="deleteBtn" class="float-right m-2 pt-2 h-10 w-16 rounded-md bg-white text-black cursor-pointer">delete</div>
+                            </div>
+
                         </div>
                     </div>
-                </div>
-                <div class="col-span-full">
-                    <label for="codeCntns" class="block text-sm font-medium leading-6 text-gray-900">Contents</label>
-                    <th:block th:replace="common/fragments/select::select-fragment"></th:block>
-                    <div class="mt-2">
-                        <div id="editor1" style="height: 15rem"></div>
-                        <div id="aceEditor" class="hidden h-72 text-sm"></div>
-                        <div class="hidden flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                            <textarea name="codeCntns" id="codeCntns" class=" h-80 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Content"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-span-full">
-                    <label for="desc" class="block text-sm font-medium leading-6 text-gray-900">Description</label>
-                    <div class="mt-2">
-                        <div id="editor2" style="height: 15rem"></div>
-                        <div class="hidden flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                            <textarea name="desc" id="desc" class=" h-60 block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Description"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-span-full">
-                    <label for="desc" class="block text-sm font-medium leading-6 text-gray-900">public</label>
-                    <div class="mt-2">
-                        <input name="openType" type="radio" value="Y" checked><span class="mx-2">공개</span>
-                        <input name="openType" type="radio" value="N"><span class="mx-2">비공개</span>
-                    </div>
-                    <div class="mt-1 text-xs text-gray-500">* 공개 시 다른사람에게 해당 게시글이 노출될 수 있습니다.</div>
                 </div>
             </div>
         </div>
     </div>
-    <input type="hidden" name="id" value="">
-    <input type="hidden" name="cateId" value="">
 
+
+    <script src="plugins/ace/ace.js"></script>
+    <script src="js/aceEditorConfig.js"></script>
+    <script src="js/quillConfig.js"></script>
     <script src="js/validateConfig.js"></script>
     <script th:inline="javascript">
+
+        domReady(()=>{
+            addClickEvnt('#closeBtn'    , closeDetail);
+            addClickEvnt("#saveBtn"     , save);
+            addClickEvnt('#updateBtn'   , update);
+            addClickEvnt('#deleteBtn'   , clickDeleteBtn);
+
+            createAceEditor();
+
+        });
+
+        function openDetail(){
+            showElement('#detailEl');
+            formInit();
+            showElement('#saveDtlBtns');
+        }
+
+        function openPostDetail(obj) {
+           formInit(obj);
+           showElement('#updateDtlBtns');
+           showElement('#detailEl');
+        }
+
+        function closeDetail(){
+            document.querySelector('#detailEl').classList.add('hidden');
+            document.dForm.reset();
+            destroyAllEditor();
+            toggleSelect(true);
+            hiddenElement("#dForm");
+            hiddenElement("[id$='DtlBtns']");
+            hiddenElement("#detailPanel");
+            removeAceEditor();
+        }
 
 
         function initCodeCntns() {
             document.dForm.codeCntns.value = '';
         }
 
+        /** 에디터 생성 */
         function createEditor(){
 
-            const form = document.dForm;
+            const codeCntns = document.dForm.codeCntns;
+            const editorSelectors = ['#editor1', '#editor2'];
 
-            const editor1 = new Quill('#editor1', {
-                theme: 'snow'
-            });
+            editorSelectors.forEach(selector => {
 
-            editor1.on('text-change', ()=>{
-                form.codeCntns.value = getEditorHtml('#editor1');
-            })
+                const editor = createQuillEditor(selector);
 
-            const editor2 = new Quill('#editor2', {
-                theme: 'snow'
-            });
+                editor.on('text-change', ()=>{
+                    codeCntns.value = getEditorHtml(selector);
+                });
 
-            editor2.on('text-change', ()=>{
-                form.desc.value = getEditorHtml('#editor2');
             })
         }
 
+        /** 에디터에 작성된 내용을 html데이터로 가져옴 */
         function getEditorHtml(editorSelector){
             return document.querySelector(`${editorSelector} .ql-editor`)?.innerHTML;
         }
@@ -96,6 +181,7 @@
             }
         }
 
+        /** 모든 에디터 숨김 */
         function destroyAllEditor(){
             removeElementsAll('.ql-toolbar');
             removeElementsAll('.ql-editor');
@@ -105,10 +191,13 @@
             })
         }
 
+        /** 에디터 초기화 */
         function editorInit(content1='', content2='', cntnsType){
+
             createEditor();
 
             if (!cntnsType || cntnsType === 'text') {
+                cntnsType = 'text';
                 document.querySelector('#editor1 .ql-editor').innerHTML = content1;
             }
             else{
@@ -118,21 +207,30 @@
                 toggleContentsEditor(false);
             }
             document.querySelector('#editor2 .ql-editor').innerHTML = content2;
+
+            selectCodeType(cntnsType);
         }
 
+        /** 폼 초기화 */
         function formInit(post){
 
             showElement('#dForm');
 
             if(post){
-                const form              = document.dForm;
-                form.title.value        = post.title;
-                //form.codeCntns.value    = post.codeCntns;
-                //form.desc.value         = post.desc;
-                form.id.value           = post.id;
-                form.openType.value     = post.openType;
-                form.cateId.value       = currCateId;
-                editorInit(post.codeCntns, post.desc, post.cntnsType);
+                if (post.category.memId === [[${LoginUser}]]?.id) {
+                    const form              = document.dForm;
+                    form.title.value        = post.title;
+                    //form.codeCntns.value    = post.codeCntns;
+                    //form.desc.value         = post.desc;
+                    form.id.value           = post.id;
+                    form.openType.value     = post.openType;
+                    form.cateId.value       = currCateId;
+                    editorInit(post.codeCntns, post.desc, post.cntnsType);
+                }
+                else{
+                    alert('잘못된 접근입니다.');
+                    location.href='/home';
+                }
             }
             else{
                 editorInit();
@@ -194,5 +292,10 @@
         }
 
 
+
     </script>
+
+
 </th:block>
+
+</html>

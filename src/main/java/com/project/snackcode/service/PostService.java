@@ -38,6 +38,12 @@ public class PostService {
         return posts.map(Post::toModel);
     }
 
+    @Transactional(readOnly = true)
+    public Page<PostModel> selectPageBySearch(String searchStr, Pageable pageable){
+        Page<Post> posts = postRepository.findAllByTitleContainsOrderByIdDesc(searchStr, pageable);
+        return posts.map(Post::toModel);
+    }
+
     /**
      * 카테고리별 전체 post조회
      * @param cateId

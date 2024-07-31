@@ -12,4 +12,6 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByCategory_Id(Long cateId);
     Page<Post> findAllByCategory_IdOrderByIdDesc(Long cateId, Pageable pageable);
+    Page<Post> findAllByTitleContainsOrderByIdDesc(String searchStr, Pageable pageable);
+
 }
