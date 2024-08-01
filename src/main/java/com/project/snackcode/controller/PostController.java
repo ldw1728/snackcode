@@ -2,6 +2,7 @@ package com.project.snackcode.controller;
 
 import com.project.snackcode.model.post.PostFormModel;
 import com.project.snackcode.model.post.PostModel;
+import com.project.snackcode.service.PostLockerService;
 import com.project.snackcode.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class PostController {
 
     private final PostService postService;
+    private final PostLockerService postLockerService;
 
     @ModelAttribute("biz")
     public Map<String, Object> commonModel(HttpServletRequest request) {
@@ -53,7 +55,7 @@ public class PostController {
         }
 
         // 특정 post 조회
-        PostModel postModel = postService.selectModel(postId);
+        PostModel postModel = postService.selectModelWithIncreaseReadCnt(postId);
         return ResponseEntity.ok(postModel);
     }
 
@@ -90,6 +92,30 @@ public class PostController {
     @ResponseBody
     public ResponseEntity delete(@PathVariable Long postId) {
         postService.delete(postId);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * post like
+     * @param postId
+     * @return
+     */
+    @PostMapping("/post/like/{postId}")
+    @ResponseBody
+    public ResponseEntity like(@PathVariable Long postId) {
+        int cnt = postService.increaseLikeCnt(postId);
+        return ResponseEntity.ok(cnt);
+    }
+
+    /**
+     * post store
+     * @param postId
+     * @return
+     */
+    @PostMapping("/post/store/{postId}")
+    @ResponseBody
+    public ResponseEntity store(@PathVariable Long postId) {
+        postLockerService.save(postId);
         return ResponseEntity.ok().build();
     }
 

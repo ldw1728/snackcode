@@ -11,7 +11,7 @@
             <div class="absolute inset-0 overflow-hidden">
                 <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 ">
 
-                    <div class="pointer-events-auto relative w-screen max-w-2xl ease-in-out duration-500 opacity-100">
+                    <div class="transition-all pointer-events-auto relative w-screen max-w-3xl lg:max-w-6xl ease-in-out duration-500 opacity-100">
 
                         <!-- close btn -->
                         <div id="closeBtn" class="absolute z-10 right-5 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
@@ -119,8 +119,8 @@
         });
 
         function openDetail(){
-            showElement('#detailEl');
             formInit();
+            showElement('#detailEl');
             showElement('#saveDtlBtns');
         }
 
@@ -149,15 +149,20 @@
         /** 에디터 생성 */
         function createEditor(){
 
-            const codeCntns = document.dForm.codeCntns;
+            const form = document.dForm;
             const editorSelectors = ['#editor1', '#editor2'];
 
-            editorSelectors.forEach(selector => {
+            editorSelectors.forEach((selector, idx) => {
 
                 const editor = createQuillEditor(selector);
 
                 editor.on('text-change', ()=>{
-                    codeCntns.value = getEditorHtml(selector);
+                    if(idx == 0){
+                        form.codeCntns.value = getEditorHtml(selector);
+                    }
+                    else{
+                        form.desc.value = getEditorHtml(selector);
+                    }
                 });
 
             })

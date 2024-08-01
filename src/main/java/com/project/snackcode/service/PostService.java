@@ -2,9 +2,11 @@ package com.project.snackcode.service;
 
 import com.project.snackcode.entity.Post;
 import com.project.snackcode.exception.BasicErrorException;
+import com.project.snackcode.model.PostLockerModel;
 import com.project.snackcode.model.member.LoginContextHolder;
 import com.project.snackcode.model.post.PostFormModel;
 import com.project.snackcode.model.post.PostModel;
+import com.project.snackcode.repository.PostLockerRepository;
 import com.project.snackcode.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,7 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +24,8 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+
+    private final PostLockerService postLockerService;
 
     /**
      * post 조회
@@ -105,5 +111,49 @@ public class PostService {
             postRepository.delete(post);
         });
     }
+
+    /** post 조회 및 조회수 증가 */
+    @Transactional
+    public PostModel selectModelWithIncreaseReadCnt(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow();
+        post.increaseReadCnt();
+        return post.toModel();
+    }
+
+    /** post 좋아요 */
+    @Transactional
+    public int increaseLikeCnt(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow();
+        if (LoginContextHolder.getLoginUser().getId() != post.getCategory().getMember().getId()) {
+            post.increaseLikeCnt();
+        }
+        return post.getLikeCnt();
+    }
+
+    /** 보관함내의 post 조회 */
+    @Transactional
+    public List<PostModel> selectPostLocker() {
+
+        List<PostModel> postModelList   = new ArrayList<>();
+        PostLockerModel postLockerModel = postLockerService.selectModel();
+
+        if (postLockerModel != null && postLockerModel.getPostIdList().size() > 0) {
+            for (String postId : postLockerModel.getPostIdList()) {
+
+                try {
+
+                    PostModel postModel = selectModel(Long.valueOf(postId));
+                    postModelList.add(postModel);
+
+                } catch (NoSuchElementException n) {
+                    continue;
+                }
+
+            }
+        }
+
+        return postModelList;
+    }
+
 
 }

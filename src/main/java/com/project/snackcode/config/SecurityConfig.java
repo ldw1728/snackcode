@@ -91,7 +91,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer configure(){
         return (web) -> {
-            web.ignoring().requestMatchers("/node_modules/**", "/favicon.ico")
+            web.ignoring().requestMatchers("/node_modules/**", "/favicon.ico", "/plugins/**")
                     .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
         };
     }

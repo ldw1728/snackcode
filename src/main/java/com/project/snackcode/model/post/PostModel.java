@@ -32,6 +32,12 @@ public class PostModel {
     /** 공개여부 */
     private OpenType openType;
 
+    /** 조회수 */
+    private Integer readCnt;
+
+    /** 좋아요 수 */
+    private Integer likeCnt;
+
     /** 등록일자 */
     private LocalDateTime regDt;
 
@@ -39,7 +45,7 @@ public class PostModel {
     private LocalDateTime updtDt;
 
     @Builder
-    public PostModel(Long id, Category category, String title, String cntnsType, String codeCntns, String desc, OpenType openType, LocalDateTime regDt, LocalDateTime updtDt) {
+    public PostModel(Long id, Category category, String title, String cntnsType, String codeCntns, String desc, OpenType openType, Integer readCnt, Integer likeCnt, LocalDateTime regDt, LocalDateTime updtDt) {
         this.id         = id;
         this.category   = category.toModel();
         this.title      = title;
@@ -47,6 +53,8 @@ public class PostModel {
         this.codeCntns  = codeCntns;
         this.desc       = desc;
         this.openType   = openType;
+        this.readCnt    = readCnt;
+        this.likeCnt    = likeCnt;
         this.regDt      = regDt;
         this.updtDt     = updtDt;
     }

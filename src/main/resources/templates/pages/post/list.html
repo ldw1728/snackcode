@@ -2,9 +2,9 @@
       xmlns:th="http://www.thymeleaf.org" >
 
 <th:block th:fragment="post-list-fragment">
-    <div id="postContainer" class="hidden-scoll md:w-11/12 h-3/5 my-10 py-10 mx-auto whitespace-nowrap overflow-y-auto">
+    <div id="postContainer" class="hidden-scoll md:w-11/12 h-3/5 my-10 py-10 md:mx-auto mx-10 whitespace-nowrap overflow-y-auto">
 
-        <div id="listBtns" class="hidden absolute w-fit text-center right-32 bottom-32">
+        <div id="listBtns" class="hidden transition-all absolute w-fit text-center md:right-32 md:bottom-32 right-5 bottom-12">
             <div id="addPostBtn" class="m-2 pt-2 h-10 w-10 rounded-full bg-black text-white font-black cursor-pointer">+</div>
             <div id="deleteCateBtn" class="m-2 pt-2 h-10 w-10 rounded-full bg-black text-white font-black cursor-pointer">-</div>
         </div>
@@ -20,13 +20,18 @@
         domReady(()=>{
             document.querySelector('#postContainer').addEventListener('scroll', scrollPaging);
             toggleListBtns();
+            addClickEvnt('#addPostBtn'      , openDetail);
+            addClickEvnt('#deleteCateBtn'   , deleteCate);
         });
+
+        function pageInit() {
+            removeElementsAll('[name="postEl"]');
+            CURR_PAGE = 0;
+        }
 
         function toggleListBtns(){
             if(typeof currCateId !== "undefined" && currCateId){
                 showElement('#listBtns');
-                addClickEvnt('#addPostBtn'      , openDetail);
-                addClickEvnt('#deleteCateBtn'   , deleteCate);
             }
             else{
                 hiddenElement('#listBtns');
@@ -36,7 +41,7 @@
         function newPostElement(obj){
             return `
                 <div name="postEl" class="md:w-8/12 mx-auto m-2">
-                    <button onclick="clickPost(this)" class="py-1 px-2 w-full ring-1 ring-inset ring-gray-300 hover:bg-gray-50 h-8 rounded-md shadow-sm" data-post-id="${obj.id}">
+                    <button onclick="clickPost(this)" class="py-1 px-2 w-full ring-1 ring-inset ring-gray-300 hover:bg-gray-50 h-8 rounded-md shadow-sm" data-post-cateid="${obj.category.id}" data-post-id="${obj.id}">
                         <span>${obj.title}</span>
                     </button>
                 </div>
@@ -69,6 +74,9 @@
 
             if(typeof currCateId !== "undefined"){
                 cateId = currCateId;
+            }
+            else{
+                cateId = target.dataset.postCateid;
             }
 
             await axios.get(`/post/${cateId}/${id}`)

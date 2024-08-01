@@ -9,7 +9,7 @@
             <div class="absolute inset-0 overflow-hidden">
                 <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 ">
 
-                    <div class="pointer-events-auto relative w-screen max-w-2xl ease-in-out duration-500 opacity-100">
+                    <div class="pointer-events-auto relative w-screen max-w-3xl lg:max-w-6xl ease-in-out duration-500 opacity-100">
 
                         <!-- close btn -->
                         <div id="closeBtn" class="absolute z-10 right-5 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
@@ -21,26 +21,156 @@
                                 </svg>
                             </button>
                         </div>
+
+                        <!-- detail panel -->
+                        <div class="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+                            <div class="px-4 sm:px-6">
+                                <h2 class="text-base font-semibold leading-6 text-gray-900" id="slide-over-title"></h2>
+                            </div>
+                            <div class="relative mt-6 flex-1 px-4 sm:px-6">
+                                <div class="space-y-12">
+                                    <div class="border-b border-gray-900/10 pb-5" >
+                                        <div class="mb-10 sm:col-span-4">
+                                            <div class="mt-2">
+                                                <div id="title" class="text-xl">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-10 col-span-full">
+                                            <div class="mt-2">
+                                                <div id="codeType" class="text-sm font-bold">
+                                                </div>
+                                                <div id="codeCntns" class="hidden" style="height: 15rem">
+                                                </div>
+                                                <div id="aceEditor" class="hidden h-72 text-sm"></div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-10 col-span-full">
+                                            <div class="mt-2">
+                                                <div id="desc" style="height: 15rem">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="detailBtns" class="hidden absolute right-10 bottom-10 text-white flex">
+                            <button id="likeBtn" class="mx-2 p-2 bg-black rounded-xl">
+                                <span id="likeCnt" class="contents mx-2 text-sm font-bold"></span>
+                                <img src="images/thumb.png" class="inline">
+                            </button>
+                            <button id="storeBtn" class="mx-2 p-2 bg-black  rounded-xl">
+                                <img src="images/star-emt.png">
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
-        <!-- detail panel -->
-        <div class="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
-            <div class="px-4 sm:px-6">
-                <h2 class="text-base font-semibold leading-6 text-gray-900" id="slide-over-title"></h2>
-            </div>
-            <div class="relative mt-6 flex-1 px-4 sm:px-6">
 
-
-            </div>
-        </div>
     </div>
 
+    <script src="plugins/ace/ace.js"></script>
+    <script src="js/aceEditorConfig.js"></script>
     <script th:inline="javascript">
 
-        function openPostDetail(obj) {
-            document.querySelector('#detailEl').classList.remove('hidden');
+        let curr_post;
+
+        let title;
+        let cntnsType;
+        let codeCntns;
+        let desc;
+        let detailEl;
+        let detailBtns;
+        let likeCnt;
+
+        domReady(()=>{
+            addClickEvnt('#closeBtn', closeDetail);
+            addClickEvnt('#likeBtn', clickLike);
+            addClickEvnt('#storeBtn', clickStore);
+            initEls();
+        })
+
+        function initEls() {
+            title       = document.querySelector('#title');
+            cntnsType   = document.querySelector('#codeType');
+            codeCntns   = document.querySelector('#codeCntns');
+            desc        = document.querySelector('#desc');
+            detailEl    = document.querySelector('#detailEl');
+            detailBtns  = document.querySelector('#detailBtns');
+            likeCnt     = document.querySelector('#likeCnt');
+
+        }
+
+        function initDetail() {
+            title.innerHTML         = '';
+            cntnsType.innerHTML     = '';
+            codeCntns.innerHTML     = '';
+            desc.innerHTML          = '';
+            likeCnt.innerHTML       = '';
+            codeCntns.classList.add('hidden');
+            detailBtns.classList.add('hidden');
+            removeAceEditor();
+        }
+
+        function closeDetail(){
+            detailEl.classList.add('hidden');
+            initDetail();
+        }
+
+        function openPostDetail(post) {
+
+            curr_post = post;
+
+            detailEl.classList.remove('hidden');
+
+            if (post.category.memId !== [[${LoginUser}]]?.id) {
+                detailBtns.classList.remove('hidden');
+            }
+
+            title.innerHTML = post.title;
+
+            const codeType = post.cntnsType || 'text';
+
+            if (post.codeCntns) {
+                if (codeType === 'text') {
+                    codeCntns.classList.remove('hidden');
+                    codeCntns.innerHTML = post.codeCntns;
+                }
+                else{
+                    cntnsType.innerHTML = codeType;
+                    initAceEditor(codeType, post.codeCntns);
+                }
+            }
+
+            desc.innerHTML = post.desc;
+            likeCnt.innerHTML = post.likeCnt;
+
+        }
+
+        function initAceEditor(codeType, codeCntns) {
+            createAceEditor();
+            setAceEditorMode(codeType);
+            setAceEditorValue(codeCntns);
+            setAceEditorReadOnly();
+            showAceEditor();
+        }
+
+        async function clickLike() {
+            await axios.post(`/post/like/${curr_post.id}`)
+            .then(res=>{
+                likeCnt.innerHTML = res.data;
+            })
+        }
+
+        async function clickStore() {
+            await axios.post(`/post/store/${curr_post.id}`)
+            .then(res=>{
+                alert('저장완료');
+            })
         }
 
     </script>

@@ -50,6 +50,12 @@ public class Post extends BaseEntity {
     @Column(name = "OPEN_YN")
     private OpenType openType;
 
+    @Column(name = "READ_CNT")
+    private Integer readCnt;
+
+    @Column(name = "LIKE_CNT")
+    private Integer likeCnt;
+
     @Builder
     public Post(Long cateId, String title, String cntnsType, String codeCntns, String desc, OpenType openType) {
         this.category   = Category.builder().id(cateId).build();
@@ -58,6 +64,8 @@ public class Post extends BaseEntity {
         this.codeCntns  = codeCntns;
         this.desc       = desc;
         this.openType   = openType;
+        this.readCnt    = 0;
+        this.likeCnt    = 0;
     }
 
     public void update(Long cateId, String title, String cntnsType, String codeCntns, String desc, OpenType openYn) {
@@ -69,6 +77,14 @@ public class Post extends BaseEntity {
         this.openType   = openYn;
     }
 
+    public void increaseReadCnt() {
+        this.readCnt += 1;
+    }
+
+    public void increaseLikeCnt() {
+        this.likeCnt += 1;
+    }
+
     public PostModel toModel(){
         return PostModel.builder()
                         .id(this.id)
@@ -78,6 +94,8 @@ public class Post extends BaseEntity {
                         .desc(this.desc)
                         .title(this.title)
                         .openType(this.openType)
+                        .readCnt(this.readCnt)
+                        .likeCnt(this.likeCnt)
                         .regDt(this.regDt)
                         .updtDt(this.updtDt)
                         .build();

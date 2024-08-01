@@ -19,9 +19,11 @@
     <script th:inline="javascript">
 
         domReady(()=>{
+
             addClickEvnt('#searchBtn', reloadList);
             setAttrAll("#searchStr", 'onkeyup', `{
             if(window.event.keyCode == 13){
+                    pageInit();
                     reloadList();
                 }
             }`);
@@ -39,6 +41,16 @@
             else{
                 alert('검색어를 입력하세요')
             }
+        }
+
+        function newPostElement(obj){
+            return `
+                <div name="postEl" class="md:w-8/12 mx-auto m-2">
+                    <button onclick="clickPost(this)" class="py-1 px-2 w-full ring-1 ring-inset ring-gray-300 hover:bg-gray-50 h-8 rounded-md shadow-sm" data-post-cateid="${obj.category.id}" data-post-id="${obj.id}">
+                        <span>${obj.title}</span>
+                    </button>
+                </div>
+            `
         }
 
 

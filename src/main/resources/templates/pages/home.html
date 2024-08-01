@@ -21,10 +21,16 @@
         function getStoredPathHtml() {
             const ls = window.localStorage;
             const pathHTML = ls.getItem(STORED_PATH);
+            console.log(pathHTML)
             if(pathHTML){
                 const pathSec = document.querySelector('#pathSec');
                 pathSec.innerHTML = pathHTML;
-                pathSec.lastElementChild?.lastElementChild?.click();
+                if(pathSec.lastElementChild?.lastElementChild){
+                    pathSec.lastElementChild?.lastElementChild?.click();
+                }
+                else{
+                    pathSec.lastElementChild?.click();
+                }
             }
             else{
                 reloadCate('');

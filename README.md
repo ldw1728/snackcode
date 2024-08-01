@@ -9,7 +9,7 @@ __- back end__
 - mysql 
 
 __- front end__  
-- vue.js
+- thymeleaf
 
 
 ### todo  
@@ -35,11 +35,14 @@ frontend 프로젝트 구성.
 ~jwt 토큰을 header에 담아 요청하는것을 쿠키 방식으로 변경~
 ~카테고리 및 리스트 생성 기능 추가~
 ~게시글 삭제 및 수정 기능 추가~
-게시글의 조회수, 좋아요, 즐겨찾기 컬럼추가 및 기능추가
+~게시글의 조회수, 좋아요, 즐겨찾기 컬럼추가 및 기능추가~
 ~게시글 contents, description항목에 에디터 달기~
 ~codemirror 이용하여 code editor 기능추가~
-search 메뉴 및 페이지 생성. 다른 유저의 게시글포함하여 서치함.
-search메뉴의 상세 요소 구현
+~search 메뉴 및 페이지 생성. 다른 유저의 게시글포함하여 서치함.~
+~search메뉴의 상세 요소 구현~
+search 메뉴에서 조회된 리스트 및 상세에 사용자명 표시
+보관함페이지 구현
+ai asistance 기능 구현
 
 
 

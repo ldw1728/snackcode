@@ -197,8 +197,14 @@ function createAceEditor() {
     aceEditor.setTheme('ace/theme/cloud9_day');
     //aceEditor.session.setMode("ace/mode/javascript");
     aceEditor.session.on('change', function(delta) {
-        document.dForm.codeCntns.value = aceEditor.getValue();
+        if (document?.dForm?.codeCntns) {
+            document.dForm.codeCntns.value = aceEditor.getValue();
+        }
     });
+}
+
+function setAceEditorReadOnly() {
+    aceEditor.setReadOnly(true)
 }
 
 function setAceEditorValue(text) {
