@@ -55,6 +55,7 @@ public class Category extends BaseEntity {
         return CategoryModel.builder()
                             .id(this.id)
                             .memId(this.member.getId())
+                            .member(this.member)
                             .prntCategory(
                                     this.prntCategory == null ? null : this.prntCategory.toModel()
                             )

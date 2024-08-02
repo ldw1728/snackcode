@@ -1,12 +1,12 @@
 package com.project.snackcode.service;
 
 import com.project.snackcode.entity.Post;
+import com.project.snackcode.enums.OpenType;
 import com.project.snackcode.exception.BasicErrorException;
-import com.project.snackcode.model.PostLockerModel;
+import com.project.snackcode.model.post.PostLockerModel;
 import com.project.snackcode.model.member.LoginContextHolder;
 import com.project.snackcode.model.post.PostFormModel;
 import com.project.snackcode.model.post.PostModel;
-import com.project.snackcode.repository.PostLockerRepository;
 import com.project.snackcode.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -46,7 +46,8 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Page<PostModel> selectPageBySearch(String searchStr, Pageable pageable){
-        Page<Post> posts = postRepository.findAllByTitleContainsOrderByIdDesc(searchStr, pageable);
+        // 제목 문자열 포함, 공개타입
+        Page<Post> posts = postRepository.findAllByTitleContainsAndOpenTypeEqualsOrderByIdDesc(searchStr, OpenType.Y,  pageable);
         return posts.map(Post::toModel);
     }
 
@@ -132,25 +133,39 @@ public class PostService {
 
     /** 보관함내의 post 조회 */
     @Transactional
-    public List<PostModel> selectPostLocker() {
+    public List<PostModel> selectPostLocker(Pageable pageable) {
 
         List<PostModel> postModelList   = new ArrayList<>();
         PostLockerModel postLockerModel = postLockerService.selectModel();
 
-        if (postLockerModel != null && postLockerModel.getPostIdList().size() > 0) {
-            for (String postId : postLockerModel.getPostIdList()) {
+        if (postLockerModel != null) {
 
-                try {
+            List<String> postIdList         = postLockerModel.getPostIdList();
 
-                    PostModel postModel = selectModel(Long.valueOf(postId));
-                    postModelList.add(postModel);
+            if (postIdList.size() > 0) {
 
-                } catch (NoSuchElementException n) {
-                    continue;
+                int startIdx    = pageable.getPageNumber() * pageable.getPageSize();
+                int lastIdx     = (pageable.getPageNumber() + 1) * pageable.getPageSize();
+                lastIdx     = lastIdx >=  postIdList.size() ? postIdList.size() : lastIdx;
+
+                List<String> postIdSubList = postIdList.subList(startIdx, lastIdx);
+
+                for (String postId : postIdSubList) {
+
+                    try {
+
+                        PostModel postModel = selectModel(Long.valueOf(postId));
+                        postModelList.add(postModel);
+
+                    } catch (NoSuchElementException n) {
+                        continue;
+                    }
+
                 }
-
             }
+
         }
+
 
         return postModelList;
     }

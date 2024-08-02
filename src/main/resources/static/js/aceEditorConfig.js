@@ -195,6 +195,11 @@ const codeModes = [
 function createAceEditor() {
     aceEditor = ace.edit('aceEditor');
     aceEditor.setTheme('ace/theme/cloud9_day');
+    aceEditor.setOptions({
+        selectionStyle: 'line',
+        copyWithEmptySelection: true,
+        navigateWithinSoftTabs: true
+    });
     //aceEditor.session.setMode("ace/mode/javascript");
     aceEditor.session.on('change', function(delta) {
         if (document?.dForm?.codeCntns) {

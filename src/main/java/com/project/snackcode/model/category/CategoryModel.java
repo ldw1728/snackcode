@@ -34,13 +34,13 @@ public class CategoryModel {
     private LocalDateTime updtDt;
 
     @Builder
-    public CategoryModel(Long id, Long memId, MemberModel member, CategoryModel prntCategory, String name, LocalDateTime regDt, LocalDateTime updtDt) {
-        this.id = id;
-        this.memId = memId;
-        this.member = member;
-        this.prntCategory = prntCategory;
-        this.name = name;
-        this.regDt = regDt;
-        this.updtDt = updtDt;
+    public CategoryModel(Long id, Long memId, Member member, CategoryModel prntCategory, String name, LocalDateTime regDt, LocalDateTime updtDt) {
+        this.id             = id;
+        this.memId          = memId;
+        this.member         = member.toBasicModel();
+        this.prntCategory   = prntCategory;
+        this.name           = name;
+        this.regDt          = regDt;
+        this.updtDt         = updtDt;
     }
 }

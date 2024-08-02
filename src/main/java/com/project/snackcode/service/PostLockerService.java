@@ -1,7 +1,7 @@
 package com.project.snackcode.service;
 
 import com.project.snackcode.entity.PostLocker;
-import com.project.snackcode.model.PostLockerModel;
+import com.project.snackcode.model.post.PostLockerModel;
 import com.project.snackcode.model.member.LoginContextHolder;
 import com.project.snackcode.repository.PostLockerRepository;
 import lombok.RequiredArgsConstructor;

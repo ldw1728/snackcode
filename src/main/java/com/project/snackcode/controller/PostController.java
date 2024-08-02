@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -117,6 +118,17 @@ public class PostController {
     public ResponseEntity store(@PathVariable Long postId) {
         postLockerService.save(postId);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * post storedPostœ
+     * @return
+     */
+    @GetMapping("/post/store")
+    @ResponseBody
+    public ResponseEntity storedPosts(Pageable pageable) {
+        List<PostModel> postModels = postService.selectPostLocker(pageable);
+        return ResponseEntity.ok(postModels);
     }
 
 }

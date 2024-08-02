@@ -9,6 +9,7 @@ public class BasicErrorException extends RuntimeException {
     private String code;
     private String msg;
 
+
     @Builder
     public BasicErrorException(String code, String msg, Throwable cause) {
         super(msg, cause);

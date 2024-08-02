@@ -1,7 +1,6 @@
 package com.project.snackcode.entity;
 
-import com.project.snackcode.model.PostLockerModel;
-import com.project.snackcode.model.post.PostModel;
+import com.project.snackcode.model.post.PostLockerModel;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

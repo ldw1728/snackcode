@@ -1,6 +1,7 @@
 package com.project.snackcode.service;
 
 import com.project.snackcode.entity.Category;
+import com.project.snackcode.exception.BasicErrorException;
 import com.project.snackcode.model.category.CategoryFormModel;
 import com.project.snackcode.model.category.CategoryModel;
 import com.project.snackcode.repository.CategoryRepository;
@@ -42,7 +43,21 @@ public class CategoryService {
      */
     @Transactional(readOnly = true)
     public List<CategoryModel> selectCategoryModels(Long memId, Long cateId) {
+
+        if (cateId != null) {
+            CategoryModel categoryModel = selectModel(cateId);
+
+            if (categoryModel == null) {
+                throw new BasicErrorException("NO_CATE", "no exist cate", null);
+            }
+
+            if(memId != categoryModel.getMemId()){
+                throw new BasicErrorException("NO_MEM", "no incorrect mem", null);
+            }
+        }
+
         List<Category> categorys = categoryRepository.findAllByMember_IdAndPrntCategory_Id(memId, cateId);
+
         return categorys.stream().map(Category::toModel).collect(Collectors.toList());
     }
 

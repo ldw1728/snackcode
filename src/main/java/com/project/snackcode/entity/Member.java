@@ -102,4 +102,12 @@ public class Member {
                         .roles(this.roles.stream().map(MemberRole::toModel).collect(Collectors.toList()))
                         .build();
     }
+
+    public MemberModel toBasicModel(){
+        return MemberModel.builder()
+                .id(this.id)
+                .name(this.name)
+                .email(this.email)
+                .build();
+    }
 }

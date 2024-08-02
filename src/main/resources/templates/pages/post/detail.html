@@ -30,16 +30,18 @@
                             <div class="relative mt-6 flex-1 px-4 sm:px-6">
                                 <div class="space-y-12">
                                     <div class="border-b border-gray-900/10 pb-5" >
-                                        <div class="mb-10 sm:col-span-4">
-                                            <div class="mt-2">
+                                        <div class="mb-10 sm:col-span-4 border-b border-gray-900/10">
+                                            <div class="mt-2 pb-5">
                                                 <div id="title" class="text-xl">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="mb-10 col-span-full">
                                             <div class="mt-2">
-                                                <div id="codeType" class="text-sm font-bold">
-                                                </div>
+                                                <span id="codeType" class="m-2 p-1 inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"></span>
+
+<!--                                                <div id="codeType" class="text-sm font-bold">-->
+<!--                                                </div>-->
                                                 <div id="codeCntns" class="hidden" style="height: 15rem">
                                                 </div>
                                                 <div id="aceEditor" class="hidden h-72 text-sm"></div>
@@ -141,9 +143,9 @@
                     codeCntns.innerHTML = post.codeCntns;
                 }
                 else{
-                    cntnsType.innerHTML = codeType;
                     initAceEditor(codeType, post.codeCntns);
                 }
+                cntnsType.innerHTML = codeType;
             }
 
             desc.innerHTML = post.desc;

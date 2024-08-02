@@ -2,17 +2,19 @@
       xmlns:th="http://www.thymeleaf.org" >
 
 <th:block th:fragment="post-list-fragment">
-    <div id="postContainer" class="hidden-scoll md:w-11/12 h-3/5 my-10 py-10 md:mx-auto mx-10 whitespace-nowrap overflow-y-auto">
 
+    <div id="postContainer" class="hidden-scoll md:w-11/12 h-3/5 my-10 py-10 md:mx-auto mx-10 whitespace-nowrap overflow-y-auto">
+        <div id="emptyDiv" class="hidden text-xl text-gray-500 text-center"></div>
+    </div>
+
+    <th:block th:if="${#strings.contains(biz.uri, 'home')}" >
+        <th:block th:insert="pages/post/form::post-form-fragment"></th:block>
         <div id="listBtns" class="hidden transition-all absolute w-fit text-center md:right-32 md:bottom-32 right-5 bottom-12">
             <div id="addPostBtn" class="m-2 pt-2 h-10 w-10 rounded-full bg-black text-white font-black cursor-pointer">+</div>
             <div id="deleteCateBtn" class="m-2 pt-2 h-10 w-10 rounded-full bg-black text-white font-black cursor-pointer">-</div>
         </div>
-
-    </div>
-
-    <th:block th:if="${#strings.contains(biz.uri, 'home')}" th:insert="pages/post/form::post-form-fragment"></th:block>
-    <th:block th:if="${#strings.contains(biz.uri, 'search')}" th:insert="pages/post/detail::post-detail-fragment"></th:block>
+    </th:block>
+    <th:block th:if="${#strings.contains(biz.uri, 'search') || #strings.contains(biz.uri, 'store')}" th:insert="pages/post/detail::post-detail-fragment"></th:block>
 
     <script th:inline="javascript">
         let CURR_PAGE = 0;
@@ -20,8 +22,10 @@
         domReady(()=>{
             document.querySelector('#postContainer').addEventListener('scroll', scrollPaging);
             toggleListBtns();
-            addClickEvnt('#addPostBtn'      , openDetail);
-            addClickEvnt('#deleteCateBtn'   , deleteCate);
+            if(isExistElement('#listBtns')){
+                addClickEvnt('#deleteCateBtn'   , deleteCate);
+                addClickEvnt('#addPostBtn'      , openDetail);
+            }
         });
 
         function pageInit() {
@@ -62,8 +66,12 @@
         async function reloadList(){
             await axios.get(`/post/${currCateId}?page=${CURR_PAGE}&size=15`)
             .then(res => {
-                CURR_PAGE ++;
-                attatchList(res.data.content);
+                if (res.data.content.length > 0) {
+                    CURR_PAGE ++;
+                    attatchList(res.data.content);
+                }else{
+                    showHddnEmptyDiv("저장된 게시글이 존재하지 않습니다.");
+                }
             });
         }
 
@@ -84,7 +92,8 @@
                     openPostDetail(res.data);
                 })
                 .catch(err => {
-                    console.error(err)
+                    console.error(err);
+                    location.reload();
                 })
 
         }
@@ -108,6 +117,17 @@
             // 스크롤 끝에 오면
             if (Math.ceil(this.scrollTop + this.offsetHeight) >= this.scrollHeight) {
                 reloadList();
+            }
+        }
+
+        function showHddnEmptyDiv(msg){
+            const emptyDiv = document.querySelector('#emptyDiv');
+            if(!isExistElement('[name="postEl"]')){
+                emptyDiv.innerHTML = msg;
+                emptyDiv.classList.remove('hidden');
+            }
+            else{
+                emptyDiv.classList.add('hidden');
             }
         }
 

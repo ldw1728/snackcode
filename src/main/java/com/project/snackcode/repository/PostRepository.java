@@ -1,6 +1,7 @@
 package com.project.snackcode.repository;
 
 import com.project.snackcode.entity.Post;
+import com.project.snackcode.enums.OpenType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,6 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByCategory_Id(Long cateId);
     Page<Post> findAllByCategory_IdOrderByIdDesc(Long cateId, Pageable pageable);
-    Page<Post> findAllByTitleContainsOrderByIdDesc(String searchStr, Pageable pageable);
+    Page<Post> findAllByTitleContainsAndOpenTypeEqualsOrderByIdDesc(String searchStr, OpenType openType, Pageable pageable);
 
 }

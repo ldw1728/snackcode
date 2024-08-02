@@ -1,0 +1,45 @@
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default-layout}">
+
+
+<th:block layout:fragment="content-fragment">
+
+    <th:block th:replace="pages/post/list :: post-list-fragment"></th:block>
+
+
+
+    <script th:inline="javascript">
+
+        domReady(()=>{
+            reloadList();
+        })
+
+        async function reloadList() {
+            await axios.get(`post/store?page=${CURR_PAGE}&size=15`)
+            .then(res => {
+                if(res.data.length > 0){
+                    CURR_PAGE ++;
+                    attatchList(res.data);
+                }
+                else{
+                    showHddnEmptyDiv("저장된 게시글이 존재하지 않습니다.");
+                }
+            });
+        }
+
+
+        function newPostElement(obj){
+            return `
+                <div name="postEl" class="md:w-8/12 mx-auto m-2">
+                    <button onclick="clickPost(this)" class="py-1 px-3 w-full ring-1 ring-inset ring-gray-300 hover:bg-gray-50 h-8 rounded-md shadow-sm" data-post-cateid="${obj.category.id}" data-post-id="${obj.id}">
+                        <div class="inline w-3/4 float-left truncate">${obj.title}</div>
+                        <div class="inline w-1/4 float-right text-gray-400 font-thin truncate">${obj.category.member.name}</div>
+                    </button>
+                </div>
+            `
+        }
+
+    </script>
+</th:block>

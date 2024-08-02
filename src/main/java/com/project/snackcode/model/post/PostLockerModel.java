@@ -1,4 +1,4 @@
-package com.project.snackcode.model;
+package com.project.snackcode.model.post;
 
 import com.project.snackcode.model.post.PostModel;
 import lombok.Builder;

@@ -5,7 +5,7 @@
 
             <!-- path 영역 -->
             <div id="pathSec" class="hidden-scoll text-sm md:w-5/6  mx-4 md:mx-auto my-3 h-10 whitespace-nowrap overflow-x-auto">
-                <img onclick="clickPathBtn(this)" class="inline p-2 cursor-pointer" th:src="@{/images/home.png}">
+                <img onclick="clickPathBtn(this)" class="inline p-2 cursor-pointer" th:src="@{/images/path-home.png}" style="width:35px">
             </div>
             <!-- // path 영역 -->
 
@@ -73,7 +73,6 @@
 
                 axios.post('/category', form)
                     .then( res => {
-                        console.log(res)
                         reloadCate(currCateId);
                     })
                     .catch(err => {
@@ -90,6 +89,12 @@
                 await axios.get(id ? `/category/${id}` : '/category')
                 .then(res=>{
                     refreshCateElements(res.data);
+                })
+                .catch(err => {
+                    setTimeout(()=>{
+                        window.localStorage.removeItem('storedPath');
+                        location.reload();
+                    }, 0);
                 })
             }
 
@@ -173,11 +178,17 @@
 
                 removeElementsAll('[name="postEl"]');
 
+                currCateId  = id;
+                CURR_PAGE   = 0;
+
+                toggleListBtns();
+
                 if (id) {
-                    currCateId = id;
-                    toggleListBtns();
-                    CURR_PAGE = 0;
-                    reloadList()
+                    reloadList();
+                }
+                else{
+                    // click home path
+                    document.querySelector('#emptyDiv').classList.add('hidden');
                 }
 
             }

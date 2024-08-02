@@ -7,6 +7,10 @@ NodeList.prototype.setAttrAll = function(key, value) {
     });
 }
 
+function isExistElement(selector){
+    return document.querySelector(selector) || false;
+}
+
 /**
  * 특정 셀렉터들에 속성을 부여한다.
  * @param selector
