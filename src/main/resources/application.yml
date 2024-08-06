@@ -5,8 +5,8 @@ spring:
   datasource:
     url: jdbc:oracle:thin:@ldwdatabase_high?TNS_ADMIN=/Users/dongwooklee/Downloads/Wallet_ldwdatabase
     driver-class-name: oracle.jdbc.driver.OracleDriver
-    username: admin
-    password: Leedongwook1!
+    username: #id
+    password: #pw
 
   jpa:
     show-sql: true
@@ -34,8 +34,19 @@ server:
 openai:
   model: gpt-3.5-turbo
   api:
-    key: #api key
+    key: #apieky
     url: https://api.openai.com/v1/chat/completions
+
+---
+spring:
+  profiles:
+    active: prod
+
+  datasource:
+    url: jdbc:oracle:thin:@ldwdatabase_high?TNS_ADMIN=~/project/Wallet_ldwdatabase
+
+  thymeleaf:
+    prefix: classpath:/templates/
 
 
 
