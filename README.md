@@ -1,6 +1,6 @@
 ### 설명
 code drawer 라는 웹앱은 직역하면 코드서랍이라는 의미를 가지며 자주 사용되는, 혹은 기억하고 싶은 코드를 간략한 설명과 함께 저장 및 조회 할 수 있습니다.
-그리고 사람들이 올린 코드를 조회하여 서로 공유할 수 있으며 open ai api를 이용하여 자신이 작성한 코드에대한 설명과 제안을 받을 수 있는 기능이 존재합니다.
+그리고 사람들이 올린 코드를 조회하여 서로 공유할 수 있으며 open ai api를 이용하여 자신이 작성한 코드에대한 설명과 제안을 받을 수 있는 기능이 존재합니다.    
 
 
 ### 사용기술
@@ -23,6 +23,9 @@ https://www.erdcloud.com/d/FecKrWFRe6iYKAJ76
 
 ### screenshot
 <img width="485" alt="image" src="https://github.com/user-attachments/assets/43456600-ba01-48da-bfd6-671754c19bcf">
+<img width="633" alt="image" src="https://github.com/user-attachments/assets/985a4299-bfc9-4481-957c-a42dc0459b4b">
+<img width="626" alt="image" src="https://github.com/user-attachments/assets/be1899da-0ec1-4816-b289-3d730ce42297">
+
 
 
 ### todo  
