@@ -53,9 +53,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+//    implementation 'org.hibernate.orm:hibernate-core:6.5.2.Final'
+    implementation 'com.oracle.database.jdbc:ojdbc10:19.18.0.0'
+    implementation 'com.oracle.database.security:oraclepki:23.2.0.0'
+    implementation 'com.oracle.database.security:osdt_cert:21.13.0.0'
+    implementation 'com.oracle.database.security:osdt_core:21.13.0.0'
+
+
 
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    //runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'

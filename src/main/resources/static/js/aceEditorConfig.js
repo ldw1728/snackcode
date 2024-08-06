@@ -192,8 +192,9 @@ const codeModes = [
     'zig',
 ];
 
-function createAceEditor() {
-    aceEditor = ace.edit('aceEditor');
+function createAceEditor(selector = 'aceEditor') {
+
+    const aceEditor = ace.edit(selector);
     aceEditor.setTheme('ace/theme/cloud9_day');
     aceEditor.setOptions({
         selectionStyle: 'line',
@@ -206,26 +207,28 @@ function createAceEditor() {
             document.dForm.codeCntns.value = aceEditor.getValue();
         }
     });
+
+    return aceEditor;
 }
 
-function setAceEditorReadOnly() {
-    aceEditor.setReadOnly(true)
+// function setAceEditorReadOnly() {
+//     aceEditor.setReadOnly(true)
+// }
+//
+// function setAceEditorValue(text) {
+//     aceEditor.setValue(text);
+// }
+//
+// function setAceEditorMode(mode){
+//     aceEditor.session.setMode(`ace/mode/${mode}`);
+// }
+
+function removeAceEditor(selector = '#aceEditor'){
+    document.querySelector(selector).classList.add('hidden');
 }
 
-function setAceEditorValue(text) {
-    aceEditor.setValue(text);
-}
-
-function setAceEditorMode(mode){
-    aceEditor.session.setMode(`ace/mode/${mode}`);
-}
-
-function removeAceEditor(){
-    aceEditorEl.classList.add('hidden');
-}
-
-function showAceEditor() {
-    aceEditorEl.classList.remove('hidden');
+function showAceEditor(selector = '#aceEditor') {
+    document.querySelector(selector).classList.remove('hidden');
 }
 
 

@@ -42,10 +42,11 @@ public class PostController {
     public ResponseEntity select(  @PathVariable(required = false) Long cateId,
                                    @PathVariable(required = false) Long postId,
                                    String searchStr,
+                                   String searchCntnsType,
                                    Pageable pageable){
         // 검색어로 조회
         if (postId == null && cateId == null) {
-            Page<PostModel> postModels = postService.selectPageBySearch(searchStr, pageable);
+            Page<PostModel> postModels = postService.selectPageBySearch(searchStr, searchCntnsType,  pageable);
             return ResponseEntity.ok(postModels);
         }
 

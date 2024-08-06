@@ -13,6 +13,6 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByCategory_Id(Long cateId);
     Page<Post> findAllByCategory_IdOrderByIdDesc(Long cateId, Pageable pageable);
-    Page<Post> findAllByTitleContainsAndOpenTypeEqualsOrderByIdDesc(String searchStr, OpenType openType, Pageable pageable);
+    Page<Post> findAllByTitleContainsAndCntnsTypeEqualsAndOpenTypeEqualsOrderByIdDesc(String searchStr, String searchCntnsType, OpenType openType, Pageable pageable);
 
 }

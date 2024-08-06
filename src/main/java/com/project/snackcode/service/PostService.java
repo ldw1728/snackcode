@@ -45,9 +45,9 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostModel> selectPageBySearch(String searchStr, Pageable pageable){
-        // 제목 문자열 포함, 공개타입
-        Page<Post> posts = postRepository.findAllByTitleContainsAndOpenTypeEqualsOrderByIdDesc(searchStr, OpenType.Y,  pageable);
+    public Page<PostModel> selectPageBySearch(String searchStr, String searchCntnsType, Pageable pageable){
+        // 제목 문자열 포함, 컨텐츠 타입, 공개타입
+        Page<Post> posts = postRepository.findAllByTitleContainsAndCntnsTypeEqualsAndOpenTypeEqualsOrderByIdDesc(searchStr, searchCntnsType, OpenType.Y,  pageable);
         return posts.map(Post::toModel);
     }
 

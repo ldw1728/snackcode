@@ -1,0 +1,105 @@
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="openai-fragment">
+
+    <div id="aiBtn" class="shadow text-gray-700 text-xs float-right ring-1 ring-gray-300 rounded-xl p-2 hover:bg-gray-100 cursor-pointer">supported by AI</div>
+
+    <div id="aiPanel" class="hidden border border-1 overflow-auto transition-all duration-300 w-0 h-0 z-20 absolute shadow-md bg-white right-32">
+        <div id="panelContents" class="hidden w-full h-full">
+            <!-- close btn -->
+            <div id="closeAiBtn" class="absolute right-5 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
+                <button type="button" class="relative rounded-md text-gray-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-white">
+                    <span class="absolute -inset-2.5"></span>
+                    <span class="sr-only">Close panel</span>
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="openai_desc" class="p-10 pt-14">
+
+            </div>
+            <div id="openai_code" class="h-2/4 p-5">
+                <div id="openai_aceEditor" class="h-full border border-solid "></div>
+            </div>
+            <div class="text-xs font-light italic m-3 mt-1 mb-10">* 위 제안된 코드는 AI로 의해 생성되어 검증 및 테스트 과정을 필요로하며 참고용으로 사용바랍니다.</div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+
+        let aceEditor_openai;
+
+        domReady(()=>{
+            addClickEvnt('#aiBtn'       , clickAiBtn);
+            addClickEvnt('#closeAiBtn'  , closeAiPanel);
+        })
+
+        function toggleAiBtn(isShow){
+            const aiBtn = document.querySelector('#aiBtn');
+            if (isShow) {
+                aiBtn.classList.remove('hidden');
+            }
+            else{
+                aiBtn.classList.add('hidden');
+            }
+        }
+
+        function openAiPanel() {
+            const panel = document.querySelector('#aiPanel');
+            panel.classList.remove('hidden');
+            setTimeout(()=>{panel.classList.add('w-3/4', 'h-3/4');}, 0);
+
+        }
+
+        function closeAiPanel() {
+            const panel = document.querySelector('#aiPanel')
+            panel.classList.remove('w-3/4', 'h-3/4');
+            panel.classList.add('hidden');
+            document.querySelector('#openai_desc').innerHTML = '';
+            removeAceEditor('#openai_aceEditor');
+            hiddenElement('#panelContents');
+        }
+        async function clickAiBtn() {
+
+            openAiPanel();
+
+            setTimeout(async ()=>{
+
+                const code = aceEditor_form.getValue();
+
+                if(!code){
+                    alert('코드를 작성해 주세요.');
+                }
+
+                const cntnsType = document.querySelector('#selectedValue').innerHTML;
+
+                await axios.post(`/openai/chat`,
+                    { code, cntnsType })
+                    .then((res) => {
+                        //res.data.choices[0].message.content
+                        document.querySelector('#openai_desc').innerText = res.data.desc;
+                        createOpenaiEditor('openai_aceEditor', res.data.cntnsType, res.data.code );
+                        showElement('#panelContents');
+                    })
+                    .catch( err => {
+                        alert("서버에 오류가 발생하였습니다.");
+                        console.log(err)
+                        //location.reload();
+                    })
+            }, 300)
+        }
+
+        function createOpenaiEditor(selector, mode, code) {
+            aceEditor_openai = createAceEditor(selector);
+            aceEditor_openai.session.setMode(`ace/mode/${mode}`);
+            aceEditor_openai.setValue(code);
+            aceEditor_openai.setReadOnly(true);
+            showAceEditor('#openai_aceEditor');
+        }
+    </script>
+</th:block>
+
+

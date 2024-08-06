@@ -5,9 +5,11 @@
 
 <th:block layout:fragment="content-fragment">
 
-    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div class="flex min-h-full flex-col justify-center lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 class="mt-10 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">CODE DRAWERS</h2>
+            <h2 id="loginTitle" class="text-cursor relative mt-10 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                &nbsp;
+            </h2>
         </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -46,7 +48,34 @@
         domReady(()=>{
             addClickEvnt('#loginBtn', goLogin);
             pressEnter();
+            titleTyping();
         });
+
+        function titleTyping(){
+
+            titleBlink();
+
+            const title     = 'CODE DRAWER.';
+            const titleEl   = document.querySelector('#loginTitle');
+
+            titleEl.innerHTML = '&nbsp;';
+
+            for (let i = 0; i < title.length; i++) {
+                setTimeout(()=>{
+                    titleEl.innerHTML = titleEl.innerHTML + title[i];
+                }, 150 * i);
+            }
+
+            setTimeout(titleTyping, 5000);
+
+        }
+
+        function titleBlink() {
+            const blink = () => {
+                document.querySelector('#loginTitle').classList.toggle('text-cursor-none');
+            }
+            setInterval(blink, 500);
+        }
 
         const pressEnter = () => {
             document.querySelectorAll('input').forEach(node => {

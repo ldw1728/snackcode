@@ -79,6 +79,8 @@
     <script src="js/aceEditorConfig.js"></script>
     <script th:inline="javascript">
 
+        let aceEditor_detail;
+
         let curr_post;
 
         let title;
@@ -154,10 +156,10 @@
         }
 
         function initAceEditor(codeType, codeCntns) {
-            createAceEditor();
-            setAceEditorMode(codeType);
-            setAceEditorValue(codeCntns);
-            setAceEditorReadOnly();
+            aceEditor_detail = createAceEditor();
+            aceEditor_detail.session.setMode(`ace/mode/${codeType}`);
+            aceEditor_detail.setValue(codeCntns);
+            aceEditor_detail.setReadOnly(true);
             showAceEditor();
         }
 

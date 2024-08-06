@@ -56,7 +56,7 @@ public class CategoryService {
             }
         }
 
-        List<Category> categorys = categoryRepository.findAllByMember_IdAndPrntCategory_Id(memId, cateId);
+        List<Category> categorys = categoryRepository.findAllByMember_IdAndPrntCategory_IdOrderByIdDesc(memId, cateId);
 
         return categorys.stream().map(Category::toModel).collect(Collectors.toList());
     }
@@ -101,7 +101,7 @@ public class CategoryService {
         Category targetCategory = categoryRepository.findById(cateId).orElseThrow();
 
         // 하위 카테고리들도 삭세
-        List<Category> categorys = categoryRepository.findAllByMember_IdAndPrntCategory_Id(memId, cateId);
+        List<Category> categorys = categoryRepository.findAllByMember_IdAndPrntCategory_IdOrderByIdDesc(memId, cateId);
         categorys.forEach(category -> {
             postService.deleteAllByCategoryId(category.getId());
             categoryRepository.delete(category);

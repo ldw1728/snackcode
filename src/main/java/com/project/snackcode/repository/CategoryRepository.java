@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    List<Category> findAllByMember_IdAndPrntCategory_Id(Long memId, Long prntCid);
+    List<Category> findAllByMember_IdAndPrntCategory_IdOrderByIdDesc(Long memId, Long prntCid);
     List<Category> findAllByMember_Id(Long memId);
 }

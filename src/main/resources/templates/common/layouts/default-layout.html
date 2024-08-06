@@ -13,9 +13,11 @@
         <header th:replace="common/fragments/header::header-fragment"></header>
 
         <!-- 본문 -->
-        <th:block layout:fragment="content-fragment"></th:block>
+        <div class="h-5/6">
+            <th:block layout:fragment="content-fragment"></th:block>
+        </div>
 
-        <footer></footer>
+        <footer th:replace="common/fragments/footer::footer-fragment"></footer>
 
     </body>
 

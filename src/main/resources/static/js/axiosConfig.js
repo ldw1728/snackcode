@@ -13,7 +13,7 @@ axios.interceptors.request.use((config) => {
     // jwt token
     //const token = window.localStorage.getItem(JWT_TOKEN_KEY);
     //config.headers.Authorization = token;
-
+    config.timeout = 100000;
     return config;
 }, (error => {
     // 요청 에러 시 실행
@@ -22,7 +22,7 @@ axios.interceptors.request.use((config) => {
 }));
 
 /** response interceptors */
-axios.interceptors.response.use((response) => {
+axios.interceptors.response.use(async (response) => {
     // 200 응답 데이터 처리
     console.info(response);
 

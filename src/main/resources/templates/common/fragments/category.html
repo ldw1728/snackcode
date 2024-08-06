@@ -35,7 +35,7 @@
             function addCate(){
 
                 const newCate =
-                                `<button name="newCateBtn" class="w-32 py-2 px-4 border-solid border border-black rounded-full relative">
+                                `<button name="newCateBtn" class="shadow border-gray-500 w-32 py-2 px-4 border-solid border border-black rounded-full relative">
                                     <form name="cForm">
                                         <input name="name" id="newCateInput" class="w-24 px-2" type="text">
                                         <input name="prntCid" type="hidden" value="">
@@ -69,7 +69,7 @@
                     return;
                 }
 
-                form.prntCid.value = currCateId;
+                form.prntCid.value = currCateId || '';
 
                 axios.post('/category', form)
                     .then( res => {
@@ -105,7 +105,7 @@
                 const newCateEl = () => {
                     const el    = document.createElement('button');
                     el.name     = 'cateBtn';
-                    el.classList.add('inline', 'hover:bg-gray-50', 'm-1', 'py-2', 'px-4', 'border-solid', 'border', 'border-black', 'rounded-full');
+                    el.classList.add('text-gray-700', 'shadow', 'inline', 'hover:bg-gray-50', 'm-1', 'py-2', 'px-4', 'border', 'border-gray-500', 'rounded-full');
                     el.addEventListener('click', (e) => { clickCateBtn(e.target) });
 
                 return el;
@@ -139,7 +139,8 @@
                 const pathSec       = document.querySelector('#pathSec');
                 const addPathHtml   = `<div name="pathBtn" class="inline" data-cate-id="${cateBtn.dataset.cateId}">
                                                     <img class="inline" src="/images/arrow_right.png">
-                                                    <button class="p-2" onclick="clickPathBtn(this)">${cateBtn.innerText}</button>
+                                                    <button class="p-2 text-gray-600
+                                                    " onclick="clickPathBtn(this)">${cateBtn.innerText}</button>
                                                 </div>`
                 // 경로에 추가
                 pathSec.insertAdjacentHTML('beforeend', addPathHtml);
@@ -188,7 +189,7 @@
                 }
                 else{
                     // click home path
-                    document.querySelector('#emptyDiv').classList.add('hidden');
+                    hideEmptyDiv();
                 }
 
             }
