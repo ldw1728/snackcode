@@ -1,15 +1,28 @@
+### 설명
+code drawer 라는 웹앱은 직역하면 코드서랍이라는 의미를 가지며 자주 사용되는, 혹은 기억하고 싶은 코드를 간략한 설명과 함께 저장 및 조회 할 수 있습니다.
+그리고 사람들이 올린 코드를 조회하여 서로 공유할 수 있으며 open ai api를 이용하여 자신이 작성한 코드에대한 설명과 제안을 받을 수 있는 기능이 존재합니다.
 
-###사용기술
+
+### 사용기술
+__- server__
+- oracle cloud vm (centOS 7)
+  
 __- back end__
 - java 17  
 - springboot 3.3.1  
 - spring security  + jwt
 - spring jpa  
 - spring validation
-- mysql 
+- oracle cloud database
 
 __- front end__  
 - thymeleaf
+
+### erd
+https://www.erdcloud.com/d/FecKrWFRe6iYKAJ76
+
+### screenshot
+<img width="485" alt="image" src="https://github.com/user-attachments/assets/43456600-ba01-48da-bfd6-671754c19bcf">
 
 
 ### todo  
@@ -40,9 +53,11 @@ frontend 프로젝트 구성.
 ~codemirror 이용하여 code editor 기능추가~
 ~search 메뉴 및 페이지 생성. 다른 유저의 게시글포함하여 서치함.~
 ~search메뉴의 상세 요소 구현~
-search 메뉴에서 조회된 리스트 및 상세에 사용자명 표시
-보관함페이지 구현
-ai asistance 기능 구현
+~search 메뉴에서 조회된 리스트 및 상세에 사용자명 표시~
+~보관함페이지 구현~
+~ai asistance 기능 구현~
+
+검색 기능 및 댓글기능 추가
 
 
 
