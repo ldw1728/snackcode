@@ -17,6 +17,9 @@ __- back end__
 
 __- front end__  
 - thymeleaf
+- tailwindcss
+- quil editor, ace editor
+
 
 ### erd
 https://www.erdcloud.com/d/FecKrWFRe6iYKAJ76
