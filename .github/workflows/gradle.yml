@@ -19,9 +19,18 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: build
-      run: | 
-        pwd
+      run: |
         ls -al
+        ./gradlew bootJar
+
+    - name: ftp upload remote server
+      uses: milanmk/actions-file-deployer@master
+      with:
+        remote-host: ${{ secrets.ORACLE_CLOUD_IP }}
+        remote-user: ${{ secrets.ORACLE_CLOUD_USER }}
+        ssh-private-key: ${{ secrets.ORACLE_CLOUD_KEY }}
+        local-path: "./build/libs/"
+        remote-path: "/home/ubuntu/project/libs/"
       
       # with:
       #   host: ${{ secrets.ORACLE_CLOUD_IP }}
