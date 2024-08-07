@@ -38,7 +38,7 @@ public class RequestCachingFilter extends OncePerRequestFilter {
         String reqDataStr   = "";
         String resDataStr   = "";
 
-        log.debug("[{}]      method : [{}],   URI : [{}],   contentType : [{}],   params : [{}]",
+        log.info("[{}]      method : [{}],   URI : [{}],   contentType : [{}],   params : [{}]",
                     reqAddr,  httpMtd,         reqUri,       contentType,          params );
 
         // do Filter
@@ -49,7 +49,7 @@ public class RequestCachingFilter extends OncePerRequestFilter {
         resDataStr = new String(cachedResponse.getContentAsByteArray(), StandardCharsets.UTF_8);
 
         // request body data
-        log.debug("REQUEST DATA: " + reqDataStr);
+        log.info("REQUEST DATA: " + reqDataStr);
 
         cachedResponse.copyBodyToResponse();
     }

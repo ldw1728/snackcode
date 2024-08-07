@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -100,12 +101,24 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 response.addCookie(cookie);
             }
         }
-        Cookie cookie = new Cookie("Authorization", URLEncoder.encode("Bearer " + jwt, StandardCharsets.UTF_8));
-        cookie.setMaxAge(60000 * 100);
-        cookie.setDomain("localhost");
-        cookie.setPath("/");
-        cookie.setSecure(true);
-        response.addCookie(cookie);
+
+        ResponseCookie responseCookie = ResponseCookie.from("Authorization", URLEncoder.encode("Bearer " + jwt, StandardCharsets.UTF_8))
+                .path("/")
+                .maxAge(60000 * 100)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .build();
+
+        response.addHeader("Set-cookie", responseCookie.toString());
+
+//        Cookie cookie = new Cookie("Authorization", );
+//        cookie.setMaxAge(60000 * 100);
+//        //cookie.setDomain("localhost");
+//        cookie.setPath("/");
+//        cookie.setSecure(true);
+//        cookie.setHttpOnly(true);
+//        response.addCookie(cookie);
         log.debug("====== create jwt cookie");
 
         //request.getRequestDispatcher("/home").forward(request, response);

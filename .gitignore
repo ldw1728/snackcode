@@ -6,6 +6,9 @@ build/
 !**/src/test/**/build/
 
 application.yml
+.log
+keystore.p12
+
 
 ### STS ###
 .apt_generated

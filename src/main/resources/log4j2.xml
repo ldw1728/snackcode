@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="warn" >
+<Configuration status="WARN" >
 
     <Properties>
         <!-- 자주 사용되는 패턴은 property에 등록-->
@@ -25,8 +25,8 @@
                      fileName="logs/server.log" filePattern="logs/server.log.%d{yyyy-MM-dd}">
             <PatternLayout pattern="${STDOUT_BS}" />
             <!-- 밑의 태그를 이용하여 Level별로 로그를 남길 수 있다. -->
-            <LevelRangeFilter minLevel="INFO" maxLevel="INFO"
-                              onMatch="ACCEPT" onMismatch="DENY" />
+<!--            <LevelRangeFilter minLevel="INFO" maxLevel="INFO"-->
+<!--                              onMatch="ACCEPT" onMismatch="DENY" />-->
             <Policies>
                 <SizeBasedTriggeringPolicy size="10MB" />
                 <TimeBasedTriggeringPolicy />
@@ -42,8 +42,8 @@
                      fileName="logs/reqInfo.log" filePattern="logs/reqInfo.log.%d{yyyy-MM-dd}">
             <PatternLayout pattern="${REQUEST_LOG}" />
             <!-- 밑의 태그를 이용하여 Level별로 로그를 남길 수 있다. -->
-            <LevelRangeFilter minLevel="INFO" maxLevel="INFO"
-                              onMatch="ACCEPT" onMismatch="DENY" />
+<!--            <LevelRangeFilter minLevel="INFO" maxLevel="INFO"-->
+<!--                              onMatch="ACCEPT" onMismatch="DENY" />-->
             <Policies>
                 <SizeBasedTriggeringPolicy size="10MB" />
                 <TimeBasedTriggeringPolicy />
@@ -57,27 +57,29 @@
 
     </Appenders>
     <Loggers>
-        <logger name="org.springframework" level="INFO" additivity="false"> <!-- additivity="false" = 중복x-->
-            <AppenderRef ref="CONSOLE_STDOUT_ST"/>
-<!--            <AppenderRef ref="InfoAppender"/>-->
+        <Root level="INFO" additivity="false">
+            <AppenderRef ref="InfoAppender"/>
+        </Root>
+        <logger name="org.springframework" level="DEBUG" additivity="false"> <!-- additivity="false" = 중복x-->
+            <AppenderRef ref="CONSOLE_STDOUT_ST" />
         </logger>
-        <logger name="org.springframework.security" level="INFO" additivity="false"> <!-- additivity="false" = 중복x-->
-            <AppenderRef ref="CONSOLE_STDOUT_ST"/>
-            <!--            <AppenderRef ref="InfoAppender"/>-->
+        <logger name="org.springframework" level="INFO" additivity="false"> <!-- additivity="false" = 중복x-->
+<!--            <AppenderRef ref="InfoAppender"/>-->
         </logger>
         <logger name="org.hibernate" level="INFO" additivity="false">
             <AppenderRef ref="CONSOLE_STDOUT_ST"/>
-<!--            <AppenderRef ref="InfoAppender"/>-->
         </logger>
-        <logger name="com.project.snackcode" level="INFO" additivity="false">
+        <logger name="com.project.snackcode.Filter.RequestCachingFilter" level="DEBUG" additivity="false">
+            <AppenderRef ref="CONSOLE_REQUEST_LOG_ST" />
+            <AppenderRef ref="ReqAppender" />
+        </logger>
+        <logger name="com.project.snackcode" level="INFO">
 <!--            <AppenderRef ref="InfoAppender"/>-->
         </logger>
         <logger name="com.project.snackcode" level="DEBUG" additivity="false">
             <AppenderRef ref="CONSOLE_STDOUT_ST"/>
         </logger>
-        <logger name="com.project.snackcode.Filter.RequestCachingFilter" level="DEBUG" additivity="false">
-            <AppenderRef ref="CONSOLE_REQUEST_LOG_ST"/>
-        </logger>
+
     </Loggers>
 </Configuration>
 
