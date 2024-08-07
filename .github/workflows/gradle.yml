@@ -18,7 +18,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    
     - name: build
+      uses: actions/setup-java@v4.2.2
+      with: 
+        java-version: "17"
       run: |
         ls -al
         ./gradlew bootJar
