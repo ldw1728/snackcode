@@ -25,8 +25,7 @@ jobs:
         key: ${{ secrets.ORACLE_CLOUD_KEY }}
         port: 22
         script: |
-          whoami
-          cd ~/project
-          ls -al
+          cd ~/project/snackcode
+          ./start_codedrawer.sh
           
     
