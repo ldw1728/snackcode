@@ -26,6 +26,7 @@ jobs:
         port: 22
         script: |
           whoami
+          cd ~/project
           ls -al
           
     
