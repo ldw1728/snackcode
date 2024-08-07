@@ -17,14 +17,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: remote ssh
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.ORACLE_CLOUD_IP }}
-        username: ${{ secrets.ORACLE_CLOUD_USER }}
-        key: ${{ secrets.ORACLE_CLOUD_KEY }}
-        port: 22
-        script: |
-          ~/project/start_codedrawer.sh
+    - uses: action/checkout@v4
+    - name: build
+      run: | 
+        pwd
+        ls -al
+      
+      # with:
+      #   host: ${{ secrets.ORACLE_CLOUD_IP }}
+      #   username: ${{ secrets.ORACLE_CLOUD_USER }}
+      #   key: ${{ secrets.ORACLE_CLOUD_KEY }}
+      #   port: 22
+      #   script: |
+      #     ~/project/start_codedrawer.sh
           
     
