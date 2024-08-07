@@ -20,7 +20,7 @@ jobs:
     - name: remote ssh
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.ORACLE_CLOUD_ID }}
+        host: ${{ secrets.ORACLE_CLOUD_IP }}
         username: ${{ secrets.ORACLE_CLOUD_USER }}
         key: ${{ secrets.ORACLE_CLOUD_KEY }}
         port: 22
