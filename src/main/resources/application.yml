@@ -5,14 +5,14 @@ spring:
   datasource:
     url: jdbc:oracle:thin:@ldwdatabase_high?TNS_ADMIN=/Users/dongwooklee/Downloads/Wallet_ldwdatabase
     driver-class-name: oracle.jdbc.driver.OracleDriver
-    username: #id
-    password: #pw
+    username: #username
+    password: #password
 
   jpa:
     show-sql: true
     open-in-view: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     database: oracle
     database-platform: org.hibernate.dialect.OracleDialect
 
@@ -30,23 +30,37 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-type: PKCS12
+    key-store-password: #password
 
 openai:
   model: gpt-3.5-turbo
   api:
-    key: #apieky
+    key: # api key
     url: https://api.openai.com/v1/chat/completions
+
 
 ---
 spring:
-  profiles:
-    active: prod
+  config:
+    activate:
+      on-profile: prod
+
 
   datasource:
-    url: jdbc:oracle:thin:@ldwdatabase_high?TNS_ADMIN=~/project/Wallet_ldwdatabase
+    url: jdbc:oracle:thin:@ldwdatabase_high?TNS_ADMIN=/home/ubuntu/project/Wallet_ldwdatabase
 
   thymeleaf:
     prefix: classpath:/templates/
 
+  jpa:
+    show-sql: false
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
 
-
+server:
+  ssl:
+    key-store: file:/home/ubuntu/project/keystore.p12

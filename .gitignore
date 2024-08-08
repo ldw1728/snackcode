@@ -5,8 +5,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-application.yml
+src/main/resources/application.yml
 .log
+logs/
 keystore.p12
 
 
