@@ -28,17 +28,22 @@ jobs:
     - name: setup
       run: |
         ls -al
-        ./gradlew bootJar
+        rm -rf ./src/main/resources/application.yml
+        echo "$application" > ./src/main/resources/application.yml
+        cat ./src/main/resources/application.yml
+        # ./gradlew bootJar
+      env:
+        application: ${{secrets.APPLICATION_YML}}
 
-    - name: ftp upload remote server
-      uses: milanmk/actions-file-deployer@master
-      with:
-        remote-host: ${{ secrets.ORACLE_CLOUD_IP }}
-        remote-user: ${{ secrets.ORACLE_CLOUD_USER }}
-        ssh-private-key: ${{ secrets.ORACLE_CLOUD_KEY }}
-        local-path: "./build/libs/"
-        remote-path: "/home/ubuntu/project/libs/"
-        sync: "full"
+    # - name: ftp upload remote server
+    #   uses: milanmk/actions-file-deployer@master
+    #   with:
+    #     remote-host: ${{ secrets.ORACLE_CLOUD_IP }}
+    #     remote-user: ${{ secrets.ORACLE_CLOUD_USER }}
+    #     ssh-private-key: ${{ secrets.ORACLE_CLOUD_KEY }}
+    #     local-path: "./build/libs/"
+    #     remote-path: "/home/ubuntu/project/libs/"
+    #     sync: "full"
       
       # with:
       #   host: ${{ secrets.ORACLE_CLOUD_IP }}
