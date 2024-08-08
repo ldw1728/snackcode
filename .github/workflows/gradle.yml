@@ -38,6 +38,7 @@ jobs:
         ssh-private-key: ${{ secrets.ORACLE_CLOUD_KEY }}
         local-path: "./build/libs/"
         remote-path: "/home/ubuntu/project/libs/"
+        sync: "full"
       
       # with:
       #   host: ${{ secrets.ORACLE_CLOUD_IP }}
