@@ -22,7 +22,7 @@
 
             </div>
             <div id="openai_code" class="h-2/4 p-5">
-                <div id="openai_aceEditor" class="h-full border border-solid "></div>
+                <div id="openai_aceEditor" class="h-full border border-solid text-xs sm:text-sm"></div>
             </div>
             <div class="text-xs font-light italic m-3 mt-1 mb-10">* 위 제안된 코드는 AI로 의해 생성되어 검증 및 테스트 과정을 필요로하며 참고용으로 사용바랍니다.</div>
         </div>
@@ -87,7 +87,7 @@
                     .catch( err => {
                         alert("서버에 오류가 발생하였습니다.");
                         console.log(err)
-                        //location.reload();
+                        location.reload();
                     })
             }, 300)
         }
@@ -97,10 +97,6 @@
             aceEditor_openai.session.setMode(`ace/mode/${mode}`);
             aceEditor_openai.setValue(code);
             aceEditor_openai.setReadOnly(true);
-
-            if (!is.desktop()) {
-                document.querySelector('#openai_aceEditor').classList.add('text-xs');
-            }
 
             showAceEditor('#openai_aceEditor');
         }
