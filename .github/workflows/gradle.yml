@@ -30,7 +30,6 @@ jobs:
         ls -al
         rm -rf ./src/main/resources/application.yml
         echo "$application" > ./src/main/resources/application.yml
-        echo "$application" > ./build/libs/application.yml
         ./gradlew bootJar
       env:
         application: ${{secrets.APPLICATION_YML}}
@@ -41,7 +40,7 @@ jobs:
         remote-host: ${{ secrets.ORACLE_CLOUD_IP }}
         remote-user: ${{ secrets.ORACLE_CLOUD_USER }}
         ssh-private-key: ${{ secrets.ORACLE_CLOUD_KEY }}
-        local-path: "./build/libs/"
+        local-path: "./src/main/resources/application.yml"
         remote-path: "/home/ubuntu/project/libs/"
         sync: "full"
 
