@@ -30,8 +30,6 @@ jobs:
         ls -al
         rm -rf ./src/main/resources/application.yml
         echo "$application" > ./src/main/resources/application.yml
-        # mkdir test
-        # echo "$application" > ./test/application.yml
         ./gradlew bootJar
       env:
         application: ${{secrets.APPLICATION_YML}}
