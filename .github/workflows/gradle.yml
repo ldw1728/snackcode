@@ -28,8 +28,10 @@ jobs:
     - name: make bootJar
       run: |
         ls -al
-        rm -rf ./src/main/resources/application.yml
-        echo "$application" > ./src/main/resources/application.yml
+        # rm -rf ./src/main/resources/application.yml
+        # echo "$application" > ./src/main/resources/application.yml
+        mkdir test
+        echo "$application" > ./test/application.yml
         ./gradlew bootJar
       env:
         application: ${{secrets.APPLICATION_YML}}
@@ -40,7 +42,7 @@ jobs:
         remote-host: ${{ secrets.ORACLE_CLOUD_IP }}
         remote-user: ${{ secrets.ORACLE_CLOUD_USER }}
         ssh-private-key: ${{ secrets.ORACLE_CLOUD_KEY }}
-        local-path: "./src/main/resources/application.yml"
+        local-path: "./test"
         remote-path: "/home/ubuntu/project/libs/"
         sync: "full"
 
