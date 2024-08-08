@@ -29,8 +29,9 @@ jobs:
       run: |
         ls -al
         rm -rf ./src/main/resources/application.yml
-        echo "$application" > ./src/main/resources/application.yml
-        cat ./src/main/resources/application.yml
+        echo "$application"
+        # echo "$application" > ./src/main/resources/application.yml
+        # cat ./src/main/resources/application.yml
         # ./gradlew bootJar
       env:
         application: ${{secrets.APPLICATION_YML}}
