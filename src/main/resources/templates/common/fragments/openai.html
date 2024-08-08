@@ -5,7 +5,7 @@
 
     <div id="aiBtn" class="shadow text-gray-700 text-xs float-right ring-1 ring-gray-300 rounded-xl p-2 hover:bg-gray-100 cursor-pointer">supported by AI</div>
 
-    <div id="aiPanel" class="hidden border border-1 overflow-auto transition-all duration-300 w-0 h-0 z-20 absolute shadow-md bg-white right-32">
+    <div id="aiPanel" class="hidden fixed top-0 right-0 sm:top-48 sm:right-32 border border-1 overflow-auto transition-all duration-300 w-0 h-0 z-20 shadow-md bg-white">
         <div id="panelContents" class="hidden w-full h-full">
             <!-- close btn -->
             <div id="closeAiBtn" class="absolute right-5 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
@@ -50,13 +50,13 @@
         function openAiPanel() {
             const panel = document.querySelector('#aiPanel');
             panel.classList.remove('hidden');
-            setTimeout(()=>{panel.classList.add('w-3/4', 'h-3/4');}, 0);
+            setTimeout(()=>{panel.classList.add('w-full', 'h-full', 'sm:w-3/4', 'sm:h-3/4');}, 0);
 
         }
 
         function closeAiPanel() {
             const panel = document.querySelector('#aiPanel')
-            panel.classList.remove('w-3/4', 'h-3/4');
+            panel.classList.remove('w-full', 'h-full', 'sm:w-3/4', 'sm:h-3/4');
             panel.classList.add('hidden');
             document.querySelector('#openai_desc').innerHTML = '';
             removeAceEditor('#openai_aceEditor');
@@ -97,6 +97,11 @@
             aceEditor_openai.session.setMode(`ace/mode/${mode}`);
             aceEditor_openai.setValue(code);
             aceEditor_openai.setReadOnly(true);
+
+            if (!is.desktop()) {
+                document.querySelector('#openai_aceEditor').classList.add('text-xs');
+            }
+
             showAceEditor('#openai_aceEditor');
         }
     </script>
