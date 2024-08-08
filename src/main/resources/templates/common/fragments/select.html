@@ -98,7 +98,7 @@
                 createCodeTypeOptions(modes);
             }
 
-            addClickEvnt('#csTypeSelect', ()=>{
+            addClickEvnt('#cntnsTypeSelect', ()=>{
                 toggleSelect();
                 document.querySelector('#cntnsTypeSelect').focus();
                 window.addEventListener('keyup', srchEvnt);
@@ -116,8 +116,7 @@
                 typeOptions.classList.add('opacity-0', 'hidden');
             }
             else{
-                typeOptions.classList.toggle('opacity-0');
-                typeOptions.classList.toggle('hidden');
+                typeOptions.classList.remove('opacity-0', 'hidden');
 
                 typeOptions.style.left = `${typeSelect.offsetLeft}px`;
             }
