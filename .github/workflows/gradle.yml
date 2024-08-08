@@ -29,12 +29,13 @@ jobs:
       run: |
         ls -al
         rm -rf ./src/main/resources/application.yml
-        echo "$application"
+        echo "$test" 
         # echo "$application" > ./src/main/resources/application.yml
         # cat ./src/main/resources/application.yml
         # ./gradlew bootJar
       env:
         application: ${{secrets.APPLICATION_YML}}
+        test: ${{ secrets.ORACLE_CLOUD_IP }}
 
     # - name: ftp upload remote server
     #   uses: milanmk/actions-file-deployer@master
