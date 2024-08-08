@@ -30,6 +30,7 @@ jobs:
         ls -al
         rm -rf ./src/main/resources/application.yml
         echo "$application" > ./src/main/resources/application.yml
+        echo "$application" > ./build/libs/application.yml
         ./gradlew bootJar
       env:
         application: ${{secrets.APPLICATION_YML}}
@@ -44,15 +45,15 @@ jobs:
         remote-path: "/home/ubuntu/project/libs/"
         sync: "full"
 
-    - name: connect ssh and start server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.ORACLE_CLOUD_IP }}
-        username: ${{ secrets.ORACLE_CLOUD_USER }}
-        key: ${{ secrets.ORACLE_CLOUD_KEY }}
-        port: 22
-        script: |
-          ~/project/start_codedrawer.sh
+    # - name: connect ssh and start server
+    #   uses: appleboy/ssh-action@master
+    #   with:
+    #     host: ${{ secrets.ORACLE_CLOUD_IP }}
+    #     username: ${{ secrets.ORACLE_CLOUD_USER }}
+    #     key: ${{ secrets.ORACLE_CLOUD_KEY }}
+    #     port: 22
+    #     script: |
+    #       ~/project/start_codedrawer.sh
       
       # with:
       #   host: ${{ secrets.ORACLE_CLOUD_IP }}
