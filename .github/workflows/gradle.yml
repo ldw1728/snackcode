@@ -25,27 +25,34 @@ jobs:
         distribution: 'temurin'
         java-version: "17"
         
-    - name: setup
+    - name: make bootJar
       run: |
         ls -al
         rm -rf ./src/main/resources/application.yml
-        echo "$test" 
-        # echo "$application" > ./src/main/resources/application.yml
-        # cat ./src/main/resources/application.yml
-        # ./gradlew bootJar
+        echo "$application" > ./src/main/resources/application.yml
+        ./gradlew bootJar
       env:
         application: ${{secrets.APPLICATION_YML}}
-        test: ${{ secrets.ORACLE_CLOUD_IP }}
 
-    # - name: ftp upload remote server
-    #   uses: milanmk/actions-file-deployer@master
-    #   with:
-    #     remote-host: ${{ secrets.ORACLE_CLOUD_IP }}
-    #     remote-user: ${{ secrets.ORACLE_CLOUD_USER }}
-    #     ssh-private-key: ${{ secrets.ORACLE_CLOUD_KEY }}
-    #     local-path: "./build/libs/"
-    #     remote-path: "/home/ubuntu/project/libs/"
-    #     sync: "full"
+    - name: ftp upload remote server
+      uses: milanmk/actions-file-deployer@master
+      with:
+        remote-host: ${{ secrets.ORACLE_CLOUD_IP }}
+        remote-user: ${{ secrets.ORACLE_CLOUD_USER }}
+        ssh-private-key: ${{ secrets.ORACLE_CLOUD_KEY }}
+        local-path: "./build/libs/"
+        remote-path: "/home/ubuntu/project/libs/"
+        sync: "full"
+
+    - name: connect ssh and start server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.ORACLE_CLOUD_IP }}
+        username: ${{ secrets.ORACLE_CLOUD_USER }}
+        key: ${{ secrets.ORACLE_CLOUD_KEY }}
+        port: 22
+        script: |
+          ~/project/start_codedrawer.sh
       
       # with:
       #   host: ${{ secrets.ORACLE_CLOUD_IP }}
