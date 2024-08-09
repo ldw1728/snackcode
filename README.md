@@ -22,8 +22,8 @@ __- front end__
 - quil editor, ace editor
 
 __- etc__
-github action 이용하여 ci/cd 구현
-open ai api 연동
+- github action 이용하여 ci/cd 구현
+- open ai api 연동
 
 
 ### erd
