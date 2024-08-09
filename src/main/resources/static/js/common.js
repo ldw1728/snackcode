@@ -1,6 +1,32 @@
 const JWT_TOKEN_KEY = 'jwttkn'
 const STORED_PATH   = 'storedPath'
 
+/** 타이핑 효과 */
+function titleTyping(selector, title){
+
+    titleBlink();
+
+    const titleEl   = document.querySelector(selector);
+
+    titleEl.innerHTML = '&nbsp;';
+
+    for (let i = 0; i < title.length; i++) {
+        setTimeout(()=>{
+            titleEl.innerHTML = titleEl.innerHTML + title[i];
+        }, 150 * i);
+    }
+
+    setTimeout(() => titleTyping(selector, title), 5000);
+
+}
+
+function titleBlink() {
+    const blink = () => {
+        document.querySelector('#loginTitle').classList.toggle('text-cursor-none');
+    }
+    setInterval(blink, 500);
+}
+
 NodeList.prototype.setAttrAll = function(key, value) {
     this.forEach((node, idx, listObj)=>{
         node.setAttribute(key, value);

@@ -72,6 +72,8 @@
 
                 if(!code){
                     alert('코드를 작성해 주세요.');
+                    closeAiPanel();
+                    return;
                 }
 
                 const cntnsType = document.querySelector('#selectedValue').innerHTML;

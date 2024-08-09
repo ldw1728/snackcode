@@ -4,12 +4,12 @@
 <th:block th:fragment="post-list-fragment">
 
     <div id="postContainer" class="hidden-scoll md:w-11/12 h-3/5 my-10 py-10 md:mx-auto mx-10 whitespace-nowrap overflow-y-auto">
-        <div id="emptyDiv" class="hidden font-light text-xl text-gray-700 text-center"></div>
+        <div id="emptyDiv" class="hidden mt-32 font-light text-xl text-gray-700 text-center"></div>
     </div>
 
     <th:block th:if="${#strings.contains(biz.uri, 'home')}" >
         <th:block th:insert="pages/post/form::post-form-fragment"></th:block>
-        <div id="listBtns" class="hidden transition-all absolute w-fit text-center md:right-32 md:bottom-32 right-10 bottom-28">
+        <div id="listBtns" class="hidden transition-all absolute w-fit text-center md:right-32 md:bottom-32 right-5 bottom-18">
             <div id="addPostBtn" class="m-2 pt-2 h-10 w-10 rounded-full bg-black text-white font-black cursor-pointer">+</div>
             <div id="deleteCateBtn" class="m-2 pt-2 h-10 w-10 rounded-full bg-black text-white font-black cursor-pointer">-</div>
         </div>

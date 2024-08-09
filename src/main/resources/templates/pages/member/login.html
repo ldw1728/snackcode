@@ -48,34 +48,8 @@
         domReady(()=>{
             addClickEvnt('#loginBtn', goLogin);
             pressEnter();
-            titleTyping();
+            titleTyping('#loginTitle', 'CODE DRAWER.');
         });
-
-        function titleTyping(){
-
-            titleBlink();
-
-            const title     = 'CODE DRAWER.';
-            const titleEl   = document.querySelector('#loginTitle');
-
-            titleEl.innerHTML = '&nbsp;';
-
-            for (let i = 0; i < title.length; i++) {
-                setTimeout(()=>{
-                    titleEl.innerHTML = titleEl.innerHTML + title[i];
-                }, 150 * i);
-            }
-
-            setTimeout(titleTyping, 5000);
-
-        }
-
-        function titleBlink() {
-            const blink = () => {
-                document.querySelector('#loginTitle').classList.toggle('text-cursor-none');
-            }
-            setInterval(blink, 500);
-        }
 
         const pressEnter = () => {
             document.querySelectorAll('input').forEach(node => {

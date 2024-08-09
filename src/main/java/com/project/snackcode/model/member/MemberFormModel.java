@@ -1,6 +1,7 @@
 package com.project.snackcode.model.member;
 
 import com.project.snackcode.entity.Member;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -19,6 +20,14 @@ public class MemberFormModel {
 
     @NotBlank
     private String password;
+
+    @NotBlank
+    private String confirmPassword;
+
+    @AssertTrue
+    public boolean isEqualsPassword() {
+        return password.equals(confirmPassword);
+    }
 
     public Member toEntity(){
         return Member.builder().name(this.name).email(this.email).password(this.password).build();

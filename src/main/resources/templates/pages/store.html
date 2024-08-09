@@ -33,10 +33,13 @@
         function newPostElement(obj){
             return `
                 <div name="postEl" class="md:w-8/12 mx-auto m-2">
-                    <button onclick="clickPost(this)" class="py-1 px-3 w-full ring-1 ring-inset ring-gray-300 hover:bg-gray-50 h-8 rounded-md shadow-sm" data-post-cateid="${obj.category.id}" data-post-id="${obj.id}">
-                        <div class="inline w-3/4 float-left truncate">${obj.title}</div>
-                        <div class="inline w-1/4 float-right text-gray-400 font-thin truncate">${obj.category.member.name}</div>
-                    </button>
+                    <div onclick="clickPost(this)" class="py-1 px-3 w-full ring-1 ring-inset ring-gray-300 hover:bg-gray-50 h-8 rounded-md shadow-sm" data-post-cateid="${obj.category.id}" data-post-id="${obj.id}">
+                        <div class="relative w-full grid grid-cols-6 text-center">
+                            <div class="w-full text-sm text-gray-400 truncate" style="margin-top:2px" >${obj.cntnsType || 'text'}</div>
+                            <div class="col-start-2 col-span-4 w-full truncate" >${obj.title}</div>
+                            <div class="w-full text-gray-400 text-sm font-thin truncate" style="margin-top:2px">${obj.category.member.name}</div>
+                        </div>
+                    </div>
                 </div>
             `
         }

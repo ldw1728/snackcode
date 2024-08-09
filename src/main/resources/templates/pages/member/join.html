@@ -7,8 +7,9 @@
 
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 class="mt-10 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">CODE DRAWERS</h2>
-            <h3></h3>
+            <h2 id="loginTitle" class="text-cursor relative mt-10 text-center text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                &nbsp;
+            </h2>
         </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -26,6 +27,15 @@
                     </div>
                     <div class="mt-2">
                         <input id="password" name="password" type="password" class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between">
+                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900"><span class="necess">*</span>Confirm Password</label>
+                    </div>
+                    <div class="mt-2">
+                        <input id="confirmPassword" name="confirmPassword" type="password" class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     </div>
                 </div>
 
@@ -50,13 +60,14 @@
 
     domReady(()=>{
         addClickEvnt('#signUpBtn', signUp);
+        titleTyping('#loginTitle', 'CODE DRAWER.');
     });
 
     function signUp() {
 
         let form = document.jForm;
 
-        validateForm(form, ['email', 'password', 'name'], JOIN_CONSTRAINTS)
+        validateForm(form, ['email', 'password', 'confirmPassword', 'name'], JOIN_CONSTRAINTS)
         .then((result)=>{
 
             axios.post('/member/join', form)

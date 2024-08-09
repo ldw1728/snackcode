@@ -22,6 +22,15 @@ const ALL_CONSTRAINTS = {
             message: '영문, 숫자, 특수문자 포함 8~20자리로 입력해 주세요.'
         }
     },
+    confirmPassword:{
+        equality: {
+            attribute: "password",
+            message: "비밀번호를 확인해 주세요.",
+            comparator: function(v1, v2) {
+                return  v1 === v2;
+            }
+        }
+    },
     name: {
         presence: {
             allowEmpty : false,
@@ -53,6 +62,7 @@ const LOGIN_CONSTRAINTS = {
 const JOIN_CONSTRAINTS = {
     email   : ALL_CONSTRAINTS.email,
     password: ALL_CONSTRAINTS.editPassword,
+    confirmPassword: ALL_CONSTRAINTS.confirmPassword,
     name    : ALL_CONSTRAINTS.name
 };
 
@@ -75,14 +85,14 @@ function validateForm(form, names, constraints = ALL_CONSTRAINTS){
         names.forEach(name => {
             paramObj[name] = form.querySelector(`[name=${name}]`).value;
         });
-        console.log(paramObj)
+        //console.log(paramObj)
 
         let resultObj = validate(paramObj, constraints, {fullMessages: false});
 
         showVaidMsg(resultObj);
 
         if(resultObj){
-            console.log(resultObj)
+            //console.log(resultObj)
             reject(new Error("exist invalid form"));
             return;
         }

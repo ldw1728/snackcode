@@ -44,7 +44,7 @@
 <!--                                                </div>-->
                                                 <div id="codeCntns" class="hidden" style="height: 15rem">
                                                 </div>
-                                                <div id="aceEditor" class="hidden h-72 text-sm"></div>
+                                                <div id="aceEditor" class="hidden border h-72 text-sm"></div>
                                             </div>
                                         </div>
                                         <div class="mb-10 col-span-full">
@@ -77,9 +77,12 @@
 
     <script src="plugins/ace/ace.js"></script>
     <script src="js/aceEditorConfig.js"></script>
+    <script src="js/quillConfig.js"></script>
+
     <script th:inline="javascript">
 
         let aceEditor_detail;
+        let quillEditor_detail;
 
         let curr_post;
 
@@ -118,6 +121,7 @@
             codeCntns.classList.add('hidden');
             detailBtns.classList.add('hidden');
             removeAceEditor();
+            removeQuillEditor();
         }
 
         function closeDetail(){
@@ -142,7 +146,14 @@
             if (post.codeCntns) {
                 if (codeType === 'text') {
                     codeCntns.classList.remove('hidden');
-                    codeCntns.innerHTML = post.codeCntns;
+                    quillEditor_detail = createQuillEditor('#codeCntns',
+                        {
+                            readOnly: true,
+                            modules: {
+                                toolbar: null
+                            },
+                        });
+                    codeCntns.querySelector('.ql-editor').innerHTML = post.codeCntns;
                 }
                 else{
                     initAceEditor(codeType, post.codeCntns);

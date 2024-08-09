@@ -10,14 +10,21 @@ const toolbarOptions = [
     ['clean']                                         // remove formatting button
 ];
 
-function createQuillEditor(selector) {
+function createQuillEditor(selector, options) {
 
     const editor = new Quill(selector, {
         modules: {
             toolbar: toolbarOptions
         },
+        ...options,
         theme: 'snow'
     });
 
     return editor;
+}
+
+function removeQuillEditor(){
+    removeElementsAll('.ql-toolbar');
+    removeElementsAll('.ql-editor');
+    removeElementsAll('.ql-tooltip');
 }
