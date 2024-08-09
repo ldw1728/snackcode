@@ -21,6 +21,10 @@ __- front end__
 - tailwindcss
 - quil editor, ace editor
 
+__- etc__
+github action 이용하여 ci/cd 구현
+open ai api 연동
+
 
 ### erd
 https://www.erdcloud.com/d/FecKrWFRe6iYKAJ76
