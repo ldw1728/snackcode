@@ -3,6 +3,7 @@ code drawer 라는 웹앱은 직역하면 코드서랍이라는 의미를 가지
 그리고 사람들이 올린 코드를 조회하여 서로 공유할 수 있으며 open ai api를 이용하여 자신이 작성한 코드에대한 설명과 제안을 받을 수 있는 기능이 존재합니다.    
 
 url : www.wookhamhappyday.com
+test 계정 : test@gmail.com     /     rhcnwkd5%
 
 ### 사용기술
 __- server__
