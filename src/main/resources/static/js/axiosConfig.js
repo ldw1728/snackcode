@@ -24,7 +24,7 @@ axios.interceptors.request.use((config) => {
 /** response interceptors */
 axios.interceptors.response.use(async (response) => {
     // 200 응답 데이터 처리
-    console.info(response);
+    //console.info(response);
 
     toggleLoading(false);
 

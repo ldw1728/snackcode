@@ -170,6 +170,7 @@
             aceEditor_detail = createAceEditor();
             aceEditor_detail.session.setMode(`ace/mode/${codeType}`);
             aceEditor_detail.setValue(codeCntns);
+            aceEditor_detail.session.selection.clearSelection();
             aceEditor_detail.setReadOnly(true);
             showAceEditor();
         }

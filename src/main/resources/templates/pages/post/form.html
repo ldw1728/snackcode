@@ -215,6 +215,7 @@
             else{
                 aceEditor_form.session.setMode(`ace/mode/${cntnsType}`);
                 aceEditor_form.setValue(content1);
+                aceEditor_form.session.selection.clearSelection()
                 showAceEditor();
                 toggleContentsEditor(false);
             }

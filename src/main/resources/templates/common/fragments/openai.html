@@ -98,6 +98,7 @@
             aceEditor_openai = createAceEditor(selector);
             aceEditor_openai.session.setMode(`ace/mode/${mode}`);
             aceEditor_openai.setValue(code);
+            aceEditor_openai.session.selection.clearSelection();
             aceEditor_openai.setReadOnly(true);
 
             showAceEditor('#openai_aceEditor');
