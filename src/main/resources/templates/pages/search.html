@@ -28,7 +28,7 @@
 
             addClickEvnt('#searchBtn', ()=>{
                 pageInit();
-                reloadList();
+                onClickSearchBtn();
 
             });
             setAttrAll("#searchStr", 'onkeypress', `{
@@ -36,7 +36,22 @@
                     document.querySelector('#searchBtn').click();
                 }
             }`);
+
+            reloadList();
         });
+
+        function onClickSearchBtn() {
+
+            const searchStr     = document.querySelector('#searchStr').value;
+
+            if (searchStr && searchStr.length > 0) {
+                reloadList();
+            }
+            else{
+                alert('검색어를 입력하세요');
+            }
+
+        }
 
         async function reloadList() {
 
@@ -44,30 +59,27 @@
             const searchStr     = searchInput.value;
             const searchCntnsType = document.querySelector('#selectedValue').innerHTML;
 
-            if(searchStr && searchStr.length > 0){
-                await axios.get(`/post?searchStr=${searchStr}&searchCntnsType=${searchCntnsType}&page=${CURR_PAGE}&size=15`)
-                    .then(res => {
-                        if (res.data.content.length > 0) {
-                            console.log(res.data.content)
-                            CURR_PAGE ++;
-                            attatchList(res.data.content);
-                            hideEmptyDiv();
-                        }
-                        else{
-                            showHddnEmptyDiv("검색결과가 존재하지 않습니다.");
-                        }
-                        searchInput.blur();
-                    })
-            }
-            else{
-                alert('검색어를 입력하세요')
-            }
+            await axios.get(`/post?searchStr=${searchStr}&searchCntnsType=${searchCntnsType}&page=${CURR_PAGE}&size=15`)
+                .then(res => {
+                    if (res.data.content.length > 0) {
+                        console.log(res.data.content)
+                        CURR_PAGE ++;
+                        attatchList(res.data.content);
+                        hideEmptyDiv();
+                    }
+                    else{
+                        showHddnEmptyDiv("검색결과가 존재하지 않습니다.");
+                    }
+                    searchInput.blur();
+                })
+
+
         }
 
         function newPostElement(obj){
             return `
-                <div name="postEl" class="md:w-8/12 mx-auto m-2 cursor-pointer">
-                    <div onclick="clickPost(this)" class="py-1 px-3 w-full ring-1 ring-inset ring-gray-300 hover:bg-gray-50 h-8 rounded-md shadow-sm" data-post-cateid="${obj.category.id}" data-post-id="${obj.id}">
+                <div name="postEl" class="md:w-8/12 mx-auto m-2 px-4 cursor-pointer">
+                    <div onclick="clickPost(this)" class="py-1 px-3 w-full ring-1 ring-inset ring-gray-500 hover:bg-gray-50 h-8 rounded-md shadow-sm" data-post-cateid="${obj.category.id}" data-post-id="${obj.id}">
                         <div class="relative w-full grid grid-cols-6 text-center">
                             <div class="w-full text-sm text-gray-400 truncate" style="margin-top:2px" >${obj.cntnsType || 'text'}</div>
                             <div class="col-start-2 col-span-4 w-full truncate" >${obj.title}</div>

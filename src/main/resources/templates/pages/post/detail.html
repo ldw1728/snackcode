@@ -30,26 +30,27 @@
                             <div class="relative mt-6 flex-1 px-4 sm:px-6">
                                 <div class="space-y-12">
                                     <div class="border-b border-gray-900/10 pb-5" >
-                                        <div class="mb-10 sm:col-span-4 border-b border-gray-900/10">
+                                        <div class="mb-1 sm:col-span-4 border-b border-gray-900/10">
                                             <div class="mt-2 pb-5">
                                                 <div id="title" class="text-xl">
                                                 </div>
                                             </div>
                                         </div>
+                                        <div id="nameDate" class="ml-2 mb-10 text-sm text-black font-light">wooklee 2024-01-01</div>
                                         <div class="mb-10 col-span-full">
                                             <div class="mt-2">
                                                 <span id="codeType" class="m-2 p-1 inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"></span>
 
 <!--                                                <div id="codeType" class="text-sm font-bold">-->
 <!--                                                </div>-->
-                                                <div id="codeCntns" class="hidden" style="height: 15rem">
+                                                <div id="codeCntns" class="hidden">
                                                 </div>
                                                 <div id="aceEditor" class="hidden border h-72 text-xs sm:text-sm"></div>
                                             </div>
                                         </div>
                                         <div class="mb-10 col-span-full">
                                             <div class="mt-2">
-                                                <div id="desc" style="height: 15rem">
+                                                <div id="desc">
                                                 </div>
                                             </div>
                                         </div>
@@ -87,6 +88,7 @@
         let curr_post;
 
         let title;
+        let nameDate;
         let cntnsType;
         let codeCntns;
         let desc;
@@ -103,6 +105,7 @@
 
         function initEls() {
             title       = document.querySelector('#title');
+            nameDate    = document.querySelector('#nameDate');
             cntnsType   = document.querySelector('#codeType');
             codeCntns   = document.querySelector('#codeCntns');
             desc        = document.querySelector('#desc');
@@ -114,6 +117,7 @@
 
         function initDetail() {
             title.innerHTML         = '';
+            nameDate.innerHTML      = '';
             cntnsType.innerHTML     = '';
             codeCntns.innerHTML     = '';
             desc.innerHTML          = '';
@@ -140,6 +144,7 @@
             }
 
             title.innerHTML = post.title;
+            nameDate.innerHTML = `${post.category.member.name}&nbsp&nbsp${post.regDt.substring(0, 10)}`
 
             const codeType = post.cntnsType || 'text';
 
@@ -172,6 +177,7 @@
             aceEditor_detail.setValue(codeCntns);
             aceEditor_detail.session.selection.clearSelection();
             aceEditor_detail.setReadOnly(true);
+            aceEditor_detail.setOption("maxLines", "auto");
             showAceEditor();
         }
 
