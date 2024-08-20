@@ -32,5 +32,10 @@ axios.interceptors.response.use(async (response) => {
 }, (error => {
     // 200 외 응답 처리
     toggleLoading(false);
+
+    if (error.response.status === 500) {
+        alert("서버에 오류가 발생하였습니다.");
+    }
+
     return Promise.reject(error);
 }));
