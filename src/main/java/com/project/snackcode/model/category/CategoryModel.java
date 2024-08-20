@@ -2,6 +2,7 @@ package com.project.snackcode.model.category;
 
 import com.project.snackcode.entity.Category;
 import com.project.snackcode.entity.Member;
+import com.project.snackcode.model.member.MemberBaseModel;
 import com.project.snackcode.model.member.MemberModel;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -19,7 +20,7 @@ public class CategoryModel {
 
     /** 회원*/
     private Long memId;
-    private MemberModel member;
+    private MemberBaseModel member;
 
     /** 부모 카테고리*/
     private CategoryModel prntCategory;

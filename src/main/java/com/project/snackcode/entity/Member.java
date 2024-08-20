@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.snackcode.converter.EncryptConverter;
 import com.project.snackcode.converter.PasswordConverter;
 import com.project.snackcode.enums.Role;
+import com.project.snackcode.model.member.MemberBaseModel;
 import com.project.snackcode.model.member.MemberModel;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -103,8 +104,8 @@ public class Member {
                         .build();
     }
 
-    public MemberModel toBasicModel(){
-        return MemberModel.builder()
+    public MemberBaseModel toBasicModel(){
+        return MemberBaseModel.builder()
                 .id(this.id)
                 .name(this.name)
                 .email(this.email)
