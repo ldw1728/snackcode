@@ -18,6 +18,7 @@ public class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "CMMT_ID")
     private Long id;
 
     /** 게시물 고유번호 */
@@ -49,6 +50,7 @@ public class Comment extends BaseEntity {
 
     public CommentModel toModel() {
         return CommentModel.builder()
+                .id(this.id)
                 .postId(this.postId)
                 .prntId(this.prntId)
                 .cntns(this.cntns)

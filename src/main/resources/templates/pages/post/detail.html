@@ -57,16 +57,20 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div id="detailBtns" class="hidden absolute right-10 bottom-10 text-white flex">
-                            <button id="likeBtn" class="mx-2 p-2 bg-black rounded-xl">
-                                <span id="likeCnt" class="contents mx-2 text-sm font-bold"></span>
-                                <img src="images/thumb.png" class="inline w-6">
-                            </button>
-                            <button id="storeBtn" class="mx-2 p-3 bg-black  rounded-xl">
-                                <img src="images/star-emt.png" class="w-6">
-                            </button>
+                            <div id="detailBtns" class="hidden m-auto my-5 text-white flex">
+                                <button id="likeBtn" class="mx-2 p-2 bg-black rounded-xl">
+                                    <span id="likeCnt" class="contents mx-2 text-sm font-bold"></span>
+                                    <img src="images/thumb.png" class="inline w-6">
+                                </button>
+                                <button id="storeBtn" class="mx-2 p-3 bg-black  rounded-xl">
+                                    <img src="images/star-emt.png" class="w-6">
+                                </button>
+                            </div>
+
+                            <!-- 코멘트 -->
+                            <th:block th:insert="common/fragments/comment::comment-fragment"></th:block>
+
                         </div>
 
                     </div>
@@ -182,6 +186,8 @@
             }
 
             likeCnt.innerHTML = post.likeCnt;
+
+            getComments();
 
         }
 

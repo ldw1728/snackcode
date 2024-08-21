@@ -36,15 +36,18 @@ public class CommentService {
             CommentModel model = list.get(0);
             if (model.getPrntId() != null) {
                 commentMap.get(model.getPrntId()).get(0).addChildComment(model);
-                commentMap.remove(model.getPrntId());
+                //commentMap.remove(model.getPrntId());
             }
         });
 
-        List<CommentModel> commentList = commentMap.values().stream().map(value -> {
-            CommentModel model = value.get(0);
-            model.getChildComment().sort(Comparator.comparing(CommentModel::getRegDt));
-            return model;
-        }).collect(Collectors.toList());
+        List<CommentModel> commentList = commentMap.values().stream()
+                .filter(value -> value.get(0).getPrntId() == null)
+                .map(value -> {
+                    CommentModel model = value.get(0);
+                    model.getChildComment().sort(Comparator.comparing(CommentModel::getRegDt));
+                    return model;
+                })
+                .collect(Collectors.toList());
 
         commentList.sort(Comparator.comparing(CommentModel::getRegDt));
 

@@ -1,22 +1,48 @@
 package com.project.snackcode;
 
-import com.project.snackcode.entity.Category;
-import com.project.snackcode.model.category.CategoryFormModel;
-import com.project.snackcode.model.member.LoginContextHolder;
-import com.project.snackcode.model.post.PostFormModel;
-import com.project.snackcode.model.post.PostModel;
-import com.project.snackcode.service.CategoryService;
-import com.project.snackcode.service.PostService;
+import com.project.snackcode.model.comment.CommentFormModel;
+import com.project.snackcode.model.comment.CommentModel;
+import com.project.snackcode.service.CommentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
+
+import java.util.List;
 
 @SpringBootTest
 class SnackcodeApplicationTests {
+
+
+    @Autowired
+    private CommentService commentService;
+
+
+    @Test
+    public void 코멘트조회_테스트() {
+        List<CommentModel> list = commentService.selectCommentList(85L);
+
+
+        System.out.println(list);
+    }
+
+    @Test
+    @Commit
+    public void 코멘트저장_테스트() {
+
+        CommentFormModel commentFormModel = new CommentFormModel();
+        commentFormModel.setPrntId(null);
+        commentFormModel.setPostId(2L);
+        commentFormModel.setCntns("this is test comment");
+        commentFormModel.setMemId(1L);
+
+        commentService.saveComment(commentFormModel);
+
+    }
+
+    private CommentFormModel createCommentFormModels() {
+        return null;
+    }
 
 
 }

@@ -32,12 +32,13 @@ public class CommentModel {
     private List<CommentModel> childComment = new ArrayList<>();
 
     @Builder
-    public CommentModel(Long postId, Long prntId, String cntns, MemberBaseModel member, LocalDateTime regDt, LocalDateTime updtDt) {
+    public CommentModel(Long id, Long postId, Long prntId, String cntns, MemberBaseModel member, LocalDateTime regDt, LocalDateTime updtDt) {
+        this.id     = id;
         this.postId = postId;
         this.prntId = prntId;
-        this.cntns = cntns;
+        this.cntns  = cntns;
         this.member = member;
-        this.regDt = regDt;
+        this.regDt  = regDt;
         this.updtDt = updtDt;
     }
 

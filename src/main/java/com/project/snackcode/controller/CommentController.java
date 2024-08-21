@@ -6,7 +6,6 @@ import com.project.snackcode.model.comment.CommentModel;
 import com.project.snackcode.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
