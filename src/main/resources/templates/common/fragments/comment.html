@@ -4,26 +4,15 @@
 <th:block th:fragment="comment-fragment">
 
     <div class="w-full h-fit">
+        <div id="commentTitle" class="mt-5 mb-1 text-center">comment</div>
         <!-- 코멘트 쓰기 영역 -->
-        <div name="commentWritePanel" class="relative w-3/4 mx-auto ring-1 ring-gray-300 h-fit focus:ring-inset focus:ring-indigo-600 my-5">
+        <div name="commentWritePanel" class="relative w-3/4 mx-auto ring-1 ring-gray-300 h-fit focus:ring-inset focus:ring-indigo-600 mb-5">
             <textarea name="cntnsArea" rows="5" class="block border-b p-3 w-full mb-1  py-1.5 text-gray-900 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-0 focus:ring-indigo-100"></textarea>
             <button onclick="commentSave(this)" type="button" class="m-2 rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">Save</button>
         </div>
 
         <!-- 코멘트 목록 영역 -->
         <div id="commentListPanel" class="relative w-3/4 mx-auto my-5">
-
-            <div id="comment" class="border m-2 p-3 h-fit">
-                <div id="commentCntns" class="h-fit">asdasd</div>
-                <div id="commentProfile" class="h-fit text-sm text-gray-500 mt-5">
-                    <span id="commentName" class="font-semibold mx-4">ldw2730</span>
-                    <span id="commentDate" class="italic mx-4">2014-01-01</span>
-                    <div class="inline-block mx-4">
-                        <button type="button" class=" rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">update</button>
-                        <button type="button" class=" rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">delete</button>
-                    </div>
-                </div>
-            </div>
 
 
         </div>
@@ -36,32 +25,148 @@
 
         })
 
+        function commentReload() {
+            document.querySelector('[name="commentWritePanel"] textarea').value = ''
+            getComments();
+        }
+
         async function getComments() {
             await axios.get(`/cmmt/${curr_post.id}`)
             .then(res => {
-                console.log(res.data)
                 createCommentList(res.data);
+                document.querySelector('#commentTitle').innerHTML =
+                    `${document.querySelectorAll('[name="comment"]').length} comment`
             })
         }
 
-        //TODO 개발 필요
+        function onClickCancel(target) {
+            target.closest('[name="comment"]').remove();
+        }
+
+        function onClickChildComment(target) {
+
+            const commentDiv = target.closest('[name="comment"]');
+
+            const newCommentInput = `
+                <div name="comment" data-comment-id="${commentDiv.dataset.commentId}" class="border m-2 p-3 h-fit ml-10">
+                    <div name="commentCntns" class="h-fit">
+                        <textarea rows="5" class="block border-b p-3 w-full mb-2  py-1.5 text-gray-900 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-0 focus:ring-indigo-100"></textarea>
+                        <button onclick="commentSave(this)" type="button" class=" rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">save</button>
+                        <button onclick="onClickCancel(this)" type="button" class=" rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">cancle</button>
+                    </div>
+                </div>
+            `
+
+            commentDiv.insertAdjacentHTML('afterend', newCommentInput);
+        }
+
+        /**
+         * update button 클릭
+         * @param target
+         */
+        function onClickCmmtUpdate(target) {
+
+            const commentDiv    = target.closest('[name="comment"]');
+            const commentCntns  = commentDiv.querySelector('[name="commentCntns"]');
+
+            if (commentCntns.querySelector('textarea')) {
+                commentUpdate(commentDiv);
+                return;
+            }
+
+            commentCntns.classList.remove('whitespace-pre-line');
+
+            const cntnsValue    = commentCntns.innerHTML;
+
+            commentCntns.innerHTML = `
+                <textarea onfocusout="commentUpdate(this.closest('[name=comment]'))" rows="5" class="block border-b p-3 w-full mb-1  py-1.5 text-gray-900 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-0 focus:ring-indigo-100">${cntnsValue}</textarea>
+            `
+
+        }
+
+        /**
+         * 코멘트 수정
+         * @param commentDiv
+         * @returns {Promise<void>}
+         */
+        async function commentUpdate(commentDiv) {
+
+            const commentId     = commentDiv.dataset.commentId;
+            const cntnsValue    = commentDiv.querySelector('textarea').value;
+
+            if (confirm("수정하시겠습니까?")) {
+
+                if (!cntnsValue) {
+                    alert('내용을 입력해 주세요.');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('id', commentId);
+                formData.append('cntns' , cntnsValue);
+
+                await axios.patch('/cmmt', formData)
+                .then(res => {
+                    commentReload();
+                });
+
+            }
+
+        }
+
+        /**
+         * 코멘트 삭제
+         * @param target
+         * @returns {Promise<void>}
+         */
+        async function commentDelete(target) {
+
+            if (confirm("삭제하시겠습니까?")) {
+
+                const cmmtId = target.closest('[name="comment"]').dataset.commentId;
+
+                await axios.delete(`/cmmt/${cmmtId}`)
+                    .then(res => {
+                        commentReload();
+                    });
+
+            }
+
+        }
+
+        /**
+         * 코멘트 저장
+         * @param target
+         * @returns {Promise<void>}
+         */
         async function commentSave(target) {
 
-            alert('준비중입니다..');
-            return;
-
-            const cntns = target.parent.querySelector('textarea').value;
+            // alert('준비중입니다..');
+            // return;
+            const commentDiv = target.closest('[name="comment"]') ?? target.parentElement;
+            const cmmtId    = commentDiv?.dataset.commentId ?? '';
+            const cntns     = commentDiv.querySelector('textarea').value;
 
             if (!cntns) {
                 alert('내용을 입력해 주세요.');
                 return;
             }
 
-            await axios.post(`/cmmt/${curr_post.id}`, );
+            const formData = new FormData();
+            formData.append('postId', curr_post.id);
+            formData.append('prntId', cmmtId);
+            formData.append('cntns' , cntns);
+            formData.append('memId' , [[${LoginUser}]]?.id);
+
+            await axios.post(`/cmmt`, formData)
+            .then(res => {
+                alert('댓글이 등록되었습니다.');
+                commentReload();
+            });
         }
 
         /**
-         * 코멘트 생성
+         * 코멘트 리스트 생성
          * @param list
          */
         function createCommentList(list){
@@ -75,6 +180,11 @@
             })
         }
 
+        /**
+         * 코멘트 생성
+         * @param comment
+         * @returns {string}
+         */
         function createComment(comment) {
 
             let childrenComment = '';
@@ -87,13 +197,17 @@
 
             const buttons = [[${LoginUser}]]?.id === comment.member.id ?
                 `<div class="inline-block mx-4">
-                        <button type="button" class=" rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">update</button>
-                        <button type="button" class=" rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">delete</button>
-                    </div>` : '';
+                        <button onclick="onClickCmmtUpdate(this)" type="button" class=" rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">update</button>
+                        <button onclick="commentDelete(this)" type="button" class=" rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">delete</button>
+                    </div>` :
+                    `
+                     <span onclick="onClickChildComment(this)" class="text-xs text-gray-500 hover:underline cursor-pointer">답글달기</span>
+                    `
+                ;
 
             return `
-                <div name="comment" class="border m-2 p-3 h-fit ${comment.prntId ? 'ml-10' : ''}">
-                    <div name="commentCntns" class="h-fit">${comment.cntns}</div>
+                <div name="comment" data-comment-id="${comment.id}" class="border m-2 p-3 h-fit ${comment.prntId ? 'ml-10' : ''}">
+                    <div name="commentCntns" class="h-fit whitespace-pre-line sm:text-sm text-gray-700 p-3">${comment.cntns}</div>
                     <div name="commentProfile" class="h-fit text-sm text-gray-500 mt-5">
                         <span name="commentName" class="font-semibold mx-4">${comment.member.name}</span>
                         <span name="commentDate" class="italic mx-4">${comment.regDt.substring(0, 10)}</span>

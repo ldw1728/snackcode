@@ -1,8 +1,10 @@
 package com.project.snackcode.service;
 
 import com.project.snackcode.entity.Comment;
+import com.project.snackcode.exception.BasicErrorException;
 import com.project.snackcode.model.comment.CommentFormModel;
 import com.project.snackcode.model.comment.CommentModel;
+import com.project.snackcode.model.member.LoginContextHolder;
 import com.project.snackcode.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -71,10 +73,30 @@ public class CommentService {
     @Transactional
     public void updateComment(CommentFormModel commentFormModel) {
         Comment comment = commentRepository.findById(commentFormModel.getId()).orElseThrow();
+
+        if (comment.getMember().getId() != LoginContextHolder.getLoginUser().getId()) {
+            throw BasicErrorException.builder().msg("incorrect memId and comment.memId").build();
+        }
+
         comment.update(commentFormModel.getCntns());
     }
 
 
+    /**
+     * 코멘트 삭제
+     * @param commentId
+     */
+    @Transactional
+    public void deleteComment(Long commentId) {
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow();
+
+        if (comment.getMember().getId() != LoginContextHolder.getLoginUser().getId()) {
+            throw BasicErrorException.builder().msg("incorrect memId and comment.memId").build();
+        }
+
+        commentRepository.deleteById(commentId);
+    }
 
 
 }

@@ -3,7 +3,9 @@ package com.project.snackcode.controller;
 
 import com.project.snackcode.model.comment.CommentFormModel;
 import com.project.snackcode.model.comment.CommentModel;
+import com.project.snackcode.model.member.LoginContextHolder;
 import com.project.snackcode.service.CommentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,19 +32,13 @@ public class CommentController {
 
     /**
      * 코멘트 저장
-     * @param postId
-     * @param cmmtId
      * @param commentFormModel
      * @return
      */
-    @PostMapping({"/cmmt/{postId}", "/cmmt/{postId}/{cmmtId}"})
-    public ResponseEntity save(@PathVariable Long postId,
-                               @PathVariable(required = false) Long cmmtId,
-                               CommentFormModel commentFormModel) {
+    @PostMapping("/cmmt")
+    public ResponseEntity save(@Valid CommentFormModel commentFormModel) {
 
-        commentFormModel.setPostId(postId);
-        commentFormModel.setPrntId(cmmtId);
-
+        commentFormModel.setMemId(LoginContextHolder.getLoginUser().getId());
         commentService.saveComment(commentFormModel);
 
         return ResponseEntity.ok().build();
@@ -50,17 +46,27 @@ public class CommentController {
 
     /**
      * 코멘트 수정
-     * @param cmmtId
      * @param commentFormModel
      * @return
      */
-    @PatchMapping("/cmmt/{cmmtId}")
-    public ResponseEntity  update(@PathVariable Long cmmtId,
-                                    CommentFormModel commentFormModel) {
+    @PatchMapping("/cmmt")
+    public ResponseEntity update(CommentFormModel commentFormModel) {
 
-        commentFormModel.setId(cmmtId);
         commentService.updateComment(commentFormModel);
 
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 코멘트 삭제
+     * @param cmmtId
+     * @return
+     */
+    @DeleteMapping("/cmmt/{cmmtId}")
+    public ResponseEntity delete(@PathVariable Long cmmtId) {
+
+        commentService.deleteComment(cmmtId);
+
+        return ResponseEntity.noContent().build();
     }
 }
