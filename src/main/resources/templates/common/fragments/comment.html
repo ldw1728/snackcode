@@ -196,9 +196,9 @@
             }
 
             const buttons = [[${LoginUser}]]?.id === comment.member.id ?
-                `<div class="inline-block mx-4">
-                        <button onclick="onClickCmmtUpdate(this)" type="button" class=" rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">update</button>
-                        <button onclick="commentDelete(this)" type="button" class=" rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">delete</button>
+                `<div class="inline-block mt-3 sm:mt-0 sm:mx-4">
+                        <button onclick="onClickCmmtUpdate(this)" type="button" class=" rounded-md bg-black px-3 py-2 text-xs sm:text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">update</button>
+                        <button onclick="commentDelete(this)" type="button" class=" rounded-md bg-black px-3 py-2 text-xs sm:text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">delete</button>
                     </div>` :
                     `
                      <span onclick="onClickChildComment(this)" class="text-xs text-gray-500 hover:underline cursor-pointer">답글달기</span>
@@ -206,11 +206,11 @@
                 ;
 
             return `
-                <div name="comment" data-comment-id="${comment.id}" class="border m-2 p-3 h-fit ${comment.prntId ? 'ml-10' : ''}">
-                    <div name="commentCntns" class="h-fit whitespace-pre-line sm:text-sm text-gray-700 p-3">${comment.cntns}</div>
-                    <div name="commentProfile" class="h-fit text-sm text-gray-500 mt-5">
-                        <span name="commentName" class="font-semibold mx-4">${comment.member.name}</span>
-                        <span name="commentDate" class="italic mx-4">${comment.regDt.substring(0, 10)}</span>
+                <div name="comment" data-comment-id="${comment.id}" class="border m-2 p-3 h-fit ${comment.prntId ? 'ml-5 sm:ml-10' : ''}">
+                    <div name="commentCntns" class="h-fit whitespace-pre-line text-xs sm:text-sm text-gray-700 p-3">${comment.cntns}</div>
+                    <div name="commentProfile" class="h-fit text-xs sm:text-sm text-gray-500 mt-5">
+                        <span name="commentName" class="font-semibold mx-2 sm:mx-4">${comment.member.name}</span>
+                        <span name="commentDate" class="italic mx-2 sm:mx-4">${comment.regDt.substring(0, 10)}</span>
                         ${buttons}
                     </div>
                 </div>
