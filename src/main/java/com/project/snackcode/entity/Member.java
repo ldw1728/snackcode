@@ -88,6 +88,11 @@ public class Member {
         this.password = password;
     }
 
+    // 비밀번호 변경
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
     public void updateLastDt(){
         this.lastDt = LocalDateTime.now();
     }

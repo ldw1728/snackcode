@@ -1,0 +1,70 @@
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"></html>
+
+
+<th:block th:fragment="modal-chngpwd-fragment">
+
+    <th:block th:insert="common/fragments/modal/modal::model-fragment('chngPwdModal', 'Change password', ~{::contents}, ~{::buttons})">
+        <contents>
+            <form name="pForm">
+                <div class="grid grid-rows-3 text-sm text-gray-500">
+                    <div class="m-2 grid grid-cols-2">
+                        <div class="mt-1">current password</div>
+                        <input name="currentPassword" type="password" class="p-1 h-7 block w-48 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    </div>
+                    <div class="m-2 grid grid-cols-2">
+                        <div class="mt-1">changed password</div>
+                        <input name="changedPassword" type="password" class="p-1 h-7 block w-48 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    </div>
+                    <div class="m-2 grid grid-cols-2">
+                        <div class="mt-1">confirm password</div>
+                        <input name="confirmPassword" type="password" class="p-1 h-7 block w-48 rounded-md border-0  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    </div>
+                </div>
+            </form>
+        </contents>
+        <buttons>
+            <button id="chngBtn" type="button" class="inline-flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 sm:ml-3 sm:w-auto">change</button>
+        </buttons>
+    </th:block>
+
+    <script th:inline="javascript">
+
+        domReady(()=>{
+            addClickEvnt('#chngBtn', changePassword);
+        })
+
+        function closeModal() {
+            document.querySelectorAll('[name="modal"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+
+            document.pForm.reset();
+            removeElementsAll('[name="validation_msg"]');
+        }
+
+        function openChngPwdModal() {
+            document.querySelector('#chngPwdModal').classList.remove('hidden');
+        }
+
+        function changePassword() {
+            const form = document.pForm;
+
+            CHNGPWD_CONSTRAINTS.confirmPassword.equality.attribute = 'changedPassword';
+            validateForm(form, ['currentPassword', 'changedPassword', 'confirmPassword'], CHNGPWD_CONSTRAINTS)
+            .then(async resultObj => {
+                await axios.post('/member/pwd', document.pForm)
+                    .then(res => {
+
+                    })
+                    .catch(error=>{
+
+                    })
+            })
+
+
+        }
+
+    </script>
+
+</th:block>

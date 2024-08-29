@@ -54,21 +54,27 @@ const ALL_CONSTRAINTS = {
     }
 };
 
+const CHNGPWD_CONSTRAINTS = {
+    currentPassword     : ALL_CONSTRAINTS.password,
+    changedPassword     : ALL_CONSTRAINTS.editPassword,
+    confirmPassword     : ALL_CONSTRAINTS.confirmPassword,
+}
+
 const LOGIN_CONSTRAINTS = {
-    email   : ALL_CONSTRAINTS.email,
-    password: ALL_CONSTRAINTS.password
+    email       : ALL_CONSTRAINTS.email,
+    password    : ALL_CONSTRAINTS.password
 }
 
 const JOIN_CONSTRAINTS = {
-    email   : ALL_CONSTRAINTS.email,
-    password: ALL_CONSTRAINTS.editPassword,
-    confirmPassword: ALL_CONSTRAINTS.confirmPassword,
-    name    : ALL_CONSTRAINTS.name
+    email           : ALL_CONSTRAINTS.email,
+    password        : ALL_CONSTRAINTS.editPassword,
+    confirmPassword : ALL_CONSTRAINTS.confirmPassword,
+    name            : ALL_CONSTRAINTS.name
 };
 
 const DETAIL_CONSTRAINTS = {
-    title: ALL_CONSTRAINTS.title,
-    codeCntns: ALL_CONSTRAINTS.codeCntns,
+    title       : ALL_CONSTRAINTS.title,
+    codeCntns   : ALL_CONSTRAINTS.codeCntns,
 }
 
 /** form validation */

@@ -1,5 +1,6 @@
 package com.project.snackcode.controller;
 
+import com.project.snackcode.model.member.MemberChngPwdFormModel;
 import com.project.snackcode.model.member.MemberFormModel;
 import com.project.snackcode.service.MemberService;
 import jakarta.validation.Valid;
@@ -45,7 +46,17 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-
+    /**
+     * 비밀번호 변경
+     * @param memberChngPwdFormModel
+     * @return
+     */
+    @PostMapping("/member/pwd")
+    @ResponseBody
+    public ResponseEntity changePassword(@Valid MemberChngPwdFormModel memberChngPwdFormModel) {
+        memberService.changePassword(memberChngPwdFormModel);
+        return ResponseEntity.noContent().build();
+    }
 
 
 }

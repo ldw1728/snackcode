@@ -1,0 +1,33 @@
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"></html>
+
+<th:block th:fragment="member-info-fragment">
+
+    <div class="mt-6 w-3/4 mx-auto">
+        <div class="text-lg sm:text-xl">User Info</div>
+        <div class="grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 m-2 ">
+            <div th:text="|name : ${LoginUser.member.name}|"></div>
+            <div th:text="|email : ${LoginUser.member.email}|"></div>
+        </div>
+        <div class="m-2 mt-5 text-sm text-gray-500">
+            <div id="chngPwdBtn" class="cursor-pointer hover:underline m-2 hover:text-black">Change password</div>
+            <div id="wthDrwBtn" class="cursor-pointer hover:underline m-2 hover:text-black">Withdraw member</div>
+        </div>
+    </div>
+
+    <th:block th:replace="common/fragments/modal/changePwdModal :: modal-chngpwd-fragment"></th:block>
+
+    <script src="js/validateConfig.js"></script>
+    <script th:inline="javascript">
+
+        domReady(()=>{
+            addClickEvnt('#chngPwdBtn', onClickChngPwdBtn);
+        })
+
+        function onClickChngPwdBtn() {
+            openChngPwdModal();
+        }
+
+    </script>
+
+</th:block>
