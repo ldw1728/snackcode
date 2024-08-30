@@ -79,6 +79,9 @@
         <logger name="com.project.snackcode" level="DEBUG" additivity="false">
             <AppenderRef ref="CONSOLE_STDOUT_ST"/>
         </logger>
+        <logger name="org.thymeleaf" level="DEBUG" additivity="false"> <!-- additivity="false" = 중복x-->
+            <AppenderRef ref="CONSOLE_STDOUT_ST" />
+        </logger>
 
     </Loggers>
 </Configuration>

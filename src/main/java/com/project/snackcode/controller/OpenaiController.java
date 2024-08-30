@@ -44,8 +44,6 @@ public class OpenaiController {
                 '%s' 명시한 후 그 아래에 문제점들이 수정되어 완성된 코드 혹은 더 개선된 예시 코드를 제안해 주세요.
                 """.formatted(requestDto.getCode(), requestDto.getCntnsType(), codeSeperate);
 
-        System.out.println(question);
-
         OpenaiRequest request       = OpenaiRequest.builder().model(model).message(question).build();
         OpenaiResponse response     = restTemplate.postForObject(apiUrl, request, OpenaiResponse.class);
 
