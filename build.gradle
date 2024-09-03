@@ -58,6 +58,8 @@ dependencies {
     implementation 'com.oracle.database.security:oraclepki:23.2.0.0'
     implementation 'com.oracle.database.security:osdt_cert:21.13.0.0'
     implementation 'com.oracle.database.security:osdt_core:21.13.0.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.1'
+
 
 
 

@@ -10,8 +10,8 @@
             <div th:text="|email : ${LoginUser.member.email}|"></div>
         </div>
         <div class="m-2 mt-5 text-sm text-gray-500">
-            <div id="chngPwdBtn" class="cursor-pointer hover:underline m-2 hover:text-black">Change password</div>
-            <div id="wthDrwBtn" class="cursor-pointer hover:underline m-2 hover:text-black">Withdraw member</div>
+            <div id="chngPwdBtn" class="cursor-pointer hover:underline m-2 hover:text-black" style="width: fit-content">Change password</div>
+            <div id="wthDrwBtn" class="cursor-pointer hover:underline m-2 hover:text-black" style="width: fit-content">Withdraw member</div>
         </div>
     </div>
 
@@ -22,7 +22,14 @@
 
         domReady(()=>{
             addClickEvnt('#chngPwdBtn', onClickChngPwdBtn);
+            addClickEvnt('#wthDrwBtn', onCLickWthDrwBtn);
         })
+
+        async function onCLickWthDrwBtn() {
+            if (confirm('정말로 탈퇴 하시겠습니까?')) {
+                await axios.delete('/member/delete');
+            }
+        }
 
         function onClickChngPwdBtn() {
             openChngPwdModal();

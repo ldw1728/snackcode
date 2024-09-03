@@ -1,13 +1,18 @@
 package com.project.snackcode.controller;
 
+import com.project.snackcode.model.member.LoginContextHolder;
 import com.project.snackcode.model.member.MemberChngPwdFormModel;
 import com.project.snackcode.model.member.MemberFormModel;
 import com.project.snackcode.service.MemberService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -56,6 +61,17 @@ public class MemberController {
     public ResponseEntity changePassword(@Valid MemberChngPwdFormModel memberChngPwdFormModel) {
         memberService.changePassword(memberChngPwdFormModel);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * 회원 탈퇴
+     * @return
+     */
+    @DeleteMapping("/member/secession")
+    public void secession(HttpServletResponse response) throws IOException {
+        Long id = LoginContextHolder.getLoginUser().getId();
+        memberService.delete(id);
+        response.sendRedirect("/logout");
     }
 
 

@@ -1,10 +1,13 @@
 package com.project.snackcode;
 
+import com.project.snackcode.api.OpenaiProvider;
 import com.project.snackcode.model.comment.CommentFormModel;
 import com.project.snackcode.model.comment.CommentModel;
+import com.project.snackcode.model.openai.OpenaiResultModel;
 import com.project.snackcode.service.CommentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
@@ -16,6 +19,10 @@ class SnackcodeApplicationTests {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    @Qualifier("openaiAutopostImpl")
+    private OpenaiProvider openaiProvider;
 
 
     @Test
@@ -45,4 +52,10 @@ class SnackcodeApplicationTests {
     }
 
 
+    @Test
+    public void openai_autopost() {
+        OpenaiResultModel model = openaiProvider.getResult("");
+        System.out.println(model);
+
+    }
 }
