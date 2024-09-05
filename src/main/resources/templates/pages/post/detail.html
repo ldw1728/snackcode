@@ -166,7 +166,8 @@
                                 toolbar: null
                             },
                         });
-                    codeCntns.querySelector('.ql-editor').innerHTML = post.codeCntns;
+                    quillEditor_detail.clipboard.dangerouslyPasteHTML(post.codeCntns);
+                    //codeCntns.querySelector('.ql-editor').innerHTML = post.codeCntns;
                 }
                 else{
                     initAceEditor(codeType, post.codeCntns);
@@ -184,7 +185,8 @@
                         },
                     }
                 )
-                desc.querySelector('.ql-editor').innerHTML = post.desc;
+                quillEditor_detail2.clipboard.dangerouslyPasteHTML(post.desc);
+                //desc.querySelector('.ql-editor').innerHTML = post.desc;
             }
 
             likeCnt.innerHTML = post.likeCnt;

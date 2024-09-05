@@ -12,7 +12,7 @@ public enum OpenaiSCategory {
     DEFI("definition"),
     GRAM("grammar"),
     TECH("technology"),
-    TREN("trend"),
+    //TREN("trend"),
     NEWS("recent news or blog post with source"),
     CMSS("common sense");
 
