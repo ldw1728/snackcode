@@ -37,9 +37,9 @@
                                             </div>
                                         </div>
                                         <div id="nameDate" class="ml-2 mb-10 text-sm text-black font-light">wooklee 2024-01-01</div>
-                                        <div class="mb-10 col-span-full">
+                                        <div id="codeSec" class="mb-10 col-span-full">
                                             <div class="mt-2">
-                                                <span id="codeType" class="m-2 p-1 inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"></span>
+                                                <span id="codeType" class="hidden m-2 p-1 inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"></span>
 
 <!--                                                <div id="codeType" class="text-sm font-bold">-->
 <!--                                                </div>-->
@@ -127,6 +127,7 @@
             codeCntns.innerHTML     = '';
             desc.innerHTML          = '';
             likeCnt.innerHTML       = '';
+            cntnsType.classList.add('hidden');
             codeCntns.classList.add('hidden');
             desc.classList.add('hidden');
             detailBtns.classList.add('hidden');
@@ -156,6 +157,7 @@
 
             if (post.codeCntns) {
                 if (codeType === 'text') {
+                    cntnsType.classList.remove('hidden');
                     codeCntns.classList.remove('hidden');
                     quillEditor_detail = createQuillEditor('#codeCntns',
                         {

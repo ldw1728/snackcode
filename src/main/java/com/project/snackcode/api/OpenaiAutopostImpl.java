@@ -11,20 +11,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 @Slf4j
 @Component
 @Qualifier("openaiAutopostImpl")
 public class OpenaiAutopostImpl extends OpenaiProvider{
 
     private String subject;
-    private String category     = "Randomly one of [" + OpenaiSCategory.getStringValues() + "]";
+    private String category     = "[" + OpenaiSCategory.getStringValues() + "] 중 랜덤으로 하나의 단어 선택";
     private String line         = "100line under";
     private String detail       = "useful information for developer";
-    private String format       = "json (attributes = title, code - example code if exist, cntnsType - programmingLanguage of 'code' attribute, desc - description in the form of look good HTML)";
+    private String format       = "json {title, code(write example code if exist and is meaningful), cntnsType(programmingLanguage of 'code' attribute), desc(just detail description not example code of subject in the form of look good HTML)}";
     private String lang         = "korean";
-    private String sentens      = "write a post reflecting the above options.";
+    private String sentens      = "write according to format a post for developers reflecting the above explains.";
 
 
     @Override
@@ -33,19 +31,18 @@ public class OpenaiAutopostImpl extends OpenaiProvider{
         OpenaiResultModel openaiResultModel = null;
 
         this.subject = param.length > 0 && !StringUtils.isBlank(param[0]) ? param[0] : """
-                   New keywords related to IT as one of the topics [%s]
+                   [%s] 주제 중 하나의 주제를 골라 그 주제와 관련있는 키워드를 단어 하나만 출력.
                 """.formatted(OpenaiMCategory.getStringValues());
 
         setQuestion(
-                """
-                options
-                subject : %s,
-                category : %s,
-                line : %s,
-                detail Requirements : %s,
-                format : %s,
-                lang : %s
-                
+                """              
+                1. subject = %s,
+                2. category = %s,
+                3. line = %s,
+                4. detail Requirements = %s,
+                5. format = %s,
+                6. language = %s
+            
                 %s
                 
                 """.formatted(
@@ -60,6 +57,8 @@ public class OpenaiAutopostImpl extends OpenaiProvider{
         );
         OpenaiResponse response = sendQuestion();
         String content = response.getChoices().get(0).getMessage().getContent();
+        content = content.substring(content.indexOf("{"), content.lastIndexOf("}") + 1);
+        log.debug(question);
         log.debug(content);
         try {
             openaiResultModel = new ObjectMapper().readValue(content, OpenaiResultModel.class);

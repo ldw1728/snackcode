@@ -28,7 +28,7 @@ public class OpenaiResultModel {
                 .codeCntns(this.code)
                 .desc(this.desc)
                 .cntnsType(this.cntnsType)
-                .cateId(0L)
+                .cateId(161L)
                 .openType(OpenType.Y)
                 .build();
     }

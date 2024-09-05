@@ -3,11 +3,11 @@ package com.project.snackcode.api;
 
 import com.project.snackcode.model.openai.OpenaiResponse;
 import com.project.snackcode.model.openai.OpenaiResultModel;
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-@Primary
+@Qualifier("openaiSupportImpl")
 public class OpenaiSupportImpl extends OpenaiProvider{
 
     private String codeSeperate = "---code---";

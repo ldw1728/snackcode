@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 public class PostFormModel {
@@ -44,7 +45,7 @@ public class PostFormModel {
     public Post toEntity(){
         return Post.builder()
                     .cateId(this.cateId)
-                    .cntnsType(this.cntnsType)
+                    .cntnsType(StringUtils.isBlank(this.cntnsType) ? "text" : this.cntnsType)
                     .codeCntns(this.codeCntns)
                     .desc(this.desc)
                     .title(this.title)
