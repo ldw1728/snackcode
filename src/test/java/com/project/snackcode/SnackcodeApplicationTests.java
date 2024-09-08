@@ -57,7 +57,7 @@ class SnackcodeApplicationTests {
 
 
     @Test
-    @Commit
+    //@Commit
     public void openai_autopost() {
         //openaiService.openai();
         openaiService.autoPosting();

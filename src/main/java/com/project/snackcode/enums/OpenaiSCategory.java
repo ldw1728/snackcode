@@ -2,6 +2,7 @@ package com.project.snackcode.enums;
 
 import lombok.Getter;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,5 +26,11 @@ public enum OpenaiSCategory {
     public static String getStringValues() {
         List<String> list = Arrays.stream(OpenaiSCategory.values()).map(cate -> cate.value).collect(Collectors.toList());
         return String.join(", ", list);
+    }
+
+    public static OpenaiSCategory getRandomCate() {
+        OpenaiSCategory[] enumArr = OpenaiSCategory.values();
+        SecureRandom random = new SecureRandom();
+        return List.of(enumArr).get(random.nextInt(enumArr.length));
     }
 }

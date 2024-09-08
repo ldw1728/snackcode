@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class OpenaiAutopostImpl extends OpenaiProvider{
 
     private String subject;
-    private String category     = "[" + OpenaiSCategory.getStringValues() + "] 중 랜덤으로 하나의 단어 선택";
+    private String category     = OpenaiSCategory.getRandomCate().getValue();
     private String line         = "100line under";
     private String detail       = "useful information for developer";
     private String format       = "json {title, code(write example code if exist and is meaningful), cntnsType(programmingLanguage of 'code' attribute), desc(just detail description not example code of subject in the form of look good HTML)}";
@@ -30,9 +30,7 @@ public class OpenaiAutopostImpl extends OpenaiProvider{
 
         OpenaiResultModel openaiResultModel = null;
 
-        this.subject = param.length > 0 && !StringUtils.isBlank(param[0]) ? param[0] : """
-                   [%s] 주제 중 하나의 주제를 골라 그 주제와 관련있는 키워드를 단어 하나만 출력.
-                """.formatted(OpenaiMCategory.getStringValues());
+        this.subject = param.length > 0 && !StringUtils.isBlank(param[0]) ? param[0] : OpenaiMCategory.getRandomCate().getValue();
 
         setQuestion(
                 """              
