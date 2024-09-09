@@ -25,6 +25,10 @@ class SnackcodeApplicationTests {
     @Qualifier("openaiAutopostImpl")
     private OpenaiProvider openaiProvider;
 
+    @Qualifier("openaiSupportImpl")
+    @Autowired
+    private OpenaiProvider openaiProvider2;
+
     @Autowired
     private OpenaiService openaiService;
 
@@ -55,6 +59,28 @@ class SnackcodeApplicationTests {
         return null;
     }
 
+
+    @Test
+    public void openai_support() {
+        OpenaiResultModel result = openaiProvider2.getResult("""
+                @Scheduled(delay="1000")
+                @Scheduled(cron = "0 0/30 * * * *")     // cron 표현식
+                public void autoPosting(){
+                    //......
+                }
+                                
+                                
+                @EnableScheduling // 어노테이션 선언
+                @SpringBootApplication
+                public class ExampleApplication {
+                    public static void main(String[] args){
+                       \s
+                    }
+                }
+                """, "java");
+
+        System.out.println(result);
+    }
 
     @Test
     //@Commit

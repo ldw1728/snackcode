@@ -25,7 +25,7 @@ public class OpenaiService {
      * open ai 자동 포스팅 기능
      * 매 시간마다 특정 키워드에대한 내용의 글을 자동으로 포스팅한다.
      */
-    //@Scheduled(cron = "0 0/30 * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void autoPosting() {
 
         String keyword = getKeyword();
@@ -35,10 +35,6 @@ public class OpenaiService {
             postService.save(openaiResultModel.toPostFormModel());
         }
 
-    }
-
-    public void openai() {
-        System.out.println(openaiProvider.getClass().toString());
     }
 
     private String getKeyword() {
