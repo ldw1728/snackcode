@@ -42,7 +42,11 @@ public class OpenaiSupportImpl extends OpenaiProvider{
         );
         OpenaiResponse response                 = sendQuestion();
         String[] contentArr                     = response.getChoices().get(0).getMessage().getContent().split(codeSeperate);
-        OpenaiResultModel openaiResultModel     = OpenaiResultModel.builder().desc(contentArr[0]).code(contentArr[1]).build();
+
+        String desc = contentArr[0];
+        String code = contentArr.length > 1 ? contentArr[1] : "";
+
+        OpenaiResultModel openaiResultModel     = OpenaiResultModel.builder().desc(desc).code(code).build();
         return openaiResultModel;
     }
 }

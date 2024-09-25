@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Commit;
 
 import java.util.List;
@@ -31,6 +32,9 @@ class SnackcodeApplicationTests {
 
     @Autowired
     private OpenaiService openaiService;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
 
     @Test
@@ -86,8 +90,14 @@ class SnackcodeApplicationTests {
     //@Commit
     public void openai_autopost() {
         //openaiService.openai();
-        openaiService.autoPosting();
+        //openaiService.autoPosting();
 
+        System.out.println(openaiProvider2.getClass());
 
+    }
+
+    @Test
+    public void password() {
+        System.out.println(passwordEncoder.encode("1111"));
     }
 }

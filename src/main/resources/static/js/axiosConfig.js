@@ -47,7 +47,7 @@ function showErrorMsg(status, error) {
     const serverErrorStatus = [500, 400];
 
     if (serverErrorStatus.includes(status)) {
-        alert(error.response.data.msg ?? "서버에 오류가 발생하였습니다.");
+        alert("서버에 오류가 발생하였습니다.");
     }
 
 }
